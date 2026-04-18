@@ -5,3 +5,5 @@ edition = "2024"
 
 [dependencies]
 rand = "0.10.1"
+thiserror = "2.0.18"
+walkdir = "2.5.0"
