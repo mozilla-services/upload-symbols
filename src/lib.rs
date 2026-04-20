@@ -1,4 +1,8 @@
-use std::path::{Path, PathBuf};
+use std::{
+    path::{Path, PathBuf},
+    sync::Arc,
+};
+use tokio::sync::Semaphore;
 use url::Url;
 
 #[derive(Debug, thiserror::Error)]
@@ -28,6 +32,7 @@ pub struct Client {
     client: reqwest::Client,
     base_url: Url,
     auth_token: String,
+    conn_limit_upload_v1: Arc<Semaphore>,
 }
 
 impl Client {
@@ -36,6 +41,7 @@ impl Client {
             client,
             base_url,
             auth_token: auth_token.into(),
+            conn_limit_upload_v1: Arc::new(Semaphore::new(3)), // TODO(smarnach): Make configurable
         }
     }
 

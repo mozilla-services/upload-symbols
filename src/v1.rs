@@ -102,6 +102,8 @@ async fn upload_zip_archive(client: Client, path: PathBuf) -> Result<()> {
     let mut retries = 2; // TODO(smarnach): Make configurable
     loop {
         let form = multipart::Form::new().file("file", &path).await?;
+        // We know the semaphore hasn't been closed, so we can unwrap.
+        let permit = client.conn_limit_upload_v1.acquire().await.unwrap();
         let response = client
             .request(Method::POST, "/upload/")?
             .multipart(form)
@@ -112,6 +114,7 @@ async fn upload_zip_archive(client: Client, path: PathBuf) -> Result<()> {
                 return Err(response.error_for_status().unwrap_err().into());
             }
             retries -= 1;
+            drop(permit);
             sleep(Duration::from_secs(120)).await; // TODO(smarnach): Make configurable
             continue;
         }
