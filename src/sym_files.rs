@@ -50,9 +50,9 @@ impl SymbolsFile {
 /// The symbols files must be laid out in a way that their eventual storage key on the symbols
 /// server can be derived from their path relative to the root directory. The relative path for
 /// each file should be of the form
-///
-///     <debug_file>/<debug_id>/<sym_file>
-///
+/// ```text
+/// <debug_file>/<debug_id>/<sym_file>
+/// ```
 /// The iterator will return SymbolFile instances for all regular files found. Entries in the
 /// directory tree that aren't regular files are silently ignored, unless they are symlinks
 /// pointing to regular files. For files that don't have the above path structure, and
