@@ -50,18 +50,13 @@ pub struct Client {
 }
 
 impl Client {
-    /// Create a new upload client.
-    ///
-    /// The [`reqwest::Client`] should have a meaningful, custom user agent. The `base_url` of
-    /// the production Mozilla Symbols Server is <https://symbols.mozilla.org/>. You can can
-    /// obtain an `auth_token` from the web interface of the symbols server (provided you have
-    /// an account with upload permissions).
-    pub fn new<S: Into<String>>(client: reqwest::Client, base_url: Url, auth_token: S) -> Self {
-        Self {
-            client,
-            base_url,
+    /// Return a [`ClientBuilder`] instance with a default configuration.
+    pub fn builder<S: Into<String>>(auth_token: S) -> ClientBuilder {
+        ClientBuilder {
+            client: None,
+            base_url: None,
             auth_token: auth_token.into(),
-            conn_limit_upload_v1: Arc::new(Semaphore::new(3)), // TODO(smarnach): Make configurable
+            max_connections_v1: 3,
         }
     }
 
@@ -86,9 +81,62 @@ impl Client {
     }
 }
 
+/// A configurable builder for a [`Client`].
+#[derive(Debug)]
+pub struct ClientBuilder {
+    client: Option<reqwest::Client>,
+    base_url: Option<Url>,
+    auth_token: String,
+    max_connections_v1: usize,
+}
+
+impl ClientBuilder {
+    /// Build the [`Client`].
+    ///
+    /// This can fail if no `http_client` was provided and building the default
+    /// [`reqwest::Client`] fails.
+    pub fn build(self) -> Result<Client> {
+        let client = Client {
+            client: match self.client {
+                Some(client) => client,
+                None => reqwest::Client::builder().user_agent(USER_AGENT).build()?,
+            },
+            base_url: self
+                .base_url
+                .unwrap_or_else(|| Url::parse("https://symbols.mozilla.org/").unwrap()),
+            auth_token: self.auth_token,
+            conn_limit_upload_v1: Arc::new(Semaphore::new(self.max_connections_v1)),
+        };
+        Ok(client)
+    }
+
+    /// Provide a custom [`reqwest::Client`] to perform HTTP requests.
+    ///
+    /// The client should have a meaningful custom user agent string.
+    pub fn http_client(mut self, client: reqwest::Client) -> Self {
+        self.client = Some(client);
+        self
+    }
+
+    /// Set the base URL of the symbols server to upload to.
+    ///
+    /// This defaults to <https://symbols.mozilla.org/>.
+    pub fn base_url(mut self, base_url: Url) -> Self {
+        self.base_url = Some(base_url);
+        self
+    }
+
+    /// Set the maximum number of concurrent uploads using the v1 upload API.
+    ///
+    /// The default is 3.
+    pub fn max_connections_v1(mut self, max_connections_v1: usize) -> Self {
+        self.max_connections_v1 = max_connections_v1;
+        self
+    }
+}
+
+static USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"),);
+
 pub mod sym_files;
 mod tmpdir;
 mod v1;
-
-#[cfg(test)]
-mod tests {}
