@@ -1,0 +1,13 @@
+MODULE Linux arm 67ECB8F3D525D90826B5584397A042B70 libmodules-test.so
+INFO CODE_ID F3B8EC6725D508D926B5584397A042B7184A9627
+INFO GENERATOR mozilla/dump_syms 2.3.6
+PUBLIC 354 0 __on_dlclose
+PUBLIC 370 0 __emutls_unregister_key
+PUBLIC 37c 0 __on_dlclose_late
+PUBLIC 38c 0 __atexit_handler_wrapper
+PUBLIC 3a4 0 atexit
+PUBLIC 3d0 0 pthread_atfork
+PUBLIC 3f0 0 <.plt ELF section in libmodules-test.so>
+STACK CFI INIT 0 6 .cfa: sp 0 + .ra: lr
+STACK CFI 2 .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI 4 .cfa: r7 8 +

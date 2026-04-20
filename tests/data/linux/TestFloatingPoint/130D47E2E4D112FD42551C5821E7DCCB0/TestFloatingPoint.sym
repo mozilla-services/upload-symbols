@@ -1,0 +1,358 @@
+MODULE Linux arm 130D47E2E4D112FD42551C5821E7DCCB0 TestFloatingPoint
+INFO CODE_ID E2470D13D1E4FD1242551C5821E7DCCB68CF583A
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 hg:hg.mozilla.org/try:mfbt/Casting.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 1 hg:hg.mozilla.org/try:mfbt/FloatingPoint.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 2 hg:hg.mozilla.org/try:mfbt/tests/TestFloatingPoint.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 3 hg:hg.mozilla.org/try:mfbt/Assertions.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+INLINE_ORIGIN 0 TestAreIdentical()
+INLINE_ORIGIN 1 TestDoublesAreIdentical()
+INLINE_ORIGIN 2 mozilla::SpecificNaN<double>(int, mozilla::FloatingPoint<double>::Bits)
+INLINE_ORIGIN 3 mozilla::SpecificNaN<double>(int, mozilla::FloatingPoint<double>::Bits, double*)
+INLINE_ORIGIN 4 mozilla::BitwiseCast<double, unsigned long long>(unsigned long long, double*)
+INLINE_ORIGIN 5 TestFloatsAreIdentical()
+INLINE_ORIGIN 6 mozilla::SpecificNaN<float>(int, mozilla::FloatingPoint<float>::Bits)
+INLINE_ORIGIN 7 mozilla::SpecificNaN<float>(int, mozilla::FloatingPoint<float>::Bits, float*)
+INLINE_ORIGIN 8 mozilla::BitwiseCast<float, unsigned int>(unsigned int, float*)
+INLINE_ORIGIN 9 TestPredicates()
+INLINE_ORIGIN 10 TestDoublesPredicates()
+INLINE_ORIGIN 11 TestIsFloat32Representable()
+INLINE_ORIGIN 12 MOZ_CrashSequence(void*, int)
+INLINE_ORIGIN 13 mozilla::NumberIsInt32<double>(double, int*)
+INLINE_ORIGIN 14 mozilla::detail::NumberIsSignedInteger<double, int>(double, int*)
+INLINE_ORIGIN 15 mozilla::IsNegativeZero<double>(double)
+INLINE_ORIGIN 16 mozilla::detail::NumberEqualsSignedInteger<double, int>(double, int*)
+INLINE_ORIGIN 17 mozilla::NumberEqualsInt32<double>(double, int*)
+INLINE_ORIGIN 18 mozilla::NumberIsInt64<double>(double, long long*)
+INLINE_ORIGIN 19 mozilla::detail::NumberIsSignedInteger<double, long long>(double, long long*)
+INLINE_ORIGIN 20 mozilla::detail::NumberEqualsSignedInteger<double, long long>(double, long long*)
+INLINE_ORIGIN 21 mozilla::NumberEqualsInt64<double>(double, long long*)
+PUBLIC a50 0 _start
+PUBLIC a60 0 _start_main
+PUBLIC acc 0 __atexit_handler_wrapper
+PUBLIC ae4 0 atexit
+PUBLIC b10 0 pthread_atfork
+PUBLIC b2c 0 call_fini_array
+FUNC b70 76c 0 main
+INLINE 0 724 2 0 ba2 138 ea0 118
+INLINE 1 201 2 1 ba2 aa ea0 8c
+INLINE 2 81 2 2 bd8 1c ea0 1c
+INLINE 3 308 1 3 bd8 1c bfc 20 c28 1c ea0 8c
+INLINE 4 298 1 4 bdc c c0c 4
+INLINE 2 82 2 2 bfc c ebc 1c
+INLINE 2 83 2 2 c08 14 ed8 1c
+INLINE 2 87 2 2 c28 1c ef4 38
+INLINE 1 202 2 5 c66 74 f2c 8c
+INLINE 2 165 2 6 c74 14 f2c 1c
+INLINE 3 308 1 7 c74 14 c94 20 cb8 1a f2c 8c
+INLINE 4 298 1 8 c78 4 ca4 4
+INLINE 2 166 2 6 c94 c f48 1c
+INLINE 2 167 2 6 ca0 14 f64 1c
+INLINE 2 171 2 6 cb8 1a f80 38
+INLINE 0 726 2 9 cde 48 100c d0
+INLINE 1 502 2 10 cde 48 100c d0
+INLINE 0 728 2 11 d26 150 e84 1c fb8 54 10dc 150
+INLINE 1 718 2 12 e9a 2
+INLINE 4 301 1 12 eb6 2 ed2 2 eee 2 f26 2 f42 2 f5e 2 f7a 2 fb2 2
+INLINE 4 296 1 12 f0a 2 f96 2
+INLINE 1 674 2 12 fce 2
+INLINE 1 684 2 12 fea 2
+INLINE 1 689 2 12 1006 2
+INLINE 2 387 2 12 1022 2
+INLINE 2 388 2 12 10d6 2
+INLINE 1 652 2 12 10f2 2
+INLINE 1 653 2 12 110e 2
+INLINE 1 656 2 12 112a 2
+INLINE 1 657 2 12 1146 2
+INLINE 1 658 2 12 1162 2
+INLINE 1 659 2 12 117e 2
+INLINE 1 660 2 12 119a 2
+INLINE 1 661 2 12 11b6 2
+INLINE 1 662 2 12 11d2 2
+INLINE 1 663 2 12 11ee 2
+INLINE 1 664 2 12 120a 2
+INLINE 1 717 2 12 1226 2
+b70 32 723 2
+ba2 6 79 2
+ba8 4 80 2
+bac 1e 81 2
+bca e 0 2
+bd8 4 299 1
+bdc 4 55 0
+be0 8 0 0
+be8 c 301 1
+bf4 8 0 1
+bfc c 301 1
+c08 4 299 1
+c0c 4 55 0
+c10 c 301 1
+c1c c 0 1
+c28 6 296 1
+c2e a 0 1
+c38 c 301 1
+c44 2 78 2
+c46 2 0 2
+c48 4 78 2
+c4c 1a 0 2
+c66 6 163 2
+c6c 4 164 2
+c70 4 165 2
+c74 4 299 1
+c78 4 55 0
+c7c c 301 1
+c88 c 0 1
+c94 c 301 1
+ca0 4 299 1
+ca4 4 55 0
+ca8 c 301 1
+cb4 4 0 1
+cb8 6 296 1
+cbe 8 0 1
+cc6 c 301 1
+cd2 2 162 2
+cd4 2 0 2
+cd6 4 162 2
+cda 4 0 2
+cde 14 387 2
+cf2 8 0 2
+cfa 18 388 2
+d12 8 389 2
+d1a 8 390 2
+d22 4 0 2
+d26 e 652 2
+d34 4 0 2
+d38 e 653 2
+d46 4 0 2
+d4a e 656 2
+d58 4 0 2
+d5c e 657 2
+d6a 4 0 2
+d6e e 658 2
+d7c 4 0 2
+d80 e 659 2
+d8e 4 0 2
+d92 e 660 2
+da0 4 0 2
+da4 e 661 2
+db2 4 0 2
+db6 e 662 2
+dc4 4 0 2
+dc8 e 663 2
+dd6 4 0 2
+dda e 664 2
+de8 10 0 2
+df8 14 674 2
+e0c 8 671 2
+e14 4 0 2
+e18 16 684 2
+e2e 4 683 2
+e32 a 0 2
+e3c 12 689 2
+e4e 8 688 2
+e56 4 0 2
+e5a e 717 2
+e68 4 0 2
+e6c a 718 2
+e76 e 729 2
+e84 14 718 2
+e98 2 0 2
+e9a 2 242 3
+e9c 4 718 2
+ea0 14 301 1
+eb4 2 0 1
+eb6 2 242 3
+eb8 4 301 1
+ebc 14 301 1
+ed0 2 0 1
+ed2 2 242 3
+ed4 4 301 1
+ed8 14 301 1
+eec 2 0 1
+eee 2 242 3
+ef0 4 301 1
+ef4 14 296 1
+f08 2 0 1
+f0a 2 242 3
+f0c 4 296 1
+f10 14 301 1
+f24 2 0 1
+f26 2 242 3
+f28 4 301 1
+f2c 14 301 1
+f40 2 0 1
+f42 2 242 3
+f44 4 301 1
+f48 14 301 1
+f5c 2 0 1
+f5e 2 242 3
+f60 4 301 1
+f64 14 301 1
+f78 2 0 1
+f7a 2 242 3
+f7c 4 301 1
+f80 14 296 1
+f94 2 0 1
+f96 2 242 3
+f98 4 296 1
+f9c 14 301 1
+fb0 2 0 1
+fb2 2 242 3
+fb4 4 301 1
+fb8 14 674 2
+fcc 2 0 2
+fce 2 242 3
+fd0 4 674 2
+fd4 14 684 2
+fe8 2 0 2
+fea 2 242 3
+fec 4 684 2
+ff0 14 689 2
+1004 2 0 2
+1006 2 242 3
+1008 4 689 2
+100c 14 387 2
+1020 2 0 2
+1022 2 242 3
+1024 4 387 2
+1028 98 0 2
+10c0 14 388 2
+10d4 2 0 2
+10d6 2 242 3
+10d8 4 388 2
+10dc 14 652 2
+10f0 2 0 2
+10f2 2 242 3
+10f4 4 652 2
+10f8 14 653 2
+110c 2 0 2
+110e 2 242 3
+1110 4 653 2
+1114 14 656 2
+1128 2 0 2
+112a 2 242 3
+112c 4 656 2
+1130 14 657 2
+1144 2 0 2
+1146 2 242 3
+1148 4 657 2
+114c 14 658 2
+1160 2 0 2
+1162 2 242 3
+1164 4 658 2
+1168 14 659 2
+117c 2 0 2
+117e 2 242 3
+1180 4 659 2
+1184 14 660 2
+1198 2 0 2
+119a 2 242 3
+119c 4 660 2
+11a0 14 661 2
+11b4 2 0 2
+11b6 2 242 3
+11b8 4 661 2
+11bc 14 662 2
+11d0 2 0 2
+11d2 2 242 3
+11d4 4 662 2
+11d8 14 663 2
+11ec 2 0 2
+11ee 2 242 3
+11f0 4 663 2
+11f4 14 664 2
+1208 2 0 2
+120a 2 242 3
+120c 4 664 2
+1210 14 717 2
+1224 2 0 2
+1226 2 242 3
+1228 4 717 2
+122c b0 0 2
+FUNC 12dc 3c 0 MOZ_ReportAssertionFailure(char const*, char const*, int)
+12dc 10 119 3
+12ec 4 123 3
+12f0 2 122 3
+12f2 2 123 3
+12f4 12 122 3
+1306 8 144 3
+130e a 0 3
+FUNC 1318 1e0 0 TestEqualsIsForNonInteger<double>(double)
+INLINE 0 301 2 13 1334 5e
+INLINE 1 429 1 14 1334 5e
+INLINE 2 410 1 15 1334 2e
+INLINE 2 414 1 16 1368 2a
+INLINE 0 302 2 17 139a 32
+INLINE 1 455 1 16 139a 32
+INLINE 0 305 2 18 13cc 38
+INLINE 1 442 1 19 13cc 38
+INLINE 2 414 1 20 13d2 32
+INLINE 0 306 2 21 1404 3a
+INLINE 1 468 1 20 1404 3a
+INLINE 0 301 2 12 145e 2
+INLINE 0 302 2 12 147a 2
+INLINE 0 305 2 12 1496 2
+INLINE 0 306 2 12 14b2 2
+1318 1c 299 2
+1334 2e 171 1
+1362 2 410 1
+1364 4 0 1
+1368 a 385 1
+1372 4 0 1
+1376 a 385 1
+1380 4 387 1
+1384 e 388 1
+1392 8 0 1
+139a 4 340 1
+139e 4 0 1
+13a2 a 385 1
+13ac 4 0 1
+13b0 a 385 1
+13ba 4 387 1
+13be e 388 1
+13cc 2 410 1
+13ce 4 0 1
+13d2 a 385 1
+13dc 4 0 1
+13e0 a 385 1
+13ea 8 387 1
+13f2 12 388 1
+1404 4 340 1
+1408 4 0 1
+140c a 385 1
+1416 4 0 1
+141a a 385 1
+1424 8 387 1
+142c 12 388 1
+143e a 307 2
+1448 14 301 2
+145c 2 0 2
+145e 2 242 3
+1460 4 301 2
+1464 14 302 2
+1478 2 0 2
+147a 2 242 3
+147c 4 302 2
+1480 14 305 2
+1494 2 0 2
+1496 2 242 3
+1498 4 305 2
+149c 14 306 2
+14b0 2 0 2
+14b2 2 242 3
+14b4 4 306 2
+14b8 40 0 2
+PUBLIC m 14f8 0 __aeabi_d2lz
+PUBLIC m 1528 0 __aeabi_l2d
+PUBLIC 1570 0 <.plt ELF section in TestFloatingPoint>
+STACK CFI INIT b70 76c .cfa: sp 0 + .ra: lr
+STACK CFI b72 .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI b74 .cfa: r7 8 +
+STACK CFI b78 r11: .cfa -24 + ^ r9: .cfa -28 + ^ r8: .cfa -32 + ^
+STACK CFI INIT 12dc 3c .cfa: sp 0 + .ra: lr
+STACK CFI 12de .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 12e0 .cfa: r7 8 +
+STACK CFI 12e4 r11: .cfa -24 + ^
+STACK CFI INIT 1318 1e0 .cfa: sp 0 + .ra: lr
+STACK CFI 131a .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 131c .cfa: r7 8 +
+STACK CFI 1320 r8: .cfa -24 + ^

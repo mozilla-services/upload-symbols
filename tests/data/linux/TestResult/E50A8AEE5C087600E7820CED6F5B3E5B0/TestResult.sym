@@ -1,0 +1,80 @@
+MODULE Linux arm E50A8AEE5C087600E7820CED6F5B3E5B0 TestResult
+INFO CODE_ID EE8A0AE5085C0076E7820CED6F5B3E5B1788EA55
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 hg:hg.mozilla.org/try:mfbt/tests/TestResult.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 1 hg:hg.mozilla.org/try:mfbt/Assertions.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 2 hg:hg.mozilla.org/try:mfbt/Result.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 3 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/fortify/string.h
+INLINE_ORIGIN 0 MapTest()
+INLINE_ORIGIN 1 mozilla::Result<char const*, MapTest()::MyError>::map<unsigned int (*)(char const*)>(unsigned int (*)(char const*))
+INLINE_ORIGIN 2 MapErrTest()
+INLINE_ORIGIN 3 mozilla::Result<mozilla::Ok, char const*>::mapErr<unsigned int (*)(char const*)>(unsigned int (*)(char const*))
+INLINE_ORIGIN 4 OrElseTest()
+INLINE_ORIGIN 5 mozilla::Result<mozilla::Ok, char const*>::orElse<mozilla::Result<mozilla::Ok, unsigned int> (*)(char const*)>(mozilla::Result<mozilla::Ok, unsigned int> (*)(char const*))
+INLINE_ORIGIN 6 strlen_ResultWrapper(char const*)
+INLINE_ORIGIN 7 strlen
+INLINE_ORIGIN 8 MOZ_CrashSequence(void*, int)
+PUBLIC 53c 0 _start
+PUBLIC 54c 0 _start_main
+PUBLIC 5b8 0 __atexit_handler_wrapper
+PUBLIC 5d0 0 atexit
+PUBLIC 5fc 0 pthread_atfork
+PUBLIC 618 0 call_fini_array
+FUNC 65c 6 0 UpcastTest()
+65c 4 813 0
+660 2 849 0
+FUNC 664 3c 0 MOZ_ReportAssertionFailure(char const*, char const*, int)
+664 10 119 1
+674 4 123 1
+678 2 122 1
+67a 2 123 1
+67c 12 122 1
+68e 8 144 1
+696 a 0 1
+FUNC 6a0 a4 0 main
+INLINE 0 902 0 0 6a4 c 6e8 1c
+INLINE 1 353 0 1 6a4 8
+INLINE 0 903 0 2 6b0 c 704 1c
+INLINE 1 418 0 3 6b0 8
+INLINE 0 904 0 4 6bc a 6cc 1c
+INLINE 1 537 0 5 6bc 8
+INLINE 2 801 2 6 6bc 8
+INLINE 3 425 0 7 6bc 8
+INLINE 1 539 0 8 6e2 2
+INLINE 1 355 0 8 6fe 2
+INLINE 1 420 0 8 71a 2
+6a0 4 897 0
+6a4 8 707 2
+6ac 4 355 0
+6b0 8 740 2
+6b8 4 420 0
+6bc 8 234 3
+6c4 2 539 0
+6c6 6 910 0
+6cc 14 539 0
+6e0 2 0 0
+6e2 2 242 1
+6e4 4 539 0
+6e8 14 355 0
+6fc 2 0 0
+6fe 2 242 1
+700 4 355 0
+704 14 420 0
+718 2 0 0
+71a 2 242 1
+71c 4 420 0
+720 24 0 0
+PUBLIC 750 0 <.plt ELF section in TestResult>
+STACK CFI INIT 65c 6 .cfa: sp 0 + .ra: lr
+STACK CFI 65e .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI 660 .cfa: r7 8 +
+STACK CFI INIT 664 3c .cfa: sp 0 + .ra: lr
+STACK CFI 666 .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 668 .cfa: r7 8 +
+STACK CFI 66c r11: .cfa -24 + ^
+STACK CFI INIT 0 6 .cfa: sp 0 + .ra: lr
+STACK CFI 2 .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI 4 .cfa: r7 8 +
+STACK CFI INIT 6a0 a4 .cfa: sp 0 + .ra: lr
+STACK CFI 6a2 .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 6a4 .cfa: r7 8 +

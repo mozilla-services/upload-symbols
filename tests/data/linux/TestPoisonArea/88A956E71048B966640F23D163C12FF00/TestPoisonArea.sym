@@ -1,0 +1,225 @@
+MODULE Linux arm 88A956E71048B966640F23D163C12FF00 TestPoisonArea
+INFO CODE_ID E756A988481066B9640F23D163C12FF0216E5DA6
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 hg:hg.mozilla.org/try:mfbt/tests/TestPoisonArea.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+INLINE_ORIGIN 0 ReserveNegativeControl()
+INLINE_ORIGIN 1 ReserveRegion(unsigned int, bool)
+INLINE_ORIGIN 2 PageSize()
+INLINE_ORIGIN 3 MakeRegionExecutable(void*)
+INLINE_ORIGIN 4 ReleaseRegion(void*)
+INLINE_ORIGIN 5 ReservePositiveControl()
+INLINE_ORIGIN 6 ReservePoisonArea()
+INLINE_ORIGIN 7 ProbeRegion(unsigned int)
+INLINE_ORIGIN 8 JumpTo(unsigned int)
+PUBLIC 9b0 0 _start
+PUBLIC 9c0 0 _start_main
+PUBLIC a2c 0 __atexit_handler_wrapper
+PUBLIC a44 0 atexit
+PUBLIC a70 0 pthread_atfork
+PUBLIC a8c 0 call_fini_array
+FUNC ad0 238 0 main
+INLINE 0 514 0 0 ae8 2 af0 88 b96 c
+INLINE 1 337 0 1 ae8 2 af0 c
+INLINE 1 346 0 2 b00 2
+INLINE 1 354 0 3 b50 8
+INLINE 1 355 0 4 b5a 8
+INLINE 2 242 0 2 b5a 2 c1e 4
+INLINE 0 527 0 5 ba6 40
+INLINE 1 323 0 1 ba6 16
+INLINE 2 237 0 2 ba6 8 c8c 8
+INLINE 0 528 0 6 be6 54 c78 3e
+INLINE 1 273 0 2 be6 8
+INLINE 1 274 0 1 bee a c02 8
+INLINE 1 285 0 7 c0e 2 c12 8
+INLINE 2 249 0 2 c0e 2
+INLINE 1 288 0 4 c1e a
+INLINE 1 307 0 1 c8c 16
+ad0 a 507 0
+ada e 511 0
+ae8 2 237 0
+aea 4 511 0
+aee 2 0 0
+af0 c 237 0
+afc 4 338 0
+b00 2 234 0
+b02 2 347 0
+b04 2 0 0
+b06 12 347 0
+b18 2 0 0
+b1a 18 347 0
+b32 8 348 0
+b3a 6 347 0
+b40 8 0 0
+b48 4 348 0
+b4c 4 347 0
+b50 8 254 0
+b58 2 354 0
+b5a 2 234 0
+b5c 6 242 0
+b62 2 356 0
+b64 14 339 0
+b78 14 522 0
+b8c 2 0 0
+b8e 8 542 0
+b96 c 359 0
+ba2 4 515 0
+ba6 8 234 0
+bae e 237 0
+bbc 4 324 0
+bc0 c 328 0
+bcc 2 0 0
+bce 14 325 0
+be2 4 0 0
+be6 2 234 0
+be8 6 0 0
+bee a 237 0
+bf8 a 273 0
+c02 8 237 0
+c0a 4 275 0
+c0e 2 234 0
+c10 2 0 0
+c12 8 249 0
+c1a 2 285 0
+c1c 2 287 0
+c1e 4 234 0
+c22 6 242 0
+c28 4 290 0
+c2c 2 310 0
+c2e 4 277 0
+c32 8 0 0
+c3a 10 530 0
+c4a e 536 0
+c58 c 538 0
+c64 2 539 0
+c66 2 538 0
+c68 e 539 0
+c76 2 0 0
+c78 4 297 0
+c7c c 299 0
+c88 4 0 0
+c8c 8 234 0
+c94 e 237 0
+ca2 4 308 0
+ca6 6 310 0
+cac 8 315 0
+cb4 2 0 0
+cb6 52 0 0
+FUNC d08 378 0 TestPage(char const*, unsigned int, int)
+INLINE 0 393 0 2 d14 18
+INLINE 0 397 0 2 dc8 4
+INLINE 0 401 0 2 e60 2
+INLINE 0 458 0 8 f38 2
+d08 c 382 0
+d14 4 234 0
+d18 2 0 0
+d1a 2 234 0
+d1c 4 0 0
+d20 c 234 0
+d2c 4 447 0
+d30 6 448 0
+d36 2 0 0
+d38 6 448 0
+d3e 6 0 0
+d44 2 469 0
+d46 e 470 0
+d54 c 475 0
+d60 4 0 0
+d64 4 483 0
+d68 a 487 0
+d72 6 488 0
+d78 10 489 0
+d88 2 0 0
+d8a 6 476 0
+d90 e 477 0
+d9e 4 0 0
+da2 10 493 0
+db2 4 0 0
+db6 e 479 0
+dc4 4 0 0
+dc8 4 234 0
+dcc 6 447 0
+dd2 c 448 0
+dde 6 0 0
+de4 2 469 0
+de6 e 470 0
+df4 a 475 0
+dfe 4 0 0
+e02 4 483 0
+e06 a 487 0
+e10 6 488 0
+e16 10 489 0
+e26 2 0 0
+e28 6 476 0
+e2e e 477 0
+e3c 2 478 0
+e3e 10 493 0
+e4e 2 0 0
+e50 e 479 0
+e5e 2 0 0
+e60 2 234 0
+e62 6 447 0
+e68 8 448 0
+e70 6 0 0
+e76 2 469 0
+e78 c 470 0
+e84 a 475 0
+e8e 4 0 0
+e92 4 483 0
+e96 a 487 0
+ea0 6 488 0
+ea6 10 489 0
+eb6 2 0 0
+eb8 6 476 0
+ebe e 477 0
+ecc 2 478 0
+ece 10 493 0
+ede 2 0 0
+ee0 e 479 0
+eee e 0 0
+efc c 504 0
+f08 6 0 0
+f0e 4 452 0
+f12 2 393 0
+f14 6 455 0
+f1a 2 456 0
+f1c 10 0 0
+f2c 2 448 0
+f2e 2 0 0
+f30 4 452 0
+f34 4 397 0
+f38 2 375 0
+f3a 2 459 0
+f3c 4 0 0
+f40 2 470 0
+f42 4 0 0
+f46 12 449 0
+f58 4 0 0
+f5c 4 452 0
+f60 2 401 0
+f62 4 461 0
+f66 4 466 0
+f6a 6 467 0
+f70 4 0 0
+f74 10 471 0
+f84 c 0 0
+f90 8 497 0
+f98 4 0 0
+f9c 2 483 0
+f9e 2 0 0
+fa0 8 497 0
+fa8 4 0 0
+fac 2 484 0
+fae 4 485 0
+fb2 4 484 0
+fb6 2 0 0
+fb8 6 497 0
+fbe c2 0 0
+PUBLIC 1080 0 <.plt ELF section in TestPoisonArea>
+STACK CFI INIT ad0 238 .cfa: sp 0 + .ra: lr
+STACK CFI ad2 .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI ad4 .cfa: r7 8 +
+STACK CFI ad8 r11: .cfa -24 + ^ r9: .cfa -28 + ^ r8: .cfa -32 + ^
+STACK CFI INIT d08 378 .cfa: sp 0 + .ra: lr
+STACK CFI d0a .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI d0c .cfa: r7 8 +
+STACK CFI d10 r11: .cfa -24 + ^ r10: .cfa -28 + ^ r9: .cfa -32 + ^ r8: .cfa -36 + ^

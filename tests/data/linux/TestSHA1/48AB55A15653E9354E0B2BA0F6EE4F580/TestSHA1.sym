@@ -1,0 +1,55 @@
+MODULE Linux arm 48AB55A15653E9354E0B2BA0F6EE4F580 TestSHA1
+INFO CODE_ID A155AB48535635E94E0B2BA0F6EE4F58712899AF
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 hg:hg.mozilla.org/try:mfbt/Assertions.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 1 hg:hg.mozilla.org/try:mfbt/tests/TestSHA1.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+INLINE_ORIGIN 0 MOZ_CrashSequence(void*, int)
+PUBLIC 750 0 _start
+PUBLIC 760 0 _start_main
+PUBLIC 7cc 0 __atexit_handler_wrapper
+PUBLIC 7e4 0 atexit
+PUBLIC 810 0 pthread_atfork
+PUBLIC 82c 0 call_fini_array
+FUNC 870 18c 0 main
+INLINE 0 200 1 0 9cc 2
+870 e 185 1
+87e 18 186 1
+896 6 188 1
+89c 2 187 1
+89e 6 188 1
+8a4 8 187 1
+8ac 6 188 1
+8b2 2 0 1
+8b4 8 189 1
+8bc 2 0 1
+8be 4 200 1
+8c2 2 187 1
+8c4 d4 200 1
+998 c 0 1
+9a4 4 200 1
+9a8 c 0 1
+9b4 c 203 1
+9c0 4 0 1
+9c4 4 200 1
+9c8 4 0 1
+9cc 2 242 0
+9ce 4 200 1
+9d2 2a 0 1
+FUNC 9fc 40 0 MOZ_ReportAssertionFailure(char const*, char const*, int)
+9fc 6 119 0
+a02 4 123 0
+a06 2 122 0
+a08 2 123 0
+a0a 1c 122 0
+a26 4 144 0
+a2a 12 0 0
+PUBLIC m a3c 0 __aeabi_memset8
+PUBLIC m a4c 0 __aeabi_memclr
+PUBLIC a60 0 <.plt ELF section in TestSHA1>
+STACK CFI INIT 870 18c .cfa: sp 0 + .ra: lr
+STACK CFI 872 .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 874 .cfa: r7 8 +
+STACK CFI 878 r8: .cfa -24 + ^
+STACK CFI INIT 9fc 40 .cfa: sp 0 + .ra: lr
+STACK CFI 9fe .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI a00 .cfa: r7 8 +

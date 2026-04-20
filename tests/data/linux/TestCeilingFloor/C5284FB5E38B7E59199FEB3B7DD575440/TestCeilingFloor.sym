@@ -1,0 +1,17 @@
+MODULE Linux arm C5284FB5E38B7E59199FEB3B7DD575440 TestCeilingFloor
+INFO CODE_ID B54F28C58BE3597E199FEB3B7DD57544F56ABCFB
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 hg:hg.mozilla.org/try:mfbt/tests/TestCeilingFloor.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+PUBLIC 3a8 0 _start
+PUBLIC 3b8 0 _start_main
+PUBLIC 424 0 __atexit_handler_wrapper
+PUBLIC 43c 0 atexit
+PUBLIC 468 0 pthread_atfork
+PUBLIC 484 0 call_fini_array
+FUNC 4c8 8 0 main
+4c8 4 75 0
+4cc 4 80 0
+PUBLIC 4d0 0 <.plt ELF section in TestCeilingFloor>
+STACK CFI INIT 4c8 8 .cfa: sp 0 + .ra: lr
+STACK CFI 4ca .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI 4cc .cfa: r7 8 +

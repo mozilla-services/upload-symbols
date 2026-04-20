@@ -1,0 +1,78 @@
+MODULE Linux arm 295C2995C61DE5EFEDFFD1E1EF33A4980 TestMozCrash
+INFO CODE_ID 95295C291DC6EFE5EDFFD1E1EF33A4989A894841
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 hg:hg.mozilla.org/try:mfbt/tests/TestMozCrash.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 1 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/fortify/string.h
+INLINE_ORIGIN 0 memset(void*, int pass_object_size0, unsigned int)
+PUBLIC 6b0 0 _start
+PUBLIC 6c0 0 _start_main
+PUBLIC 72c 0 __atexit_handler_wrapper
+PUBLIC 744 0 atexit
+PUBLIC 770 0 pthread_atfork
+PUBLIC 78c 0 call_fini_array
+FUNC 7d0 1c 0 handler(int)
+7d0 16 14 0
+7e6 6 0 0
+FUNC 7ec 16c 0 main
+INLINE 0 30 0 0 858 4
+7ec 6 16 0
+7f2 14 18 0
+806 2 0 0
+808 4 27 0
+80c 2 28 0
+80e 4 0 0
+812 4 44 0
+816 8 45 0
+81e a 46 0
+828 e 0 0
+836 6 59 0
+83c 4 0 0
+840 10 19 0
+850 2 0 0
+852 2 31 0
+854 4 0 0
+858 4 138 1
+85c 6 31 0
+862 2 29 0
+864 4 32 0
+868 e 34 0
+876 2 0 0
+878 c 34 0
+884 2 0 0
+886 c 34 0
+892 2 0 0
+894 c 34 0
+8a0 2 0 0
+8a2 c 34 0
+8ae 2 0 0
+8b0 c 34 0
+8bc 2 0 0
+8be c 34 0
+8ca 2 0 0
+8cc c 34 0
+8d8 2 0 0
+8da c 34 0
+8e6 6 35 0
+8ec 2 0 0
+8ee 2 47 0
+8f0 4 46 0
+8f4 e 47 0
+902 a 54 0
+90c 6 53 0
+912 4 47 0
+916 4 55 0
+91a 4 47 0
+91e 4 46 0
+922 4 53 0
+926 2 46 0
+928 4 47 0
+92c 4 0 0
+930 8 40 0
+938 20 0 0
+PUBLIC 960 0 <.plt ELF section in TestMozCrash>
+STACK CFI INIT 7d0 1c .cfa: sp 0 + .ra: lr
+STACK CFI 7d2 .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI 7d4 .cfa: r7 8 +
+STACK CFI INIT 7ec 16c .cfa: sp 0 + .ra: lr
+STACK CFI 7ee .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r5: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 7f0 .cfa: r7 8 +

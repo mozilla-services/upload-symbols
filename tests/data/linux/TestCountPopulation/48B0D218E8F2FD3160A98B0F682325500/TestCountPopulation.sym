@@ -1,0 +1,17 @@
+MODULE Linux arm 48B0D218E8F2FD3160A98B0F682325500 TestCountPopulation
+INFO CODE_ID 18D2B048F2E831FD60A98B0F68232550BA9A06B1
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 hg:hg.mozilla.org/try:mfbt/tests/TestCountPopulation.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+PUBLIC 3a8 0 _start
+PUBLIC 3b8 0 _start_main
+PUBLIC 424 0 __atexit_handler_wrapper
+PUBLIC 43c 0 atexit
+PUBLIC 468 0 pthread_atfork
+PUBLIC 484 0 call_fini_array
+FUNC 4c8 8 0 main
+4c8 4 27 0
+4cc 4 29 0
+PUBLIC 4d0 0 <.plt ELF section in TestCountPopulation>
+STACK CFI INIT 4c8 8 .cfa: sp 0 + .ra: lr
+STACK CFI 4ca .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI 4cc .cfa: r7 8 +

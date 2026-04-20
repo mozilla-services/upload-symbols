@@ -1,0 +1,31 @@
+MODULE Linux arm C4A239FCE34F4E2C706BE51C6BB2A4BE0 TestUnicodeArguments
+INFO CODE_ID FC39A2C44FE32C4E706BE51C6BB2A4BE0FF9E3CC
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 hg:hg.mozilla.org/try:xpcom/tests/TestUnicodeArguments.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+PUBLIC 45c 0 _start
+PUBLIC 46c 0 _start_main
+PUBLIC 4d8 0 __atexit_handler_wrapper
+PUBLIC 4f0 0 atexit
+PUBLIC 51c 0 pthread_atfork
+PUBLIC 538 0 call_fini_array
+FUNC 57c b8 0 main
+57c 8 61 0
+584 4 62 0
+588 2 65 0
+58a 2 0 0
+58c 12 65 0
+59e a 66 0
+5a8 14 65 0
+5bc a 66 0
+5c6 14 65 0
+5da a 66 0
+5e4 12 65 0
+5f6 12 66 0
+608 4 0 0
+60c 8 72 0
+614 20 0 0
+PUBLIC 640 0 <.plt ELF section in TestUnicodeArguments>
+STACK CFI INIT 57c b8 .cfa: sp 0 + .ra: lr
+STACK CFI 57e .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 580 .cfa: r7 8 +
+STACK CFI 584 r11: .cfa -24 + ^

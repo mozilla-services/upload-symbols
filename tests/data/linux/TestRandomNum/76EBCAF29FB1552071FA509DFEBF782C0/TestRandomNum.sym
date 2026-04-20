@@ -1,0 +1,196 @@
+MODULE Linux arm 76EBCAF29FB1552071FA509DFEBF782C0 TestRandomNum
+INFO CODE_ID F2CAEB76B19F205571FA509DFEBF782C9FC88FD8
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/stdexcept
+FILE 1 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__new/exceptions.h
+FILE 2 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__new/allocate.h
+FILE 3 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__memory/allocator.h
+FILE 4 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__memory/allocate_at_least.h
+FILE 5 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__split_buffer
+FILE 6 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__vector/vector.h
+FILE 7 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__memory/construct_at.h
+FILE 8 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__memory/allocator_traits.h
+FILE 9 hg:hg.mozilla.org/try:mfbt/Maybe.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 10 hg:hg.mozilla.org/try:mfbt/tests/TestRandomNum.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 11 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__iterator/wrap_iter.h
+FILE 12 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__memory/uninitialized_algorithms.h
+FILE 13 hg:hg.mozilla.org/try:mfbt/Assertions.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+INLINE_ORIGIN 0 TestRandomUint64()
+INLINE_ORIGIN 1 std::__ndk1::vector<unsigned long long, std::__ndk1::allocator<unsigned long long> >::reserve(unsigned int)
+INLINE_ORIGIN 2 std::__ndk1::__split_buffer<unsigned long long, std::__ndk1::allocator<unsigned long long>&>::__split_buffer(unsigned int, unsigned int, std::__ndk1::allocator<unsigned long long>&)
+INLINE_ORIGIN 3 std::__ndk1::__allocate_at_least[abi:dn210000]<std::__ndk1::allocator<unsigned long long> >(std::__ndk1::allocator_traits&, unsigned int)
+INLINE_ORIGIN 4 std::__ndk1::allocator<unsigned long long>::allocate[abi:dn210000](unsigned int)
+INLINE_ORIGIN 5 std::__ndk1::__libcpp_allocate[abi:dn210000]<unsigned long long>(std::__ndk1::__element_count, unsigned int)
+INLINE_ORIGIN 6 std::__ndk1::__libcpp_operator_new[abi:dn210000]<unsigned int>(unsigned int)
+INLINE_ORIGIN 7 std::__ndk1::vector<unsigned long long, std::__ndk1::allocator<unsigned long long> >::push_back[abi:dn210000](unsigned long long const&)
+INLINE_ORIGIN 8 std::__ndk1::vector<unsigned long long, std::__ndk1::allocator<unsigned long long> >::emplace_back<unsigned long long const&>(unsigned long long const&)
+INLINE_ORIGIN 9 std::__ndk1::vector<unsigned long long, std::__ndk1::allocator<unsigned long long> >::__construct_one_at_end[abi:dn210000]<unsigned long long const&>(unsigned long long const&)
+INLINE_ORIGIN 10 _ZNSt6__ndk116allocator_traitsINS_9allocatorIyEEE9constructB8dn210000IyJRKyEvTnNS_9enable_ifIXntsr15__has_constructIS2_PT_DpT0_EE5valueEiE4typeELi0EEEvRS2_S9_DpOSA_
+INLINE_ORIGIN 11 std::__ndk1::__construct_at[abi:dn210000]<unsigned long long, unsigned long long const&, unsigned long long*>(unsigned long long, unsigned long long const&)
+INLINE_ORIGIN 12 std::__ndk1::construct_at[abi:dn210000]<unsigned long long, unsigned long long const&, unsigned long long*>(unsigned long long, unsigned long long const&)
+INLINE_ORIGIN 13 getRandomUint64OrDie()
+INLINE_ORIGIN 14 mozilla::Maybe<unsigned long long>::isSome() const
+INLINE_ORIGIN 15 mozilla::Maybe<unsigned long long>::value() const &
+INLINE_ORIGIN 16 std::__ndk1::__wrap_iter<unsigned long long*>::operator++[abi:dn210000]()
+INLINE_ORIGIN 17 std::__ndk1::vector<unsigned long long, std::__ndk1::allocator<unsigned long long> >::__emplace_back_slow_path<unsigned long long const&>(unsigned long long const&)
+INLINE_ORIGIN 18 std::__ndk1::vector<unsigned long long, std::__ndk1::allocator<unsigned long long> >::size[abi:dn210000]() const
+INLINE_ORIGIN 19 std::__ndk1::vector<unsigned long long, std::__ndk1::allocator<unsigned long long> >::__recommend[abi:dn210000](unsigned int) const
+INLINE_ORIGIN 20 std::__ndk1::vector<unsigned long long, std::__ndk1::allocator<unsigned long long> >::capacity[abi:dn210000]() const
+INLINE_ORIGIN 21 std::__ndk1::vector<unsigned long long, std::__ndk1::allocator<unsigned long long> >::__swap_out_circular_buffer(std::__ndk1::__split_buffer<unsigned long long, std::__ndk1::allocator<unsigned long long>&>&)
+INLINE_ORIGIN 22 std::__ndk1::__uninitialized_allocator_relocate[abi:dn210000]<std::__ndk1::allocator<unsigned long long>, unsigned long long*>(std::__ndk1::allocator<unsigned long long>&, unsigned long long*, std::__ndk1::allocator<unsigned long long>&, std::__ndk1::allocator<unsigned long long>&)
+INLINE_ORIGIN 23 std::__ndk1::__split_buffer<unsigned long long, std::__ndk1::allocator<unsigned long long>&>::~__split_buffer()
+INLINE_ORIGIN 24 std::__ndk1::allocator_traits<std::__ndk1::allocator<unsigned long long> >::deallocate[abi:dn210000](std::__ndk1::allocator<unsigned long long>&, unsigned long long*, unsigned int)
+INLINE_ORIGIN 25 std::__ndk1::allocator<unsigned long long>::deallocate[abi:dn210000](unsigned long long*, unsigned int)
+INLINE_ORIGIN 26 std::__ndk1::__libcpp_deallocate[abi:dn210000]<unsigned long long>(std::__ndk1::__type_identity<unsigned long long>::type*, std::__ndk1::__element_count, unsigned int)
+INLINE_ORIGIN 27 std::__ndk1::__libcpp_operator_delete[abi:dn210000]<unsigned long long*>(unsigned long long*)
+INLINE_ORIGIN 28 std::__ndk1::vector<unsigned long long, std::__ndk1::allocator<unsigned long long> >::~vector[abi:dn210000]()
+INLINE_ORIGIN 29 std::__ndk1::vector<unsigned long long, std::__ndk1::allocator<unsigned long long> >::__destroy_vector::operator()[abi:dn210000]()
+INLINE_ORIGIN 30 MOZ_CrashSequence(void*, int)
+PUBLIC 850 0 _start
+PUBLIC 860 0 _start_main
+PUBLIC 8cc 0 __atexit_handler_wrapper
+PUBLIC 8e4 0 atexit
+PUBLIC 910 0 pthread_atfork
+PUBLIC 92c 0 call_fini_array
+FUNC 970 180 0 main
+INLINE 0 59 10 0 984 f8 a8c 44
+INLINE 1 45 10 1 984 18
+INLINE 2 1086 6 2 984 18
+INLINE 3 325 5 3 984 6 990 c
+INLINE 4 41 4 4 984 6 990 c
+INLINE 5 105 3 5 984 6 990 c
+INLINE 6 64 2 6 984 6 990 c
+INLINE 1 54 10 7 99c 6 9a4 4 9e8 82 abc 14
+INLINE 2 452 6 8 99c 6 9a4 4 9e8 82 abc 14
+INLINE 3 1133 6 9 99c 6
+INLINE 4 742 6 10 99c 6
+INLINE 5 318 8 11 99c 6 a3c 4 a46 4 abc c
+INLINE 6 48 7 12 99c 6 a3c 4 a46 4 abc c
+INLINE 1 48 10 13 9ae 1e aa4 18
+INLINE 2 35 10 14 9be 4
+INLINE 2 37 10 15 9c8 4
+INLINE 1 50 10 16 9e0 2
+INLINE 3 1136 6 17 9ec 7e abc 14
+INLINE 4 1114 6 18 9ec 6
+INLINE 4 1114 6 19 9fa 24 ac8 4
+INLINE 5 890 6 20 a02 2
+INLINE 4 1114 6 2 a1e c a2c 10 a5a 10 acc 4
+INLINE 5 325 5 3 a24 6 a2c a a3a 2 acc 4
+INLINE 6 41 4 4 a24 6 a2c a a3a 2 acc 4
+INLINE 7 105 3 5 a2c a a3a 2
+INLINE 8 64 2 6 a2c 2 a32 4 a3a 2
+INLINE 4 1116 6 10 a3c 4 a46 4 abc c
+INLINE 4 1118 6 21 a40 6 a4a a
+INLINE 5 831 6 22 a40 4 a4e 6
+INLINE 4 1120 6 23 a54 6
+INLINE 5 337 5 24 a54 6
+INLINE 6 302 8 25 a54 6
+INLINE 7 120 3 26 a54 6
+INLINE 8 80 2 27 a54 6
+INLINE 1 56 10 28 a6a 12
+INLINE 2 259 6 29 a6a 12
+INLINE 3 250 6 24 a6a 12
+INLINE 4 302 8 25 a6a 12
+INLINE 5 120 3 26 a6a 12
+INLINE 6 80 2 27 a6a 12
+INLINE 1 51 10 30 a9e 2
+INLINE 2 35 10 30 ab6 2
+970 14 58 10
+984 6 37 2
+98a 4 330 5
+98e 2 0 5
+990 2 37 2
+992 a 0 2
+99c 6 40 7
+9a2 2 47 10
+9a4 4 0 6
+9a8 6 47 10
+9ae 10 33 10
+9be 4 478 9
+9c2 4 35 10
+9c6 2 0 10
+9c8 4 979 9
+9cc a 50 10
+9d6 8 51 10
+9de 2 0 10
+9e0 2 65 11
+9e2 4 50 10
+9e6 2 0 10
+9e8 4 1132 6
+9ec 6 385 6
+9f2 8 1114 6
+9fa 6 888 6
+a00 2 0 6
+a02 2 388 6
+a04 1a 891 6
+a1e 6 322 5
+a24 6 100 3
+a2a 2 1114 6
+a2c 2 37 2
+a2e 4 55 2
+a32 4 37 2
+a36 4 329 5
+a3a 2 37 2
+a3c 4 40 7
+a40 4 645 12
+a44 2 830 6
+a46 4 40 7
+a4a 4 830 6
+a4e 6 645 12
+a54 6 46 2
+a5a 4 330 5
+a5e c 0 5
+a6a 6 46 2
+a70 c 0 2
+a7c c 60 10
+a88 4 0 10
+a8c 10 51 10
+a9c 2 0 10
+a9e 2 242 13
+aa0 4 51 10
+aa4 10 35 10
+ab4 2 0 10
+ab6 2 242 13
+ab8 4 35 10
+abc c 39 7
+ac8 4 889 6
+acc 4 101 3
+ad0 20 0 3
+FUNC af0 3c 0 MOZ_ReportAssertionFailure(char const*, char const*, int)
+af0 10 119 13
+b00 4 123 13
+b04 2 122 13
+b06 2 123 13
+b08 12 122 13
+b1a 8 144 13
+b22 a 0 13
+FUNC b2c 10 0 std::__ndk1::vector<unsigned long long, std::__ndk1::allocator<unsigned long long> >::__throw_length_error[abi:dn210000]()
+b2c c 763 6
+b38 4 0 6
+FUNC b3c 14 0 std::__ndk1::__throw_length_error[abi:dn210000](char const*)
+b3c 6 241 0
+b42 8 245 0
+b4a 6 0 0
+FUNC b50 10 0 std::__throw_bad_array_new_length([abi:dn210000], void)
+b50 4 65 1
+b54 8 69 1
+b5c 4 0 1
+PUBLIC m b60 0 __aeabi_memcpy
+PUBLIC b70 0 <.plt ELF section in TestRandomNum>
+STACK CFI INIT 970 180 .cfa: sp 0 + .ra: lr
+STACK CFI 972 .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 974 .cfa: r7 8 +
+STACK CFI 978 r11: .cfa -24 + ^ r10: .cfa -28 + ^ r9: .cfa -32 + ^ r8: .cfa -36 + ^
+STACK CFI INIT af0 3c .cfa: sp 0 + .ra: lr
+STACK CFI af2 .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI af4 .cfa: r7 8 +
+STACK CFI af8 r11: .cfa -24 + ^
+STACK CFI INIT b2c 10 .cfa: sp 0 + .ra: lr
+STACK CFI b2e .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI b30 .cfa: r7 8 +
+STACK CFI INIT b3c 14 .cfa: sp 0 + .ra: lr
+STACK CFI b3e .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI b40 .cfa: r7 8 +
+STACK CFI INIT b50 10 .cfa: sp 0 + .ra: lr
+STACK CFI b52 .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI b54 .cfa: r7 8 +

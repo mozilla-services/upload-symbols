@@ -1,0 +1,134 @@
+MODULE Linux arm 8E5E7167FA1FAD4DA1687E85A52A12FF0 TestXorShift128PlusRNG
+INFO CODE_ID 67715E8E1FFA4DADA1687E85A52A12FFABA04EC5
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 hg:hg.mozilla.org/try:mfbt/tests/TestXorShift128PlusRNG.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 1 hg:hg.mozilla.org/try:mfbt/XorShift128PlusRNG.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 2 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/fortify/string.h
+FILE 3 hg:hg.mozilla.org/try:mfbt/PodOperations.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 4 hg:hg.mozilla.org/try:mfbt/Assertions.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+INLINE_ORIGIN 0 TestDumbSequence()
+INLINE_ORIGIN 1 TestPopulation()
+INLINE_ORIGIN 2 mozilla::non_crypto::XorShift128PlusRNG::next()
+INLINE_ORIGIN 3 Population(unsigned long long)
+INLINE_ORIGIN 4 TestDoubleDistribution()
+INLINE_ORIGIN 5 mozilla::PodArrayZero<unsigned int, (unsigned int)100>(unsigned int (&) [(unsigned int)100])
+INLINE_ORIGIN 6 memset(void*, int pass_object_size0, unsigned int)
+INLINE_ORIGIN 7 mozilla::non_crypto::XorShift128PlusRNG::nextDouble()
+INLINE_ORIGIN 8 MOZ_CrashSequence(void*, int)
+PUBLIC 7e8 0 _start
+PUBLIC 7f8 0 _start_main
+PUBLIC 864 0 __atexit_handler_wrapper
+PUBLIC 87c 0 atexit
+PUBLIC 8a8 0 pthread_atfork
+PUBLIC 8c4 0 call_fini_array
+FUNC 908 310 0 main
+INLINE 0 95 0 0 91a 72 b3a 48
+INLINE 0 96 0 1 9ae 6e b82 18
+INLINE 1 54 0 2 9ae 38
+INLINE 1 54 0 3 9e6 22
+INLINE 0 98 0 4 a1e ca b0a 30
+INLINE 1 79 0 5 a1e 3e
+INLINE 2 84 3 6 a1e 3e
+INLINE 1 84 0 7 a5c 48
+INLINE 2 96 1 2 a5c 38
+INLINE 1 85 0 8 b1c 2
+INLINE 1 90 0 8 b34 2
+INLINE 1 27 0 8 b4c 2
+INLINE 1 29 0 8 b64 2
+INLINE 1 31 0 8 b7c 2
+INLINE 1 55 0 8 b94 2
+908 12 94 0
+91a c 27 0
+926 2 0 0
+928 1c 27 0
+944 4 0 0
+948 c 29 0
+954 4 0 0
+958 10 29 0
+968 4 0 0
+96c c 31 0
+978 4 0 0
+97c 10 31 0
+98c 22 0 0
+9ae c 75 1
+9ba 24 76 1
+9de 8 77 1
+9e6 8 38 0
+9ee 4 0 0
+9f2 2 39 0
+9f4 4 38 0
+9f8 a 39 0
+a02 6 38 0
+a08 6 55 0
+a0e 2 53 0
+a10 4 0 0
+a14 4 53 0
+a18 2 0 0
+a1a 2 53 0
+a1c 2 0 0
+a1e a 138 2
+a28 34 0 2
+a5c c 75 1
+a68 24 76 1
+a8c 8 77 1
+a94 4 96 1
+a98 c 97 1
+aa4 a 85 0
+aae 4 86 0
+ab2 4 83 0
+ab6 14 86 0
+aca 8 0 0
+ad2 2 83 0
+ad4 2 0 0
+ad6 c 90 0
+ae2 6 89 0
+ae8 c 0 0
+af4 12 100 0
+b06 4 0 0
+b0a 10 85 0
+b1a 2 0 0
+b1c 2 242 4
+b1e 4 85 0
+b22 10 90 0
+b32 2 0 0
+b34 2 242 4
+b36 4 90 0
+b3a 10 27 0
+b4a 2 0 0
+b4c 2 242 4
+b4e 4 27 0
+b52 10 29 0
+b62 2 0 0
+b64 2 242 4
+b66 4 29 0
+b6a 10 31 0
+b7a 2 0 0
+b7c 2 242 4
+b7e 4 31 0
+b82 6 55 0
+b88 2 0 0
+b8a 8 55 0
+b92 2 0 0
+b94 2 242 4
+b96 4 55 0
+b9a 7e 0 0
+FUNC c18 3c 0 MOZ_ReportAssertionFailure(char const*, char const*, int)
+c18 10 119 4
+c28 4 123 4
+c2c 2 122 4
+c2e 2 123 4
+c30 12 122 4
+c42 8 144 4
+c4a a 0 4
+PUBLIC m c58 0 __aeabi_ul2d
+PUBLIC m c90 0 __aeabi_memset
+PUBLIC m ca0 0 __aeabi_memclr8
+PUBLIC cb0 0 <.plt ELF section in TestXorShift128PlusRNG>
+STACK CFI INIT 908 310 .cfa: sp 0 + .ra: lr
+STACK CFI 90a .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 90c .cfa: r7 8 +
+STACK CFI 910 r10: .cfa -24 + ^ r9: .cfa -28 + ^ r8: .cfa -32 + ^
+STACK CFI INIT c18 3c .cfa: sp 0 + .ra: lr
+STACK CFI c1a .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI c1c .cfa: r7 8 +
+STACK CFI c20 r11: .cfa -24 + ^

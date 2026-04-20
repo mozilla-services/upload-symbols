@@ -1,0 +1,30 @@
+MODULE Linux arm ADD18C2FACD5FE078D176FBC5868DA620 TestBlockingProcess
+INFO CODE_ID 2F8CD1ADD5AC07FE8D176FBC5868DA62CD539D7D
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/bits/fortify/stdio.h
+FILE 1 hg:hg.mozilla.org/try:xpcom/tests/TestBlockingProcess.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+INLINE_ORIGIN 0 fread(void*, unsigned int pass_object_size0, unsigned int, __sFILE*)
+PUBLIC 460 0 _start
+PUBLIC 470 0 _start_main
+PUBLIC 4dc 0 __atexit_handler_wrapper
+PUBLIC 4f4 0 atexit
+PUBLIC 520 0 pthread_atfork
+PUBLIC 53c 0 call_fini_array
+FUNC 580 4c 0 main
+INLINE 0 5 1 0 588 4 598 2 5a4 10
+580 6 3 1
+586 2 5 1
+588 4 106 0
+58c c 5 1
+598 2 106 0
+59a 4 5 1
+59e 4 4 1
+5a2 2 0 1
+5a4 4 106 0
+5a8 c 0 0
+5b4 8 6 1
+5bc 10 0 1
+PUBLIC 5d0 0 <.plt ELF section in TestBlockingProcess>
+STACK CFI INIT 580 4c .cfa: sp 0 + .ra: lr
+STACK CFI 582 .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI 584 .cfa: r7 8 +
