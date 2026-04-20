@@ -1,7 +1,8 @@
 //! Client implementation for the original Mozilla Symbols Server upload endpoint.
 
-use crate::{Client, Result};
+use crate::{Client, Error, Result};
 use reqwest::{Method, multipart};
+use serde::Deserialize;
 use std::{
     io::Seek,
     path::{Path, PathBuf},
@@ -118,19 +119,32 @@ async fn upload_zip_archive(client: Client, path: PathBuf) -> Result<()> {
             .multipart(form)
             .send()
             .await?;
-        if let 429 | 502 | 503 | 504 = response.status().as_u16() {
-            if remaining_retries == 0 {
-                return Err(response.error_for_status().unwrap_err().into());
+        match response.status().as_u16() {
+            429 | 502 | 503 | 504 => {
+                if remaining_retries == 0 {
+                    return Err(response.error_for_status().unwrap_err().into());
+                }
+                remaining_retries -= 1;
+                drop(permit);
+                sleep(client.retry_delay_v1).await;
+                continue;
             }
-            remaining_retries -= 1;
-            drop(permit);
-            sleep(client.retry_delay_v1).await;
-            continue;
+            400 => {
+                // For 400s, the symbols server returns an error message.
+                let server_error = response.json::<ServerError>().await?;
+                return Err(Error::SymbolsServerBadRequest(server_error.error));
+            }
+            _ => {
+                response.error_for_status_ref()?;
+            }
         }
-        // TODO(smarnach): Extract the error response for 4XXs.
-        response.error_for_status_ref()?;
         // TODO(smarnach): Extract skipped keys from response.
         break;
     }
     Ok(())
+}
+
+#[derive(Deserialize)]
+struct ServerError {
+    error: String,
 }

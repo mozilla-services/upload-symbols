@@ -30,6 +30,8 @@ pub enum Error {
     IgnoredFile(PathBuf),
     #[error("path not valid UTF-8: {0}")]
     PathNotValidUtf8(PathBuf),
+    #[error("bad request to symbols server: {0}")]
+    SymbolsServerBadRequest(String),
 }
 
 type Result<T> = std::result::Result<T, Error>;
