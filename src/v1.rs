@@ -28,7 +28,7 @@ pub async fn upload_directory(client: &Client, root: &Path) -> Result<()> {
     // archive as soon as it is ready.
     let (tx, mut rx) = mpsc::channel(64);
     let path = root.to_path_buf();
-    let temp_dir = crate::tmpdir::TempDir::new("upload-symbols")?;
+    let temp_dir = crate::tmpdir::TempDir::new("upload-symbols.")?;
     let temp_path = temp_dir.path().to_path_buf();
     let create_zip_handle = spawn_blocking(|| create_zip_archives(tx, path, temp_path));
 
@@ -53,7 +53,7 @@ pub async fn upload_directory(client: &Client, root: &Path) -> Result<()> {
 }
 
 /// The file size threshold after which to start a new ZIP archive.
-const ZIP_FILE_SIZE_THRESHOLD: u64 = 2 << 29; // 0.5 GiB
+const ZIP_FILE_SIZE_THRESHOLD: u64 = 2 << 26; // 64 MiB
 
 /// Create ZIP archives for all symbols files in the given directory.
 fn create_zip_archives(tx: mpsc::Sender<PathBuf>, root: PathBuf, temp_path: PathBuf) -> Result<()> {
@@ -100,8 +100,12 @@ fn create_zip_archives(tx: mpsc::Sender<PathBuf>, root: PathBuf, temp_path: Path
 
 async fn upload_zip_archive(client: Client, path: PathBuf) -> Result<()> {
     let mut retries = 2; // TODO(smarnach): Make configurable
+    // We know the file name is of the form `symbols-{i}.zip`. So we can unwrap the result of
+    // `file_name()`, as there must be a file name. We can also unwrap the result of to_str(),
+    // since the file name only contain ASCII characters.
+    let file_name = String::from(path.file_name().unwrap().to_str().unwrap());
     loop {
-        let form = multipart::Form::new().file("file", &path).await?;
+        let form = multipart::Form::new().file(file_name.clone(), &path).await?;
         // We know the semaphore hasn't been closed, so we can unwrap.
         let permit = client.conn_limit_upload_v1.acquire().await.unwrap();
         let response = client
@@ -118,6 +122,7 @@ async fn upload_zip_archive(client: Client, path: PathBuf) -> Result<()> {
             sleep(Duration::from_secs(120)).await; // TODO(smarnach): Make configurable
             continue;
         }
+        // TODO(smarnach): Extract the error response for 4XXs.
         response.error_for_status_ref()?;
         // TODO(smarnach): Extract skipped keys from response.
         break;
