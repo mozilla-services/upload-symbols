@@ -53,7 +53,7 @@ impl Client {
     /// Create a new upload client.
     ///
     /// The [`reqwest::Client`] should have a meaningful, custom user agent. The `base_url` of
-    /// the production Mozilla Symbols Server is https://symbols.mozilla.org/. You can can
+    /// the production Mozilla Symbols Server is <https://symbols.mozilla.org/>. You can can
     /// obtain an `auth_token` from the web interface of the symbols server (provided you have
     /// an account with upload permissions).
     pub fn new<S: Into<String>>(client: reqwest::Client, base_url: Url, auth_token: S) -> Self {
