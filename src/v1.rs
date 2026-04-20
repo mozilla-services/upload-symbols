@@ -5,7 +5,6 @@ use reqwest::{Method, multipart};
 use std::{
     io::Seek,
     path::{Path, PathBuf},
-    time::Duration,
 };
 use tokio::{
     sync::mpsc,
@@ -30,7 +29,9 @@ pub async fn upload_directory(client: &Client, root: &Path) -> Result<()> {
     let path = root.to_path_buf();
     let temp_dir = crate::tmpdir::TempDir::new("upload-symbols.")?;
     let temp_path = temp_dir.path().to_path_buf();
-    let create_zip_handle = spawn_blocking(|| create_zip_archives(tx, path, temp_path));
+    let zip_size_threshold = client.zip_size_threshold_v1;
+    let create_zip_handle =
+        spawn_blocking(move || create_zip_archives(tx, path, temp_path, zip_size_threshold));
 
     // Upload ZIP archives as they get created.
     let mut set = JoinSet::new();
@@ -52,11 +53,13 @@ pub async fn upload_directory(client: &Client, root: &Path) -> Result<()> {
     result
 }
 
-/// The file size threshold after which to start a new ZIP archive.
-const ZIP_FILE_SIZE_THRESHOLD: u64 = 2 << 26; // 64 MiB
-
 /// Create ZIP archives for all symbols files in the given directory.
-fn create_zip_archives(tx: mpsc::Sender<PathBuf>, root: PathBuf, temp_path: PathBuf) -> Result<()> {
+fn create_zip_archives(
+    tx: mpsc::Sender<PathBuf>,
+    root: PathBuf,
+    temp_path: PathBuf,
+    file_size_threshold: u64,
+) -> Result<()> {
     let mut current_zip_writer = None;
     let mut zip_path_iter = (0..).map(|i| temp_path.join(format!("symbols-{i}.zip")));
     let mut current_zip_path = None;
@@ -84,7 +87,7 @@ fn create_zip_archives(tx: mpsc::Sender<PathBuf>, root: PathBuf, temp_path: Path
         zip_writer.start_file(sym_file.key(), options)?;
         std::io::copy(&mut sym_file.open()?, zip_writer)?;
         // We know the ZipWriter isn't closed yet, so we can unwrap.
-        if zip_writer.get_ref().unwrap().stream_position()? >= ZIP_FILE_SIZE_THRESHOLD {
+        if zip_writer.get_ref().unwrap().stream_position()? >= file_size_threshold {
             current_zip_writer.take().unwrap().finish()?;
             // We know the receiver hasn't hung up yet, so we can unwrap.
             tx.blocking_send(current_zip_path.take().unwrap()).unwrap();
@@ -99,13 +102,15 @@ fn create_zip_archives(tx: mpsc::Sender<PathBuf>, root: PathBuf, temp_path: Path
 }
 
 async fn upload_zip_archive(client: Client, path: PathBuf) -> Result<()> {
-    let mut retries = 2; // TODO(smarnach): Make configurable
+    let mut remaining_retries = client.retries_v1;
     // We know the file name is of the form `symbols-{i}.zip`. So we can unwrap the result of
     // `file_name()`, as there must be a file name. We can also unwrap the result of to_str(),
     // since the file name only contain ASCII characters.
     let file_name = String::from(path.file_name().unwrap().to_str().unwrap());
     loop {
-        let form = multipart::Form::new().file(file_name.clone(), &path).await?;
+        let form = multipart::Form::new()
+            .file(file_name.clone(), &path)
+            .await?;
         // We know the semaphore hasn't been closed, so we can unwrap.
         let permit = client.conn_limit_upload_v1.acquire().await.unwrap();
         let response = client
@@ -114,12 +119,12 @@ async fn upload_zip_archive(client: Client, path: PathBuf) -> Result<()> {
             .send()
             .await?;
         if let 429 | 502 | 503 | 504 = response.status().as_u16() {
-            if retries == 0 {
+            if remaining_retries == 0 {
                 return Err(response.error_for_status().unwrap_err().into());
             }
-            retries -= 1;
+            remaining_retries -= 1;
             drop(permit);
-            sleep(Duration::from_secs(120)).await; // TODO(smarnach): Make configurable
+            sleep(client.retry_delay_v1).await;
             continue;
         }
         // TODO(smarnach): Extract the error response for 4XXs.

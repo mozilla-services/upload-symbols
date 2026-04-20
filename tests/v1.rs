@@ -14,6 +14,7 @@ fn upload_directory_locally() {
     let auth_token = std::env::var("LOCAL_AUTH_TOKEN").unwrap();
     let client = Client::builder(auth_token)
         .base_url(Url::parse("http://localhost:8000/").unwrap())
+        .zip_size_threshold_v1(1 << 20) // 1 MiB
         .build()
         .unwrap();
     Runtime::new()

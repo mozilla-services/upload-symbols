@@ -6,6 +6,7 @@
 use std::{
     path::{Path, PathBuf},
     sync::Arc,
+    time::Duration,
 };
 use tokio::sync::Semaphore;
 use url::Url;
@@ -47,6 +48,9 @@ pub struct Client {
     /// The current upload API doesn't handle load spikes gracefully, so we limit the number
     /// of concurrent connections.
     conn_limit_upload_v1: Arc<Semaphore>,
+    zip_size_threshold_v1: u64,
+    retries_v1: usize,
+    retry_delay_v1: Duration,
 }
 
 impl Client {
@@ -57,6 +61,9 @@ impl Client {
             base_url: None,
             auth_token: auth_token.into(),
             max_connections_v1: 3,
+            zip_size_threshold_v1: 1 << 26, // 64 MiB
+            retries_v1: 2,
+            retry_delay_v1: Duration::from_secs(120),
         }
     }
 
@@ -88,6 +95,9 @@ pub struct ClientBuilder {
     base_url: Option<Url>,
     auth_token: String,
     max_connections_v1: usize,
+    zip_size_threshold_v1: u64,
+    retries_v1: usize,
+    retry_delay_v1: Duration,
 }
 
 impl ClientBuilder {
@@ -106,6 +116,9 @@ impl ClientBuilder {
                 .unwrap_or_else(|| Url::parse("https://symbols.mozilla.org/").unwrap()),
             auth_token: self.auth_token,
             conn_limit_upload_v1: Arc::new(Semaphore::new(self.max_connections_v1)),
+            zip_size_threshold_v1: self.zip_size_threshold_v1,
+            retries_v1: self.retries_v1,
+            retry_delay_v1: self.retry_delay_v1,
         };
         Ok(client)
     }
@@ -131,6 +144,37 @@ impl ClientBuilder {
     /// The default is 3.
     pub fn max_connections_v1(mut self, max_connections_v1: usize) -> Self {
         self.max_connections_v1 = max_connections_v1;
+        self
+    }
+
+    /// Set the ZIP archive size threshold.
+    ///
+    /// When building ZIP archives for v1 of the upload API, a new archive is started once the
+    /// size of the current archive exceeds this threshold. ZIP archives still can get much
+    /// bigger than this value since member files can be big.
+    ///
+    /// The default is 64 MiB.
+    pub fn zip_size_threshold_v1(mut self, zip_size_threshold_v1: u64) -> Self {
+        self.zip_size_threshold_v1 = zip_size_threshold_v1;
+        self
+    }
+
+    /// Set the number of retries for the version 1 upload API.
+    ///
+    /// On retriable status codes, uploading ZIP archives is retried this number of times, in
+    /// addition to the original request. A value of 0 disables retrying.
+    ///
+    /// The default is 2.
+    pub fn retries_v1(mut self, retries_v1: usize) -> Self {
+        self.retries_v1 = retries_v1;
+        self
+    }
+
+    /// Set the delay between retries for version 1 of the upload API.
+    ///
+    /// The default is 120 seconds.
+    pub fn retry_delay_v1_seconds(mut self, retry_delay_v1_seconds: u64) -> Self {
+        self.retry_delay_v1 = Duration::from_secs(retry_delay_v1_seconds);
         self
     }
 }
