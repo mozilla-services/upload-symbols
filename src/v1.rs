@@ -1,6 +1,6 @@
 //! Client implementation for the original Mozilla Symbols Server upload endpoint.
 
-use crate::{Client, Error, Result};
+use crate::{Client, Error, Result, sym_files::SymbolsFile};
 use reqwest::{Method, multipart};
 use serde::Deserialize;
 use std::{
@@ -36,17 +36,23 @@ pub async fn upload_directory(client: &Client, root: &Path) -> Result<()> {
 
     // Upload ZIP archives as they get created.
     let mut set = JoinSet::new();
-    while let Some(zip_archive_path) = rx.recv().await {
-        set.spawn(upload_zip_archive(client.clone(), zip_archive_path));
+    while let Some((zip_archive_path, keys)) = rx.recv().await {
+        let client = client.clone();
+        set.spawn(async move { (upload_zip_archive(client, zip_archive_path).await, keys) });
     }
 
     // Unwrap the outer JoinError. This will basically propagate panics.
     create_zip_handle.await.unwrap()?;
 
-    // TODO(smarnach) Instead of just returning the first error, we should do something more
-    // reasonable. We should probably also collect the information about skipped files and pass
-    // it back to the caller.
-    let result = set.join_all().await.into_iter().collect();
+    let mut result = Ok(());
+    while let Some(join_result) = set.join_next().await {
+        // Unwrap the outer result to propagate panics.
+        let (upload_result, _keys) = join_result.unwrap();
+        // TODO(smarnach) Instead of just returning the first error, we should do something
+        // more reasonable. We should probably also collect the information about skipped files
+        // and pass it back to the caller.
+        result = result.and(upload_result);
+    }
 
     // Explicitly close temp_dir so we can propagate any errors.
     temp_dir.close()?;
@@ -56,27 +62,48 @@ pub async fn upload_directory(client: &Client, root: &Path) -> Result<()> {
 
 /// Create ZIP archives for all symbols files in the given directory.
 fn create_zip_archives(
-    tx: mpsc::Sender<PathBuf>,
+    tx: mpsc::Sender<(PathBuf, Vec<String>)>,
     root: PathBuf,
     temp_path: PathBuf,
     file_size_threshold: u64,
 ) -> Result<()> {
-    let mut current_zip_writer = None;
     let mut zip_path_iter = (0..).map(|i| temp_path.join(format!("symbols-{i}.zip")));
-    let mut current_zip_path = None;
+    let mut current_zip_archive = None;
     for sym_file in crate::sym_files::discover(&root) {
-        // TODO(smarnach): Add tracing events for ignored files instead of erroring out.
-        let sym_file = sym_file?;
-        let zip_writer = if let Some(ref mut zip_writer) = current_zip_writer {
-            zip_writer
+        let zip_archive = if let Some(ref mut zip_archive) = current_zip_archive {
+            zip_archive
         } else {
             let zip_path = zip_path_iter.next().unwrap();
-            let zip_file = std::fs::File::create_new(&zip_path)?;
-            let zip_writer = ZipWriter::new(zip_file);
-            current_zip_writer = Some(zip_writer);
-            current_zip_path = Some(zip_path);
-            current_zip_writer.as_mut().unwrap()
+            current_zip_archive = Some(ZipArchive::new(zip_path)?);
+            current_zip_archive.as_mut().unwrap()
         };
+        // TODO(smarnach): Add tracing events for ignored files instead of erroring out.
+        zip_archive.add_sym_file(sym_file?)?;
+        if zip_archive.size()? >= file_size_threshold {
+            current_zip_archive.take().unwrap().finish(&tx)?;
+        }
+    }
+    if let Some(zip_archive) = current_zip_archive {
+        zip_archive.finish(&tx)?;
+    }
+    Ok(())
+}
+
+struct ZipArchive {
+    path: PathBuf,
+    writer: ZipWriter<std::fs::File>,
+    keys: Vec<String>,
+}
+
+impl ZipArchive {
+    fn new(path: PathBuf) -> std::io::Result<Self> {
+        let file = std::fs::File::create_new(&path)?;
+        let writer = ZipWriter::new(file);
+        let keys = vec![];
+        Ok(Self { path, writer, keys })
+    }
+
+    fn add_sym_file(&mut self, sym_file: SymbolsFile) -> Result<()> {
         let options = zip::write::SimpleFileOptions::default().compression_method(
             if sym_file.is_compressed() {
                 CompressionMethod::Stored
@@ -84,21 +111,23 @@ fn create_zip_archives(
                 CompressionMethod::Deflated
             },
         );
-        zip_writer.start_file(sym_file.key(), options)?;
-        std::io::copy(&mut sym_file.open()?, zip_writer)?;
+        self.writer.start_file(sym_file.key(), options)?;
+        std::io::copy(&mut sym_file.open()?, &mut self.writer)?;
+        self.keys.push(sym_file.into_key());
+        Ok(())
+    }
+
+    fn size(&self) -> std::io::Result<u64> {
         // We know the ZipWriter isn't closed yet, so we can unwrap.
-        if zip_writer.get_ref().unwrap().stream_position()? >= file_size_threshold {
-            current_zip_writer.take().unwrap().finish()?;
-            // We know the receiver hasn't hung up yet, so we can unwrap.
-            tx.blocking_send(current_zip_path.take().unwrap()).unwrap();
-        }
+        self.writer.get_ref().unwrap().stream_position()
     }
-    if let Some(zip_writer) = current_zip_writer {
-        zip_writer.finish()?;
+
+    fn finish(self, tx: &mpsc::Sender<(PathBuf, Vec<String>)>) -> zip::result::ZipResult<()> {
+        self.writer.finish()?;
         // We know the receiver hasn't hung up yet, so we can unwrap.
-        tx.blocking_send(current_zip_path.unwrap()).unwrap();
+        tx.blocking_send((self.path, self.keys)).unwrap();
+        Ok(())
     }
-    Ok(())
 }
 
 async fn upload_zip_archive(client: Client, path: PathBuf) -> Result<()> {

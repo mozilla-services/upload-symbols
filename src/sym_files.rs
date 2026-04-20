@@ -29,6 +29,11 @@ impl SymbolsFile {
         &self.key
     }
 
+    /// Return the storage key for this symbols file.
+    pub fn into_key(self) -> String {
+        self.key
+    }
+
     /// Return whether the file is compressed. We currently assume that all file types except
     /// for Breakpad symobls files are already compressed.
     pub fn is_compressed(&self) -> bool {
