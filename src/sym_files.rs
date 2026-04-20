@@ -53,11 +53,11 @@ impl SymbolsFile {
 /// ```text
 /// <debug_file>/<debug_id>/<sym_file>
 /// ```
-/// The iterator will return SymbolFile instances for all regular files found. Entries in the
+/// The iterator will return `SymbolFile` instances for all regular files found. Entries in the
 /// directory tree that aren't regular files are silently ignored, unless they are symlinks
 /// pointing to regular files. For files that don't have the above path structure, and
-/// Error::IgnoredFile error is returned. For files with non-UTF8 paths Error::PathNotValidUtf8
-/// is returned.
+/// `Error::IgnoredFile` error is returned. For files with non-UTF8 paths
+/// `Error::PathNotValidUtf8` is returned.
 pub fn discover<P: Into<PathBuf>>(root: P) -> impl Iterator<Item = Result<SymbolsFile>> {
     Discovery::new(root.into())
 }

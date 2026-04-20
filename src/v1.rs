@@ -67,16 +67,15 @@ fn create_zip_archives(
     for sym_file in crate::sym_files::discover(&root) {
         // TODO(smarnach): Add tracing events for ignored files instead of erroring out.
         let sym_file = sym_file?;
-        let zip_writer = match current_zip_writer {
-            Some(ref mut zip_writer) => zip_writer,
-            None => {
-                let zip_path = zip_path_iter.next().unwrap();
-                let zip_file = std::fs::File::create_new(&zip_path)?;
-                let zip_writer = ZipWriter::new(zip_file);
-                current_zip_writer = Some(zip_writer);
-                current_zip_path = Some(zip_path);
-                current_zip_writer.as_mut().unwrap()
-            }
+        let zip_writer = if let Some(ref mut zip_writer) = current_zip_writer {
+            zip_writer
+        } else {
+            let zip_path = zip_path_iter.next().unwrap();
+            let zip_file = std::fs::File::create_new(&zip_path)?;
+            let zip_writer = ZipWriter::new(zip_file);
+            current_zip_writer = Some(zip_writer);
+            current_zip_path = Some(zip_path);
+            current_zip_writer.as_mut().unwrap()
         };
         let options = zip::write::SimpleFileOptions::default().compression_method(
             if sym_file.is_compressed() {
