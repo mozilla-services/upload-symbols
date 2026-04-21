@@ -24,12 +24,6 @@ pub enum Error {
     ZipError(#[from] zip::result::ZipError),
     #[error("error sending HTTP request")]
     ReqwestError(#[from] reqwest::Error),
-    #[error("error while traversing diretory tree")]
-    WalkDirError(#[from] walkdir::Error),
-    #[error("ignored file: {0}")]
-    IgnoredFile(PathBuf),
-    #[error("path not valid UTF-8: {0}")]
-    PathNotValidUtf8(PathBuf),
     #[error("bad request to symbols server: {0}")]
     SymbolsServerBadRequest(String),
 }

@@ -1,10 +1,10 @@
 //! Utilities to discover and handle symbols files.
 
-use crate::{Error, Result};
 use std::{ffi::OsStr, fs::File, io, path::PathBuf};
 use walkdir::WalkDir;
 
 /// A reference to a symbols file on the filesystem.
+#[derive(Clone, Debug)]
 pub struct SymbolsFile {
     /// The filesystem path of the underlying file.
     path: PathBuf,
@@ -50,6 +50,21 @@ impl SymbolsFile {
     }
 }
 
+/// Errors for invalid keys found during symbols file discovery.
+#[derive(Debug, thiserror::Error)]
+pub enum InvalidKeyError {
+    #[error("path does not have exactly three components: {0}")]
+    NotThreeComponents(PathBuf),
+    #[error("path not valid UTF-8: {0}")]
+    PathNotValidUtf8(PathBuf),
+    #[error("debug_id must be a hex string: {0}")]
+    InvalidDebugId(String),
+    #[error("key contains invalid characters: {0}")]
+    InvalidCharacters(String),
+    #[error("error while traversing diretory tree")]
+    WalkDirError(#[from] walkdir::Error),
+}
+
 /// Discover all symbols files in a directory.
 ///
 /// The symbols files must be laid out in a way that their eventual storage key on the symbols
@@ -63,7 +78,9 @@ impl SymbolsFile {
 /// pointing to regular files. For files that don't have the above path structure, and
 /// `Error::IgnoredFile` error is returned. For files with non-UTF8 paths
 /// `Error::PathNotValidUtf8` is returned.
-pub fn discover<P: Into<PathBuf>>(root: P) -> impl Iterator<Item = Result<SymbolsFile>> {
+pub fn discover<P: Into<PathBuf>>(
+    root: P,
+) -> impl Iterator<Item = Result<SymbolsFile, InvalidKeyError>> {
     Discovery::new(root.into())
 }
 
@@ -80,7 +97,7 @@ impl Discovery {
 }
 
 impl Iterator for Discovery {
-    type Item = Result<SymbolsFile>;
+    type Item = Result<SymbolsFile, InvalidKeyError>;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
@@ -92,31 +109,47 @@ impl Iterator for Discovery {
                         // considered files and not skipped.
                         continue;
                     }
-                    if entry.depth() != 3 {
-                        // Everything that isn't exactly at depth 3 is not of the form
-                        // `<debug_file>/<debug_id>/<symbols_file>`, so we can ignore it.
-                        return Some(Err(Error::IgnoredFile(entry.into_path())));
-                    }
                     // Paths of entries are guaranteed to start with `root`, so we can unwrap.
                     // This is also true for symlinks; `entry.path()` still returns the path of
                     // the link, not the path of the target.
                     let rel_path = entry.path().strip_prefix(&self.root).unwrap();
+                    if entry.depth() != 3 {
+                        // Everything that isn't exactly at depth 3 is not of the form
+                        // `<debug_file>/<debug_id>/<symbols_file>`.
+                        return Some(Err(InvalidKeyError::NotThreeComponents(rel_path.into())));
+                    }
                     let Some(key) = rel_path.to_str() else {
-                        return Some(Err(Error::PathNotValidUtf8(entry.into_path())));
+                        return Some(Err(InvalidKeyError::PathNotValidUtf8(rel_path.into())));
                     };
                     // We know the path must contain two slashes, so we can unwrap.
                     let (_, rest) = key.split_once('/').unwrap();
                     let (debug_id, _) = rest.split_once('/').unwrap();
                     if !debug_id.chars().all(|c| c.is_ascii_hexdigit()) {
                         // The debug_id is not a hex string; ignore the file.
-                        return Some(Err(Error::IgnoredFile(entry.into_path())));
+                        return Some(Err(InvalidKeyError::InvalidDebugId(key.into())));
                     }
-                    // TODO(smarnach): Check for other undesirable characters in the key.
+                    if key.chars().any(is_invalid_char) {
+                        return Some(Err(InvalidKeyError::InvalidCharacters(key.into())));
+                    }
                     let symbols_file = SymbolsFile::new(entry.path(), key);
                     return Some(Ok(symbols_file));
                 }
-                Err(e) => return Some(Err(Error::from(e))),
+                Err(e) => return Some(Err(InvalidKeyError::from(e))),
             }
         }
     }
+}
+
+/// Check for characters we consider invalid in symbol file keys.
+///
+/// This is taken from `tecken/base/utils.py`; these are the chracters we currently reject on
+/// the server side, both during upload and during download. Originally this was inspired by
+/// the restriction S3 places on object keys.
+fn is_invalid_char(c: char) -> bool {
+    !c.is_ascii()
+        || c.is_ascii_control()
+        || matches!(
+            c,
+            '\\' | '^' | '`' | '<' | '>' | '{' | '}' | '[' | ']' | '#' | '%' | '"' | '\'' | '|'
+        )
 }

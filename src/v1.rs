@@ -1,6 +1,9 @@
 //! Client implementation for the original Mozilla Symbols Server upload endpoint.
 
-use crate::{Client, Error, Result, sym_files::SymbolsFile};
+use crate::{
+    Client, Error, Result,
+    sym_files::{InvalidKeyError, SymbolsFile},
+};
 use reqwest::{Method, multipart};
 use serde::Deserialize;
 use std::{
@@ -66,10 +69,15 @@ fn create_zip_archives(
     root: PathBuf,
     temp_path: PathBuf,
     file_size_threshold: u64,
-) -> Result<()> {
+) -> Result<Vec<InvalidKeyError>> {
     let mut zip_path_iter = (0..).map(|i| temp_path.join(format!("symbols-{i}.zip")));
     let mut current_zip_archive = None;
+    let mut errors = vec![];
     for sym_file in crate::sym_files::discover(&root) {
+        let Ok(sym_file) = sym_file else {
+                errors.push(sym_file.unwrap_err());
+                continue;
+        };
         let zip_archive = if let Some(ref mut zip_archive) = current_zip_archive {
             zip_archive
         } else {
@@ -77,8 +85,7 @@ fn create_zip_archives(
             current_zip_archive = Some(ZipArchive::new(zip_path)?);
             current_zip_archive.as_mut().unwrap()
         };
-        // TODO(smarnach): Add tracing events for ignored files instead of erroring out.
-        zip_archive.add_sym_file(sym_file?)?;
+        zip_archive.add_sym_file(sym_file)?;
         if zip_archive.size()? >= file_size_threshold {
             current_zip_archive.take().unwrap().finish(&tx)?;
         }
@@ -86,7 +93,7 @@ fn create_zip_archives(
     if let Some(zip_archive) = current_zip_archive {
         zip_archive.finish(&tx)?;
     }
-    Ok(())
+    Ok(errors)
 }
 
 struct ZipArchive {
