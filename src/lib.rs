@@ -66,7 +66,7 @@ impl Client {
     /// Upload a directory on the filesystem to the symbols server.
     ///
     /// The files to be uploaded are discovered using [`sym_files::discover`].
-    pub async fn upload_directory<P: AsRef<Path>>(&self, path: P) -> Result<()> {
+    pub async fn upload_directory<P: AsRef<Path>>(&self, path: P) -> Result<UploadSummary> {
         let path = std::fs::canonicalize(path.as_ref())?;
         if !path.is_dir() {
             return Err(Error::NotADirectory(path));
@@ -173,6 +173,20 @@ impl ClientBuilder {
         self.retry_delay_v1 = Duration::from_secs(retry_delay_v1_seconds);
         self
     }
+}
+
+#[derive(Debug)]
+pub struct UploadSummary {
+    /// Keys of files that were successfully uploaded.
+    pub uploaded_keys: Vec<String>,
+    /// Keys of files that were skipped because they were already known to the server.
+    pub skipped_keys: Vec<String>,
+    /// Keys of files that were not successfully uploaded.
+    pub failed_keys: Vec<String>,
+    /// Errors during symbols file discovery.
+    pub discovery_errors: Vec<sym_files::InvalidKeyError>,
+    /// Errors during uploads.
+    pub upload_errors: Vec<Error>,
 }
 
 static USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"),);

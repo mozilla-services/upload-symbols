@@ -1,12 +1,13 @@
 //! Client implementation for the original Mozilla Symbols Server upload endpoint.
 
 use crate::{
-    Client, Error, Result,
+    Client, Error, Result, UploadSummary,
     sym_files::{InvalidKeyError, SymbolsFile},
 };
 use reqwest::{Method, multipart};
 use serde::Deserialize;
 use std::{
+    collections::HashSet,
     io::Seek,
     path::{Path, PathBuf},
 };
@@ -26,7 +27,7 @@ use zip::{CompressionMethod, ZipWriter};
 /// Since the original version of the upload API only supports uploading ZIP archives, we first
 /// need to create ZIP archives in a temporary directory before sending the actual HTTP
 /// requests.
-pub async fn upload_directory(client: &Client, root: &Path) -> Result<()> {
+pub async fn upload_directory(client: &Client, root: &Path) -> Result<UploadSummary> {
     // Create ZIP archives in a background thread so we can start uploading the first
     // archive as soon as it is ready.
     let (tx, mut rx) = mpsc::channel(64);
@@ -45,22 +46,39 @@ pub async fn upload_directory(client: &Client, root: &Path) -> Result<()> {
     }
 
     // Unwrap the outer JoinError. This will basically propagate panics.
-    create_zip_handle.await.unwrap()?;
+    let discovery_errors = create_zip_handle.await.unwrap()?;
 
-    let mut result = Ok(());
+    let mut uploaded_keys = vec![];
+    let mut skipped_keys = vec![];
+    let mut failed_keys = vec![];
+    let mut upload_errors = vec![];
     while let Some(join_result) = set.join_next().await {
         // Unwrap the outer result to propagate panics.
-        let (upload_result, _keys) = join_result.unwrap();
-        // TODO(smarnach) Instead of just returning the first error, we should do something
-        // more reasonable. We should probably also collect the information about skipped files
-        // and pass it back to the caller.
-        result = result.and(upload_result);
+        let (upload_result, keys) = join_result.unwrap();
+        match upload_result {
+            Ok(UploadResponse { upload }) => {
+                let skipped_set: HashSet<String> = upload.skipped_keys.into_iter().collect();
+                uploaded_keys.extend(keys.into_iter().filter(|key| !skipped_set.contains(key)));
+                skipped_keys.extend(skipped_set);
+            }
+            Err(e) => {
+                failed_keys.extend(keys);
+                upload_errors.push(e);
+            }
+        }
     }
 
     // Explicitly close temp_dir so we can propagate any errors.
     temp_dir.close()?;
 
-    result
+    let summary = UploadSummary {
+        uploaded_keys,
+        skipped_keys,
+        failed_keys,
+        discovery_errors,
+        upload_errors,
+    };
+    Ok(summary)
 }
 
 /// Create ZIP archives for all symbols files in the given directory.
@@ -75,8 +93,8 @@ fn create_zip_archives(
     let mut errors = vec![];
     for sym_file in crate::sym_files::discover(&root) {
         let Ok(sym_file) = sym_file else {
-                errors.push(sym_file.unwrap_err());
-                continue;
+            errors.push(sym_file.unwrap_err());
+            continue;
         };
         let zip_archive = if let Some(ref mut zip_archive) = current_zip_archive {
             zip_archive
@@ -137,7 +155,7 @@ impl ZipArchive {
     }
 }
 
-async fn upload_zip_archive(client: Client, path: PathBuf) -> Result<()> {
+async fn upload_zip_archive(client: Client, path: PathBuf) -> Result<UploadResponse> {
     let mut remaining_retries = client.retries_v1;
     // We know the file name is of the form `symbols-{i}.zip`. So we can unwrap the result of
     // `file_name()`, as there must be a file name. We can also unwrap the result of to_str(),
@@ -166,20 +184,28 @@ async fn upload_zip_archive(client: Client, path: PathBuf) -> Result<()> {
             }
             400 => {
                 // For 400s, the symbols server returns an error message.
-                let server_error = response.json::<ServerError>().await?;
+                let server_error: ServerError = response.json().await?;
                 return Err(Error::SymbolsServerBadRequest(server_error.error));
             }
-            _ => {
-                response.error_for_status_ref()?;
-            }
+            _ => {}
         }
-        // TODO(smarnach): Extract skipped keys from response.
-        break;
+        response.error_for_status_ref()?;
+        let upload_response: UploadResponse = response.json().await?;
+        return Ok(upload_response);
     }
-    Ok(())
 }
 
 #[derive(Deserialize)]
 struct ServerError {
     error: String,
+}
+
+#[derive(Deserialize)]
+struct UploadResponse {
+    upload: Upload,
+}
+
+#[derive(Deserialize)]
+struct Upload {
+    skipped_keys: Vec<String>,
 }

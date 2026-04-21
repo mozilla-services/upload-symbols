@@ -5,6 +5,8 @@
 
 #![cfg(feature = "local-upload-test")]
 
+use std::collections::HashSet;
+
 use upload_symbols::Client;
 use url::Url;
 
@@ -16,5 +18,14 @@ async fn upload_directory_locally() {
         .zip_size_threshold_v1(1 << 20) // 1 MiB
         .build()
         .unwrap();
-    client.upload_directory("tests/data/linux").await.unwrap();
+    let summary = client.upload_directory("tests/data/linux").await.unwrap();
+    let successful_keys: HashSet<String> = summary
+        .uploaded_keys
+        .into_iter()
+        .chain(summary.skipped_keys)
+        .collect();
+    assert_eq!(successful_keys.len(), 144);
+    assert!(summary.failed_keys.is_empty());
+    assert!(summary.discovery_errors.is_empty());
+    assert!(summary.upload_errors.is_empty());
 }
