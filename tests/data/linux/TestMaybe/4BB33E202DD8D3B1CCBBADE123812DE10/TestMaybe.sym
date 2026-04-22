@@ -1,0 +1,46 @@
+MODULE Linux arm 4BB33E202DD8D3B1CCBBADE123812DE10 TestMaybe
+INFO CODE_ID 203EB34BD82DB1D3CCBBADE123812DE1982F9A72
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 hg:hg.mozilla.org/try:mfbt/tests/TestMaybe.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 1 hg:hg.mozilla.org/try:mfbt/Assertions.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+INLINE_ORIGIN 0 AllDestructorsWereCalled()
+INLINE_ORIGIN 1 TestFunctionalAccessors()
+INLINE_ORIGIN 2 BasicValue::~BasicValue()
+INLINE_ORIGIN 3 MOZ_CrashSequence(void*, int)
+PUBLIC 520 0 _start
+PUBLIC 530 0 _start_main
+PUBLIC 59c 0 __atexit_handler_wrapper
+PUBLIC 5b4 0 atexit
+PUBLIC 5e0 0 pthread_atfork
+PUBLIC 5fc 0 call_fini_array
+FUNC 640 40 0 main
+INLINE 0 1772 0 0 640 6
+INLINE 0 1774 0 1 64c 2
+INLINE 1 789 0 2 64c 2
+INLINE 0 1772 0 3 66c 2
+640 6 45 0
+646 2 1772 0
+648 4 0 0
+64c 2 74 0
+64e 8 1789 0
+656 14 1772 0
+66a 2 0 0
+66c 2 242 1
+66e 4 1772 0
+672 e 0 0
+FUNC 680 3c 0 MOZ_ReportAssertionFailure(char const*, char const*, int)
+680 10 119 1
+690 4 123 1
+694 2 122 1
+696 2 123 1
+698 12 122 1
+6aa 8 144 1
+6b2 a 0 1
+PUBLIC 6c0 0 <.plt ELF section in TestMaybe>
+STACK CFI INIT 640 40 .cfa: sp 0 + .ra: lr
+STACK CFI 654 .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 656 .cfa: r7 8 +
+STACK CFI INIT 680 3c .cfa: sp 0 + .ra: lr
+STACK CFI 682 .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 684 .cfa: r7 8 +
+STACK CFI 688 r11: .cfa -24 + ^

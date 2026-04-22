@@ -1,0 +1,479 @@
+MODULE Linux arm 736A6A3822493BC50A0CCA57285A5F4A0 TestSmallPointerArray
+INFO CODE_ID 386A6A734922C53B0A0CCA57285A5F4A9CF0F079
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__new/allocate.h
+FILE 1 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__memory/allocator.h
+FILE 2 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__memory/allocate_at_least.h
+FILE 3 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__vector/vector.h
+FILE 4 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__memory/construct_at.h
+FILE 5 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__memory/allocator_traits.h
+FILE 6 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__memory/uninitialized_algorithms.h
+FILE 7 hg:hg.mozilla.org/try:mfbt/SmallPointerArray.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 8 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/cwchar
+FILE 9 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__algorithm/find.h
+FILE 10 hg:hg.mozilla.org/try:mfbt/Assertions.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 11 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__string/constexpr_c_functions.h
+FILE 12 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__algorithm/copy_move_common.h
+FILE 13 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__algorithm/move.h
+FILE 14 hg:hg.mozilla.org/try:mfbt/tests/TestSmallPointerArray.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 15 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__iterator/wrap_iter.h
+FILE 16 hg:hg.mozilla.org/try:mfbt/PodOperations.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 17 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__utility/swap.h
+INLINE_ORIGIN 0 mozilla::SmallPointerArray<void>::AppendElement(void*)
+INLINE_ORIGIN 1 std::__ndk1::vector<void*, std::__ndk1::allocator<void*> >::vector[abi:dn210000](std::initializer_list<void*>)
+INLINE_ORIGIN 2 std::__ndk1::vector<void*, std::__ndk1::allocator<void*> >::__init_with_size[abi:dn210000]<void* const*, void* const>(void* const*, void* const, unsigned int)
+INLINE_ORIGIN 3 std::__ndk1::vector<void*, std::__ndk1::allocator<void*> >::__vallocate[abi:dn210000](unsigned int)
+INLINE_ORIGIN 4 std::__ndk1::__allocate_at_least[abi:dn210000]<std::__ndk1::allocator<void*> >(std::__ndk1::allocator_traits&, unsigned int)
+INLINE_ORIGIN 5 std::__ndk1::allocator<void*>::allocate[abi:dn210000](unsigned int)
+INLINE_ORIGIN 6 std::__ndk1::__libcpp_allocate[abi:dn210000]<void*>(std::__ndk1::__element_count, unsigned int)
+INLINE_ORIGIN 7 std::__ndk1::__libcpp_operator_new[abi:dn210000]<unsigned int>(unsigned int)
+INLINE_ORIGIN 8 std::__ndk1::vector<void*, std::__ndk1::allocator<void*> >::__construct_at_end<void* const*, void* const*>(void* const*, void* const*, unsigned int)
+INLINE_ORIGIN 9 std::__ndk1::__uninitialized_allocator_copy[abi:dn210000]<std::__ndk1::allocator<void*>, std::__ndk1::allocator const*, std::__ndk1::allocator const, std::__ndk1::allocator*>(std::__ndk1::allocator<void*>&, std::__ndk1::allocator const*, std::__ndk1::allocator const, std::__ndk1::allocator*)
+INLINE_ORIGIN 10 std::__ndk1::__uninitialized_allocator_copy_impl[abi:dn210000]<std::__ndk1::allocator<void*>, std::__ndk1::allocator const*, std::__ndk1::allocator const, std::__ndk1::allocator*>(std::__ndk1::allocator<void*>&, std::__ndk1::allocator const*, std::__ndk1::allocator const, std::__ndk1::allocator*)
+INLINE_ORIGIN 11 _ZNSt6__ndk116allocator_traitsINS_9allocatorIPvEEE9constructB8dn210000IS2_JRKS2_EvTnNS_9enable_ifIXntsr15__has_constructIS3_PT_DpT0_EE5valueEiE4typeELi0EEEvRS3_SA_DpOSB_
+INLINE_ORIGIN 12 std::__ndk1::__construct_at[abi:dn210000]<void*, std::__ndk1::__construct_at[abi:dn210000] const&, std::__ndk1::__construct_at[abi:dn210000]*>(void*, std::__ndk1::__construct_at[abi:dn210000] const&)
+INLINE_ORIGIN 13 std::__ndk1::construct_at[abi:dn210000]<void*, std::__ndk1::construct_at[abi:dn210000] const&, std::__ndk1::construct_at[abi:dn210000]*>(void*, std::__ndk1::construct_at[abi:dn210000] const&)
+INLINE_ORIGIN 14 mozilla::SmallPointerArray<void>::Contains(void*) const
+INLINE_ORIGIN 15 std::__ndk1::find[abi:dn210000]<std::__ndk1::__wrap_iter<void**>, std::__ndk1::__wrap_iter>(std::__ndk1::__wrap_iter<void**>, std::__ndk1::__wrap_iter<void**>, std::__ndk1::__wrap_iter const&)
+INLINE_ORIGIN 16 _ZNSt6__ndk16__findB8dn210000IPvS1_NS_10__identityETnNS_9enable_ifIXaaaaaasr13__is_identityIT1_EE5valuesr41__libcpp_is_trivially_equality_comparableIT_T0_EE5valueeqstS5_Lj4EgeatS5_Lj4EEiE4typeELi0EEEPS5_S9_S9_RKS6_RS4_
+INLINE_ORIGIN 17 std::__ndk1::__constexpr_wmemchr[abi:dn210000]<void*, std::__ndk1::__constexpr_wmemchr[abi:dn210000]>(void*, std::__ndk1::__constexpr_wmemchr[abi:dn210000], unsigned int)
+INLINE_ORIGIN 18 MOZ_CrashSequence(void*, int)
+INLINE_ORIGIN 19 mozilla::SmallPointerArray<void>::RemoveElement(void*)
+INLINE_ORIGIN 20 std::__ndk1::vector<void*, std::__ndk1::allocator<void*> >::erase[abi:dn210000](std::__ndk1::__wrap_iter<void* const*>)
+INLINE_ORIGIN 21 std::__ndk1::move[abi:dn210000]<void**, void*>(void**, void*, void**)
+INLINE_ORIGIN 22 std::__ndk1::__move[abi:dn210000]<std::__ndk1::_ClassicAlgPolicy, void**, void*, void*>(std::__ndk1::pair, void*, void**)
+INLINE_ORIGIN 23 _ZNSt6__ndk124__copy_move_unwrap_itersB8dn210000INS_11__move_implINS_17_ClassicAlgPolicyEEEPPvS5_S5_TnNS_9enable_ifIXsr12__can_rewrapIT0_T2_EE5valueEiE4typeELi0EEENS_4pairIS7_S8_EES7_T1_S8_
+INLINE_ORIGIN 24 _ZNKSt6__ndk111__move_implINS_17_ClassicAlgPolicyEEclB8dn210000IPvS4_TnNS_9enable_ifIXsr38__can_lower_move_assignment_to_memmoveIT_T0_EE5valueEiE4typeELi0EEENS_4pairIPS6_PS7_EESB_SB_SC_
+INLINE_ORIGIN 25 std::__ndk1::__copy_trivial_impl[abi:dn210000]<void*, std::__ndk1::__copy_trivial_impl[abi:dn210000]>(void*, void*, std::__ndk1::__copy_trivial_impl[abi:dn210000])
+INLINE_ORIGIN 26 _ZNSt6__ndk119__constexpr_memmoveB8dn210000IPvS1_TnNS_9enable_ifIXsr23__is_always_bitcastableIT0_T_EE5valueEiE4typeELi0EEEPS4_S7_PS3_NS_15__element_countE
+INLINE_ORIGIN 27 mozilla::SmallPointerArray<void>::Clear()
+INLINE_ORIGIN 28 std::__ndk1::vector<void*, std::__ndk1::allocator<void*> >::~vector[abi:dn210000]()
+INLINE_ORIGIN 29 std::__ndk1::vector<void*, std::__ndk1::allocator<void*> >::__destroy_vector::operator()[abi:dn210000]()
+INLINE_ORIGIN 30 std::__ndk1::allocator_traits<std::__ndk1::allocator<void*> >::deallocate[abi:dn210000](std::__ndk1::allocator<void*>&, void**, unsigned int)
+INLINE_ORIGIN 31 std::__ndk1::allocator<void*>::deallocate[abi:dn210000](void**, unsigned int)
+INLINE_ORIGIN 32 std::__ndk1::__libcpp_deallocate[abi:dn210000]<void*>(std::__ndk1::__type_identity<void*>::type*, std::__ndk1::__element_count, unsigned int)
+INLINE_ORIGIN 33 std::__ndk1::__libcpp_operator_delete[abi:dn210000]<void**>(void**)
+INLINE_ORIGIN 34 std::__ndk1::vector<void*, std::__ndk1::allocator<void*> >::begin[abi:dn210000]()
+INLINE_ORIGIN 35 std::__ndk1::operator==[abi:dn210000]<void**>(std::__ndk1::__wrap_iter<void**> const&, std::__ndk1::__wrap_iter<void**> const)
+INLINE_ORIGIN 36 std::__ndk1::vector<void*, std::__ndk1::allocator<void*> >::__destruct_at_end[abi:dn210000](void**)
+INLINE_ORIGIN 37 std::__ndk1::vector<void*, std::__ndk1::allocator<void*> >::__base_destruct_at_end[abi:dn210000](void**)
+INLINE_ORIGIN 38 mozilla::SmallPointerArray<void>::begin()
+INLINE_ORIGIN 39 mozilla::SmallPointerArray<void>::beginInternal() const
+INLINE_ORIGIN 40 std::__ndk1::vector<void*, std::__ndk1::allocator<void*> >::empty[abi:dn210000]() const
+INLINE_ORIGIN 41 std::__ndk1::vector<void*, std::__ndk1::allocator<void*> >::clear[abi:dn210000]()
+INLINE_ORIGIN 42 mozilla::SmallPointerArray<void>::SmallPointerArray(mozilla::SmallPointerArray<void>&&)
+INLINE_ORIGIN 43 mozilla::PodCopy<mozilla::SmallPointerArray<void>::Element>(mozilla::SmallPointerArray<void>::Element*, mozilla::SmallPointerArray<void>::Element const*, unsigned int)
+INLINE_ORIGIN 44 mozilla::SmallPointerArray<void>::Length() const
+INLINE_ORIGIN 45 std::__ndk1::vector<void*, std::__ndk1::allocator<void*> >::size[abi:dn210000]() const
+INLINE_ORIGIN 46 mozilla::SmallPointerArray<void>::operator[](unsigned int) const
+INLINE_ORIGIN 47 mozilla::SmallPointerArray<void>::ElementAt(unsigned int) const
+INLINE_ORIGIN 48 mozilla::SmallPointerArray<void>::operator=(mozilla::SmallPointerArray<void>&&)
+INLINE_ORIGIN 49 _ZNSt6__ndk14swapB8dn210000IN7mozilla17SmallPointerArrayIvE7ElementELj2ETnNS_9enable_ifIX16__is_swappable_vIT_EEiE4typeELi0EEEvRAT0__S6_SA_
+INLINE_ORIGIN 50 std::__ndk1::swap[abi:dn210000]<mozilla::SmallPointerArray<void>::Element>(std::__ndk1::enable_if&, std::__ndk1::enable_if<(is_move_constructible<mozilla::SmallPointerArray<void>::Element>::value)&&(is_move_assignable<std::__ndk1::enable_if>::value), void>::type)
+INLINE_ORIGIN 51 mozilla::SmallPointerArray<void>::~SmallPointerArray()
+PUBLIC 94c 0 _start
+PUBLIC 95c 0 _start_main
+PUBLIC 9c8 0 __atexit_handler_wrapper
+PUBLIC 9e0 0 atexit
+PUBLIC a0c 0 pthread_atfork
+PUBLIC a28 0 call_fini_array
+FUNC a6c 15c 0 TestArrayManipulation()
+INLINE 0 57 14 0 a70 12 a84 2
+INLINE 1 109 7 1 a70 12 a84 2
+INLINE 2 274 3 2 a70 12 a84 2
+INLINE 3 580 3 3 a70 e
+INLINE 4 562 3 4 a70 e
+INLINE 5 41 2 5 a70 e
+INLINE 6 105 1 6 a70 e
+INLINE 7 64 0 7 a70 e
+INLINE 3 581 3 8 a7e 4 a84 2
+INLINE 4 931 3 9 a7e 4 a84 2
+INLINE 5 589 6 10 a7e 4 a84 2
+INLINE 6 550 6 11 a7e 4 a84 2
+INLINE 7 318 5 12 a7e 4 a84 2
+INLINE 8 48 4 13 a7e 4 a84 2
+INLINE 0 66 14 14 a82 2 a86 8
+INLINE 1 163 7 15 a82 2 a86 8
+INLINE 2 177 9 16 a82 2 a86 8
+INLINE 3 75 9 17 a82 2 a86 8
+INLINE 0 66 14 18 aac 2
+INLINE 0 68 14 19 ab2 2e
+INLINE 1 144 7 20 ace 12 afe 12
+INLINE 2 1151 3 21 ad0 4 ad6 a b00 4 b06 a
+INLINE 3 122 13 22 ad0 4 ad6 a b00 4 b06 a
+INLINE 4 112 13 23 ad0 4 ad6 a b00 4 b06 a
+INLINE 5 94 12 24 ad0 4 ad6 a b00 4 b06 a
+INLINE 6 105 13 25 ad0 4 ad6 a b00 4 b06 a
+INLINE 7 64 12 26 ad0 4 adc 4 b00 4 b0c 4
+INLINE 0 76 14 19 aec 24
+INLINE 0 86 14 27 b14 c
+INLINE 1 77 7 28 b14 c
+INLINE 2 259 3 29 b14 c
+INLINE 3 250 3 30 b14 c
+INLINE 4 302 5 31 b14 c
+INLINE 5 120 1 32 b14 c
+INLINE 6 80 0 33 b14 c
+INLINE 0 79 14 18 b32 2
+INLINE 0 71 14 18 b4a 2
+INLINE 0 73 14 18 b62 2
+INLINE 0 76 14 18 b7a 2
+INLINE 0 68 14 18 b92 2
+a6c 4 16 14
+a70 8 37 0
+a78 6 0 0
+a7e 4 40 4
+a82 2 242 8
+a84 2 40 4
+a86 8 242 8
+a8e 2 66 14
+a90 6 0 14
+a96 14 66 14
+aaa 2 0 14
+aac 2 242 10
+aae 4 66 14
+ab2 12 143 7
+ac4 2 0 7
+ac6 2 143 7
+ac8 6 0 7
+ace 2 1151 3
+ad0 4 225 11
+ad4 2 1151 3
+ad6 6 62 12
+adc 4 226 11
+ae0 2 0 11
+ae2 4 71 14
+ae6 2 0 14
+ae8 4 73 14
+aec c 143 7
+af8 2 0 7
+afa 2 143 7
+afc 2 0 7
+afe 2 1151 3
+b00 4 225 11
+b04 2 1151 3
+b06 6 62 12
+b0c 4 226 11
+b10 2 0 11
+b12 2 79 14
+b14 c 46 0
+b20 10 79 14
+b30 2 0 14
+b32 2 242 10
+b34 4 79 14
+b38 10 71 14
+b48 2 0 14
+b4a 2 242 10
+b4c 4 71 14
+b50 10 73 14
+b60 2 0 14
+b62 2 242 10
+b64 4 73 14
+b68 10 76 14
+b78 2 0 14
+b7a 2 242 10
+b7c 4 76 14
+b80 10 68 14
+b90 2 0 14
+b92 2 242 10
+b94 4 68 14
+b98 30 0 14
+FUNC bc8 3c 0 MOZ_ReportAssertionFailure(char const*, char const*, int)
+bc8 10 119 10
+bd8 4 123 10
+bdc 2 122 10
+bde 2 123 10
+be0 12 122 10
+bf2 8 144 10
+bfa a 0 10
+FUNC c04 130 0 TestRangeBasedLoops()
+INLINE 0 164 14 0 c0c 18 c26 c
+INLINE 1 109 7 1 c14 10 c26 c
+INLINE 2 274 3 2 c14 10 c26 c
+INLINE 3 580 3 3 c14 10 c2c 6
+INLINE 4 562 3 4 c14 6
+INLINE 5 41 2 5 c14 6
+INLINE 6 105 1 6 c14 6
+INLINE 7 64 0 7 c14 6
+INLINE 3 581 3 8 c26 6
+INLINE 4 931 3 9 c26 6
+INLINE 5 589 6 10 c26 6
+INLINE 6 550 6 11 c26 6
+INLINE 7 318 5 12 c26 6
+INLINE 8 48 4 13 c26 6
+INLINE 0 177 14 19 c34 34
+INLINE 1 142 7 34 c34 4 c68 4 c9c 4
+INLINE 1 142 7 35 c44 4 c78 4 cac 4
+INLINE 1 144 7 20 c4e 1a c82 1a cb6 1a
+INLINE 2 1151 3 21 c4e 2 c52 14 c82 2 c86 14 cb6 2 cba 14
+INLINE 3 122 13 22 c4e 2 c52 14 c82 2 c86 14 cb6 2 cba 14
+INLINE 4 112 13 23 c4e 2 c52 14 c82 2 c86 14 cb6 2 cba 14
+INLINE 5 94 12 24 c4e 2 c52 14 c82 2 c86 14 cb6 2 cba 14
+INLINE 6 105 13 25 c4e 2 c52 14 c82 2 c86 14 cb6 2 cba 14
+INLINE 7 64 12 26 c4e 2 c52 2 c56 e c82 2 c86 2 c8a e cb6 2 cba 2 cbe e
+INLINE 2 1151 3 36 c66 2 c9a 2 cce 2
+INLINE 3 667 3 37 c66 2 c9a 2 cce 2
+INLINE 0 178 14 19 c68 34
+INLINE 0 179 14 19 c9c 34
+INLINE 0 181 14 38 cd0 4
+INLINE 1 200 7 39 cd0 4
+INLINE 2 221 7 40 cd0 4
+INLINE 0 187 14 27 cd8 1a
+INLINE 1 77 7 28 cd8 c
+INLINE 2 259 3 29 cd8 c
+INLINE 3 248 3 41 cdc 4
+INLINE 4 531 3 37 cdc 4
+INLINE 3 250 3 30 ce0 4
+INLINE 4 302 5 31 ce0 4
+INLINE 5 120 1 32 ce0 4
+INLINE 6 80 0 33 ce0 4
+INLINE 0 172 14 18 d04 2
+INLINE 0 185 14 18 d1c 2
+c04 8 117 14
+c0c 8 109 7
+c14 6 37 0
+c1a 4 565 3
+c1e 6 0 3
+c24 2 172 14
+c26 6 40 4
+c2c 4 563 3
+c30 2 565 3
+c32 2 172 14
+c34 4 349 3
+c38 4 142 7
+c3c 2 0 7
+c3e 6 143 7
+c44 4 125 15
+c48 6 142 7
+c4e 2 225 11
+c50 2 1151 3
+c52 2 225 11
+c54 2 62 12
+c56 4 225 11
+c5a a 226 11
+c64 2 66 12
+c66 2 750 3
+c68 4 349 3
+c6c 4 142 7
+c70 2 0 7
+c72 6 143 7
+c78 4 125 15
+c7c 6 142 7
+c82 2 225 11
+c84 2 1151 3
+c86 2 225 11
+c88 2 62 12
+c8a 4 225 11
+c8e a 226 11
+c98 2 66 12
+c9a 2 750 3
+c9c 4 349 3
+ca0 4 142 7
+ca4 2 0 7
+ca6 6 143 7
+cac 4 125 15
+cb0 6 142 7
+cb6 2 225 11
+cb8 2 1151 3
+cba 2 225 11
+cbc 2 62 12
+cbe 4 225 11
+cc2 a 226 11
+ccc 2 66 12
+cce 2 750 3
+cd0 4 391 3
+cd4 4 181 14
+cd8 4 247 3
+cdc 4 750 3
+ce0 4 46 0
+ce4 e 77 7
+cf2 10 172 14
+d02 2 0 14
+d04 2 242 10
+d06 4 172 14
+d0a 10 185 14
+d1a 2 0 14
+d1c 2 242 10
+d1e 4 185 14
+d22 12 0 14
+FUNC d34 28c 0 TestMove()
+INLINE 0 203 14 42 d44 1c d6c 8 d78 4 e38 18
+INLINE 1 60 7 43 d44 1c d6c 8 d9a 2 da6 8 db8 4 e38 30
+INLINE 0 201 14 0 d60 4
+INLINE 0 200 14 0 d64 4
+INLINE 0 211 14 0 d76 2 d7c 1e d9c 6
+INLINE 1 109 7 1 d82 18 d9c 2
+INLINE 2 274 3 2 d82 18 d9c 2
+INLINE 3 580 3 3 d82 c d94 6 d9c 2
+INLINE 4 562 3 4 d82 6
+INLINE 5 41 2 5 d82 6
+INLINE 6 105 1 6 d82 6
+INLINE 7 64 0 7 d82 6
+INLINE 3 581 3 8 d8e 6
+INLINE 4 931 3 9 d8e 6
+INLINE 5 589 6 10 d8e 6
+INLINE 6 550 6 11 d8e 6
+INLINE 7 318 5 12 d8e 6
+INLINE 8 48 4 13 d8e 6
+INLINE 0 213 14 42 d9a 2 da6 8 db2 4 db8 4 e50 18
+INLINE 0 217 14 44 dae 4 db6 2
+INLINE 1 175 7 45 dae 4 db6 2 dda 6 de8 2
+INLINE 0 218 14 46 dc2 8 f10 18
+INLINE 1 194 7 47 dc2 8 dce 2 dd4 2 df0 8 dfc 2 e04 2 f10 18 f40 18
+INLINE 0 219 14 46 dce 2
+INLINE 0 220 14 46 dd4 2
+INLINE 0 227 14 44 dda 6 de8 2
+INLINE 0 223 14 48 de0 8
+INLINE 1 66 7 49 de0 8
+INLINE 2 53 17 50 de0 8
+INLINE 0 228 14 46 df0 8 f40 18
+INLINE 0 229 14 46 dfc 2
+INLINE 0 230 14 46 e04 2
+INLINE 0 231 14 51 e0c 1e
+INLINE 1 55 7 28 e0c c
+INLINE 2 259 3 29 e0c c
+INLINE 3 248 3 41 e10 4
+INLINE 4 531 3 37 e10 4
+INLINE 3 250 3 30 e14 4
+INLINE 4 302 5 31 e14 4
+INLINE 5 120 1 32 e14 4
+INLINE 6 80 0 33 e14 4
+INLINE 2 103 16 18 e4a 2 e62 2
+INLINE 0 218 14 18 e7a 2
+INLINE 0 219 14 18 e92 2
+INLINE 0 220 14 18 eaa 2
+INLINE 0 228 14 18 ec2 2
+INLINE 0 229 14 18 eda 2
+INLINE 0 230 14 18 ef2 2
+INLINE 0 217 14 18 f0a 2
+INLINE 2 184 7 18 f22 2 f52 2
+INLINE 0 227 14 18 f3a 2
+d34 10 196 14
+d44 8 103 16
+d4c 12 0 16
+d5e 2 103 16
+d60 4 105 7
+d64 4 95 7
+d68 4 203 14
+d6c 8 103 16
+d74 2 0 16
+d76 2 109 7
+d78 4 61 7
+d7c 6 109 7
+d82 6 37 0
+d88 4 565 3
+d8c 2 0 3
+d8e 6 40 4
+d94 4 563 3
+d98 2 0 3
+d9a 2 103 16
+d9c 2 565 3
+d9e 4 110 7
+da2 4 213 14
+da6 8 103 16
+dae 4 385 3
+db2 4 61 7
+db6 2 385 3
+db8 4 115 16
+dbc 6 217 14
+dc2 6 184 7
+dc8 2 0 7
+dca 4 218 14
+dce 2 0 7
+dd0 4 219 14
+dd4 2 0 7
+dd6 4 220 14
+dda 6 385 3
+de0 4 45 17
+de4 4 46 17
+de8 2 385 3
+dea 6 227 14
+df0 6 184 7
+df6 2 0 7
+df8 4 228 14
+dfc 2 0 7
+dfe 6 229 14
+e04 2 0 7
+e06 6 230 14
+e0c 4 247 3
+e10 4 750 3
+e14 4 46 0
+e18 6 55 7
+e1e c 0 7
+e2a a 231 14
+e34 4 0 14
+e38 10 103 16
+e48 2 0 16
+e4a 2 242 10
+e4c 4 103 16
+e50 10 103 16
+e60 2 0 16
+e62 2 242 10
+e64 4 103 16
+e68 10 218 14
+e78 2 0 14
+e7a 2 242 10
+e7c 4 218 14
+e80 10 219 14
+e90 2 0 14
+e92 2 242 10
+e94 4 219 14
+e98 10 220 14
+ea8 2 0 14
+eaa 2 242 10
+eac 4 220 14
+eb0 10 228 14
+ec0 2 0 14
+ec2 2 242 10
+ec4 4 228 14
+ec8 10 229 14
+ed8 2 0 14
+eda 2 242 10
+edc 4 229 14
+ee0 10 230 14
+ef0 2 0 14
+ef2 2 242 10
+ef4 4 230 14
+ef8 10 217 14
+f08 2 0 14
+f0a 2 242 10
+f0c 4 217 14
+f10 10 184 7
+f20 2 0 7
+f22 2 242 10
+f24 4 184 7
+f28 10 227 14
+f38 2 0 14
+f3a 2 242 10
+f3c 4 227 14
+f40 10 184 7
+f50 2 0 7
+f52 2 242 10
+f54 4 184 7
+f58 68 0 7
+FUNC fc0 14 0 main
+fc0 4 233 14
+fc4 4 234 14
+fc8 4 235 14
+fcc 4 236 14
+fd0 4 237 14
+PUBLIC m fd4 0 __aeabi_memmove4
+PUBLIC fd9 0 __ThumbV7PILongThunk__ZdlPv
+PUBLIC ff0 0 <.plt ELF section in TestSmallPointerArray>
+STACK CFI INIT a6c 15c .cfa: sp 0 + .ra: lr
+STACK CFI a6e .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI a70 .cfa: r7 8 +
+STACK CFI INIT bc8 3c .cfa: sp 0 + .ra: lr
+STACK CFI bca .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI bcc .cfa: r7 8 +
+STACK CFI bd0 r11: .cfa -24 + ^
+STACK CFI INIT c04 130 .cfa: sp 0 + .ra: lr
+STACK CFI c06 .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI c08 .cfa: r7 8 +
+STACK CFI c0c r11: .cfa -24 + ^
+STACK CFI INIT d34 28c .cfa: sp 0 + .ra: lr
+STACK CFI d36 .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI d38 .cfa: r7 8 +
+STACK CFI d3c r11: .cfa -24 + ^ r10: .cfa -28 + ^ r9: .cfa -32 + ^ r8: .cfa -36 + ^
+STACK CFI INIT fc0 14 .cfa: sp 0 + .ra: lr
+STACK CFI fc2 .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI fc4 .cfa: r7 8 +

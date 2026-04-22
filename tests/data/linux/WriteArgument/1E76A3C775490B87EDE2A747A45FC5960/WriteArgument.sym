@@ -1,0 +1,25 @@
+MODULE Linux arm 1E76A3C775490B87EDE2A747A45FC5960 WriteArgument
+INFO CODE_ID C7A3761E4975870BEDE2A747A45FC59679F8A5CE
+INFO GENERATOR mozilla/dump_syms 2.3.7
+FILE 0 git:github.com/mozilla-firefox/firefox:uriloader/exthandler/tests/WriteArgument.cpp:07e27bfce5acf193bdb89c7ba2aa73451a3e43b4
+PUBLIC 49c 0 _start
+PUBLIC 4ac 0 _start_main
+PUBLIC 518 0 __atexit_handler_wrapper
+PUBLIC 530 0 atexit
+PUBLIC 55c 0 pthread_atfork
+PUBLIC 578 0 call_fini_array
+FUNC 5bc 48 0 main
+5bc 6 5 0
+5c2 6 20 0
+5c8 a 7 0
+5d2 2 9 0
+5d4 8 11 0
+5dc 2 12 0
+5de 2 0 0
+5e0 8 15 0
+5e8 6 17 0
+5ee 16 0 0
+PUBLIC 610 0 <.plt ELF section in WriteArgument>
+STACK CFI INIT 5bc 48 .cfa: sp 0 + .ra: lr
+STACK CFI 5c6 .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r5: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 5c8 .cfa: r7 8 +

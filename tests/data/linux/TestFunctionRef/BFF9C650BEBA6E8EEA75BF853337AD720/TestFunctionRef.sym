@@ -1,0 +1,83 @@
+MODULE Linux arm BFF9C650BEBA6E8EEA75BF853337AD720 TestFunctionRef
+INFO CODE_ID 50C6F9BFBABE8E6EEA75BF853337AD727E4E2C92
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 hg:hg.mozilla.org/try:mfbt/tests/TestFunctionRef.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 1 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__memory/unique_ptr.h
+FILE 2 hg:hg.mozilla.org/try:mfbt/FunctionRef.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 3 hg:hg.mozilla.org/try:mfbt/Assertions.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+INLINE_ORIGIN 0 std::__ndk1::unique_ptr<int, std::__ndk1::default_delete<int> >::operator*[abi:dn210000]() const
+INLINE_ORIGIN 1 TestVoidNoParameters()
+INLINE_ORIGIN 2 CallFunctionRef<void (), >(mozilla::FunctionRef<void ()>, )
+INLINE_ORIGIN 3 mozilla::FunctionRef<void ()>::operator()() const
+INLINE_ORIGIN 4 mozilla::FunctionRef<void ()>::CallFunctionPointer<void (*)()>(mozilla::FunctionRef<void ()>::Payload const&)
+INLINE_ORIGIN 5 helloWorld()
+INLINE_ORIGIN 6 MOZ_CrashSequence(void*, int)
+PUBLIC 54c 0 _start
+PUBLIC 55c 0 _start_main
+PUBLIC 5c8 0 __atexit_handler_wrapper
+PUBLIC 5e0 0 atexit
+PUBLIC 60c 0 pthread_atfork
+PUBLIC 628 0 call_fini_array
+FUNC 66c c 0 addConstRefs(int const&, int const&)
+66c c 19 0
+FUNC 678 c 0 incrementPointer(int*)
+678 c 21 0
+FUNC 684 8 0 increment(int)
+684 8 23 0
+FUNC 68c c 0 incrementUnique(std::__ndk1::unique_ptr<int, std::__ndk1::default_delete<int> >)
+INLINE 0 25 0 0 690 2
+68c 4 25 0
+690 2 278 1
+692 6 25 0
+FUNC 698 14 0 helloWorld()
+698 e 29 0
+6a6 6 0 0
+FUNC 6ac 48 0 main
+INLINE 0 136 0 1 6b0 a 6be 2 6ca 18
+INLINE 1 95 0 2 6be 2
+INLINE 2 45 0 3 6be 2
+INLINE 3 211 2 4 6be 2
+INLINE 4 139 2 5 6be 2
+INLINE 1 94 0 6 6dc 2
+6ac 4 127 0
+6b0 a 94 0
+6ba 4 142 0
+6be 2 29 0
+6c0 6 142 0
+6c6 4 143 0
+6ca 10 94 0
+6da 2 0 0
+6dc 2 242 3
+6de 4 94 0
+6e2 12 0 0
+FUNC 6f4 3c 0 MOZ_ReportAssertionFailure(char const*, char const*, int)
+6f4 10 119 3
+704 4 123 3
+708 2 122 3
+70a 2 123 3
+70c 12 122 3
+71e 8 144 3
+726 a 0 3
+PUBLIC 730 0 <.plt ELF section in TestFunctionRef>
+STACK CFI INIT 66c c .cfa: sp 0 + .ra: lr
+STACK CFI 66e .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI 670 .cfa: r7 8 +
+STACK CFI INIT 678 c .cfa: sp 0 + .ra: lr
+STACK CFI 67a .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI 67c .cfa: r7 8 +
+STACK CFI INIT 684 8 .cfa: sp 0 + .ra: lr
+STACK CFI 686 .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI 688 .cfa: r7 8 +
+STACK CFI INIT 68c c .cfa: sp 0 + .ra: lr
+STACK CFI 68e .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI 690 .cfa: r7 8 +
+STACK CFI INIT 698 14 .cfa: sp 0 + .ra: lr
+STACK CFI 69a .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI 69c .cfa: r7 8 +
+STACK CFI INIT 6ac 48 .cfa: sp 0 + .ra: lr
+STACK CFI 6ae .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 6b0 .cfa: r7 8 +
+STACK CFI INIT 6f4 3c .cfa: sp 0 + .ra: lr
+STACK CFI 6f6 .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 6f8 .cfa: r7 8 +
+STACK CFI 6fc r11: .cfa -24 + ^

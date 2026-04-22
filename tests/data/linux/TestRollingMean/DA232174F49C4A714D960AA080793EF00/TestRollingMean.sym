@@ -1,0 +1,1080 @@
+MODULE Linux arm DA232174F49C4A714D960AA080793EF00 TestRollingMean
+INFO CODE_ID 742123DA9CF4714A4D960AA080793EF0BE5E8838
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 hg:hg.mozilla.org/try:mfbt/Vector.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 1 hg:hg.mozilla.org/try:mfbt/RollingMean.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 2 hg:hg.mozilla.org/try:mfbt/tests/TestRollingMean.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 3 hg:hg.mozilla.org/try:mfbt/Assertions.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 4 hg:hg.mozilla.org/try:mfbt/ReentrancyGuard.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 5 hg:hg.mozilla.org/try:mfbt/AllocPolicy.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 6 hg:hg.mozilla.org/try:mfbt/MathAlgorithms.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+INLINE_ORIGIN 0 RollingMeanSuite::runTests()
+INLINE_ORIGIN 1 RollingMeanSuite::testZero()
+INLINE_ORIGIN 2 mozilla::RollingMean<unsigned int, unsigned long long>::RollingMean(unsigned int)
+INLINE_ORIGIN 3 mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>::Vector()
+INLINE_ORIGIN 4 mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>::Vector(mozilla::MallocAllocPolicy)
+INLINE_ORIGIN 5 mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>::CRAndStorage<(unsigned int)0, (unsigned int)0>::CRAndStorage(unsigned int, unsigned int)
+INLINE_ORIGIN 6 mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>::CapacityAndReserved::CapacityAndReserved(unsigned int, unsigned int)
+INLINE_ORIGIN 7 mozilla::RollingMean<unsigned int, unsigned long long>::~RollingMean()
+INLINE_ORIGIN 8 mozilla::RollingMean<unsigned int, unsigned long long>::mean() const
+INLINE_ORIGIN 9 mozilla::RollingMean<unsigned int, unsigned long long>::empty() const
+INLINE_ORIGIN 10 mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>::empty() const
+INLINE_ORIGIN 11 mozilla::RollingMean<unsigned int, unsigned long long>::clear()
+INLINE_ORIGIN 12 MOZ_CrashSequence(void*, int)
+INLINE_ORIGIN 13 mozilla::RollingMean<MyClass, MyClass>::RollingMean(unsigned int)
+INLINE_ORIGIN 14 mozilla::Vector<MyClass, (unsigned int)0, mozilla::MallocAllocPolicy>::Vector()
+INLINE_ORIGIN 15 mozilla::Vector<MyClass, (unsigned int)0, mozilla::MallocAllocPolicy>::Vector(mozilla::MallocAllocPolicy)
+INLINE_ORIGIN 16 mozilla::Vector<MyClass, (unsigned int)0, mozilla::MallocAllocPolicy>::CRAndStorage<(unsigned int)0, (unsigned int)0>::CRAndStorage(unsigned int, unsigned int)
+INLINE_ORIGIN 17 mozilla::Vector<MyClass, (unsigned int)0, mozilla::MallocAllocPolicy>::CapacityAndReserved::CapacityAndReserved(unsigned int, unsigned int)
+INLINE_ORIGIN 18 MyClass::MyClass(unsigned int)
+INLINE_ORIGIN 19 mozilla::RollingMean<MyClass, MyClass>::mean() const
+INLINE_ORIGIN 20 mozilla::RollingMean<MyClass, MyClass>::empty() const
+INLINE_ORIGIN 21 mozilla::Vector<MyClass, (unsigned int)0, mozilla::MallocAllocPolicy>::empty() const
+INLINE_ORIGIN 22 MyClass::operator/(unsigned int) const
+INLINE_ORIGIN 23 mozilla::RollingMean<MyClass, MyClass>::clear()
+INLINE_ORIGIN 24 mozilla::RollingMean<MyClass, MyClass>::~RollingMean()
+INLINE_ORIGIN 25 mozilla::RollingMean<unsigned int, unsigned long long>::operator=(mozilla::RollingMean<unsigned int, unsigned long long>&&)
+INLINE_ORIGIN 26 mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>::operator=(mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>&&)
+INLINE_ORIGIN 27 mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>::Vector(mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>&&)
+INLINE_ORIGIN 28 mozilla::RollingMean<unsigned int, unsigned long long>::maxValues() const
+INLINE_ORIGIN 29 mozilla::ReentrancyGuard::ReentrancyGuard<mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy> >()
+INLINE_ORIGIN 30 mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>::usingInlineStorage() const
+INLINE_ORIGIN 31 mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>::reserved() const
+INLINE_ORIGIN 32 mozilla::MallocAllocPolicy::free_<unsigned int>(unsigned int*, unsigned int)
+INLINE_ORIGIN 33 mozilla::ReentrancyGuard::~ReentrancyGuard()
+INLINE_ORIGIN 34 mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>::length() const
+INLINE_ORIGIN 35 mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>::operator[](unsigned int)
+INLINE_ORIGIN 36 mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>::begin()
+INLINE_ORIGIN 37 mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>::internalAppend<unsigned int&>(unsigned int&)
+INLINE_ORIGIN 38 mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>::endNoCheck()
+INLINE_ORIGIN 39 mozilla::detail::VectorImpl<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy, true>::new_<unsigned int&>(unsigned int*, unsigned int&)
+INLINE_ORIGIN 40 mozilla::detail::ComputeGrowth<mozilla::MallocAllocPolicy, (unsigned int)4>(unsigned int, unsigned int, int)
+INLINE_ORIGIN 41 mozilla::detail::GrowEltsByDoubling<(unsigned int)4>(unsigned int, unsigned int)
+INLINE_ORIGIN 42 mozilla::detail::CapacityHasExcessSpace<(unsigned int)4>(unsigned int)
+INLINE_ORIGIN 43 mozilla::RoundUpPow2(unsigned int)
+INLINE_ORIGIN 44 mozilla::CeilingLog2<unsigned int>(unsigned int)
+INLINE_ORIGIN 45 mozilla::detail::CeilingLog2<unsigned int, (unsigned int)4>::compute(unsigned int)
+INLINE_ORIGIN 46 mozilla::MallocAllocPolicy::pod_realloc<unsigned int>(unsigned int*, unsigned int, unsigned int)
+INLINE_ORIGIN 47 mozilla::MallocAllocPolicy::maybe_pod_realloc<unsigned int>(unsigned int*, unsigned int, unsigned int)
+INLINE_ORIGIN 48 mozilla::MallocAllocPolicy::pod_malloc<unsigned int>(unsigned int)
+INLINE_ORIGIN 49 mozilla::MallocAllocPolicy::maybe_pod_malloc<unsigned int>(unsigned int)
+INLINE_ORIGIN 50 mozilla::detail::VectorImpl<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy, true>::moveConstruct<unsigned int>(unsigned int*, unsigned int const*, unsigned int const*)
+INLINE_ORIGIN 51 mozilla::detail::VectorImpl<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy, true>::copyConstruct<unsigned int>(unsigned int*, unsigned int const*, unsigned int const*)
+INLINE_ORIGIN 52 mozilla::detail::VectorImpl<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy, true>::new_<unsigned int const&>(unsigned int*, unsigned int const&)
+INLINE_ORIGIN 53 mozilla::Vector<MyClass, (unsigned int)0, mozilla::MallocAllocPolicy>::length() const
+INLINE_ORIGIN 54 mozilla::Vector<MyClass, (unsigned int)0, mozilla::MallocAllocPolicy>::operator[](unsigned int)
+INLINE_ORIGIN 55 mozilla::Vector<MyClass, (unsigned int)0, mozilla::MallocAllocPolicy>::begin()
+INLINE_ORIGIN 56 MyClass::operator-(MyClass const&) const
+INLINE_ORIGIN 57 MyClass::operator+(MyClass const&) const
+INLINE_ORIGIN 58 mozilla::ReentrancyGuard::ReentrancyGuard<mozilla::Vector<MyClass, (unsigned int)0, mozilla::MallocAllocPolicy> >()
+INLINE_ORIGIN 59 mozilla::Vector<MyClass, (unsigned int)0, mozilla::MallocAllocPolicy>::usingInlineStorage() const
+INLINE_ORIGIN 60 mozilla::Vector<MyClass, (unsigned int)0, mozilla::MallocAllocPolicy>::reserved() const
+INLINE_ORIGIN 61 mozilla::Vector<MyClass, (unsigned int)0, mozilla::MallocAllocPolicy>::internalAppend<MyClass&>(MyClass&)
+INLINE_ORIGIN 62 mozilla::Vector<MyClass, (unsigned int)0, mozilla::MallocAllocPolicy>::endNoCheck()
+INLINE_ORIGIN 63 mozilla::detail::VectorImpl<MyClass, (unsigned int)0, mozilla::MallocAllocPolicy, false>::new_<MyClass&>(MyClass*, MyClass&)
+INLINE_ORIGIN 64 mozilla::MallocAllocPolicy::pod_malloc<MyClass>(unsigned int)
+INLINE_ORIGIN 65 mozilla::MallocAllocPolicy::maybe_pod_malloc<MyClass>(unsigned int)
+INLINE_ORIGIN 66 mozilla::detail::VectorImpl<MyClass, (unsigned int)0, mozilla::MallocAllocPolicy, false>::new_<MyClass>(MyClass*, MyClass&&)
+INLINE_ORIGIN 67 mozilla::MallocAllocPolicy::free_<MyClass>(MyClass*, unsigned int)
+PUBLIC ab4 0 _start
+PUBLIC ac4 0 _start_main
+PUBLIC b30 0 __atexit_handler_wrapper
+PUBLIC b48 0 atexit
+PUBLIC b74 0 pthread_atfork
+PUBLIC b90 0 call_fini_array
+FUNC bd4 8c 0 main
+INLINE 0 112 2 0 bee 5c
+INLINE 1 38 2 1 bee 38
+INLINE 2 47 2 2 bee 18 c0e 10
+INLINE 3 42 1 3 bee 4 bf4 8 bfe 8 c14 a
+INLINE 4 544 0 4 bee 4 bf4 8 bfe 8 c14 a
+INLINE 5 964 0 5 bee 4 bf4 8 bfe 8 c14 4 c1a 4
+INLINE 6 472 0 6 bee 4 bf4 8 bfe 8 c14 4 c1a 4
+INLINE 2 49 2 7 c1e 8
+bd4 14 110 2
+be8 6 111 2
+bee 4 429 0
+bf2 2 42 1
+bf4 8 429 0
+bfc 2 43 1
+bfe 8 429 0
+c06 8 47 2
+c0e 6 43 1
+c14 4 429 0
+c18 2 970 0
+c1a 4 429 0
+c1e 4 30 1
+c22 4 0 1
+c26 6 39 2
+c2c 6 40 2
+c32 6 41 2
+c38 6 42 2
+c3e c 0 2
+c4a 8 113 2
+c52 e 0 2
+FUNC c60 150 0 RollingMeanSuite::testClear()
+INLINE 0 52 2 2 c74 16 c92 8 c9c 8
+INLINE 1 42 1 3 c74 c c82 8 c98 2 c9c 8
+INLINE 2 544 0 4 c74 c c82 8 c98 2 c9c 8
+INLINE 3 964 0 5 c74 c c82 8 c9c 8
+INLINE 4 472 0 6 c74 c c82 8 c9c 8
+INLINE 0 55 2 8 caa 10 d08 18
+INLINE 1 73 1 9 caa 2 cd8 2
+INLINE 2 77 1 10 caa 2 cd8 2
+INLINE 0 57 2 11 cc0 6 cc8 6
+INLINE 0 58 2 9 cc6 2
+INLINE 1 77 1 10 cc6 2
+INLINE 0 61 2 8 cd8 10 d50 18
+INLINE 0 62 2 7 cec 12
+INLINE 1 73 1 12 d1a 2 d62 2
+INLINE 0 55 2 12 d32 2
+INLINE 0 58 2 12 d4a 2
+INLINE 0 61 2 12 d7a 2
+c60 14 51 2
+c74 c 429 0
+c80 2 43 1
+c82 8 429 0
+c8a 8 52 2
+c92 6 43 1
+c98 2 970 0
+c9a 2 54 2
+c9c 8 429 0
+ca4 6 54 2
+caa 2 560 0
+cac 2 73 1
+cae c 74 1
+cba 4 55 2
+cbe 2 0 2
+cc0 6 83 1
+cc6 2 560 0
+cc8 4 85 1
+ccc 2 84 1
+cce 2 58 2
+cd0 2 0 2
+cd2 6 60 2
+cd8 2 560 0
+cda 4 73 1
+cde a 74 1
+ce8 4 61 2
+cec 6 30 1
+cf2 c 0 1
+cfe 6 62 2
+d04 4 0 2
+d08 10 73 1
+d18 2 0 1
+d1a 2 242 3
+d1c 4 73 1
+d20 10 55 2
+d30 2 0 2
+d32 2 242 3
+d34 4 55 2
+d38 10 58 2
+d48 2 0 2
+d4a 2 242 3
+d4c 4 58 2
+d50 10 73 1
+d60 2 0 1
+d62 2 242 3
+d64 4 73 1
+d68 10 61 2
+d78 2 0 2
+d7a 2 242 3
+d7c 4 61 2
+d80 30 0 2
+FUNC db0 240 0 RollingMeanSuite::testRolling()
+INLINE 0 65 2 2 dc4 16 de2 8 dec 8
+INLINE 1 42 1 3 dc4 c dd2 8 de8 2 dec 8
+INLINE 2 544 0 4 dc4 c dd2 8 de8 2 dec 8
+INLINE 3 964 0 5 dc4 c dd2 8 dec 8
+INLINE 4 472 0 6 dc4 c dd2 8 dec 8
+INLINE 0 68 2 8 dfa 10 ea6 18
+INLINE 1 73 1 9 dfa 2 e16 2 e32 2 e50 2 e70 2
+INLINE 2 77 1 10 dfa 2 e16 2 e32 2 e50 2 e70 2
+INLINE 0 71 2 8 e16 10 ed6 18
+INLINE 0 74 2 8 e32 10 f06 18
+INLINE 0 77 2 8 e50 12 f36 18
+INLINE 0 80 2 8 e70 12 f66 18
+INLINE 0 81 2 7 e8c 10
+INLINE 1 73 1 12 eb8 2 ee8 2 f18 2 f48 2 f78 2
+INLINE 0 68 2 12 ed0 2
+INLINE 0 71 2 12 f00 2
+INLINE 0 74 2 12 f30 2
+INLINE 0 77 2 12 f60 2
+INLINE 0 80 2 12 f90 2
+db0 14 64 2
+dc4 c 429 0
+dd0 2 43 1
+dd2 8 429 0
+dda 8 65 2
+de2 6 43 1
+de8 2 970 0
+dea 2 67 2
+dec 8 429 0
+df4 6 67 2
+dfa 2 560 0
+dfc 4 73 1
+e00 a 74 1
+e0a 4 68 2
+e0e 2 0 2
+e10 6 70 2
+e16 2 560 0
+e18 4 73 1
+e1c a 74 1
+e26 4 71 2
+e2a 2 0 2
+e2c 6 73 2
+e32 2 560 0
+e34 4 73 1
+e38 a 74 1
+e42 6 74 2
+e48 2 0 2
+e4a 6 76 2
+e50 2 560 0
+e52 6 73 1
+e58 a 74 1
+e62 6 77 2
+e68 2 0 2
+e6a 6 79 2
+e70 2 560 0
+e72 6 73 1
+e78 a 74 1
+e82 6 80 2
+e88 4 0 2
+e8c 4 30 1
+e90 c 0 1
+e9c 6 81 2
+ea2 4 0 2
+ea6 10 73 1
+eb6 2 0 1
+eb8 2 242 3
+eba 4 73 1
+ebe 10 68 2
+ece 2 0 2
+ed0 2 242 3
+ed2 4 68 2
+ed6 10 73 1
+ee6 2 0 1
+ee8 2 242 3
+eea 4 73 1
+eee 10 71 2
+efe 2 0 2
+f00 2 242 3
+f02 4 71 2
+f06 10 73 1
+f16 2 0 1
+f18 2 242 3
+f1a 4 73 1
+f1e 10 74 2
+f2e 2 0 2
+f30 2 242 3
+f32 4 74 2
+f36 10 73 1
+f46 2 0 1
+f48 2 242 3
+f4a 4 73 1
+f4e 10 77 2
+f5e 2 0 2
+f60 2 242 3
+f62 4 77 2
+f66 10 73 1
+f76 2 0 1
+f78 2 242 3
+f7a 4 73 1
+f7e 10 80 2
+f8e 2 0 2
+f90 2 242 3
+f92 4 80 2
+f96 5a 0 2
+FUNC ff0 ec 0 RollingMeanSuite::testClass()
+INLINE 0 84 2 13 1004 18 1020 8 102a 6
+INLINE 1 42 1 14 1004 18 1026 2 102c 4
+INLINE 2 544 0 15 1004 18 1026 2 102c 4
+INLINE 3 964 0 16 1004 18 102c 4
+INLINE 4 472 0 17 1004 18 102c 4
+INLINE 1 43 1 18 102a 2
+INLINE 0 87 2 19 1036 a 1072 18
+INLINE 1 73 1 20 1036 2
+INLINE 2 77 1 21 1036 2
+INLINE 1 74 1 22 103a 6
+INLINE 0 89 2 23 1046 6 1050 4
+INLINE 0 90 2 20 104c 4
+INLINE 1 77 1 21 104c 4
+INLINE 0 91 2 24 1056 12
+INLINE 1 73 1 12 1084 2
+INLINE 0 87 2 12 109c 2
+INLINE 0 90 2 12 10b4 2
+ff0 14 83 2
+1004 18 429 0
+101c 4 84 2
+1020 4 43 1
+1024 2 0 1
+1026 2 970 0
+1028 2 86 2
+102a 2 16 2
+102c 4 429 0
+1030 6 86 2
+1036 2 560 0
+1038 2 73 1
+103a 6 30 2
+1040 4 87 2
+1044 2 0 2
+1046 6 83 1
+104c 4 560 0
+1050 2 85 1
+1052 2 84 1
+1054 2 90 2
+1056 6 30 1
+105c c 0 1
+1068 6 91 2
+106e 4 0 2
+1072 10 73 1
+1082 2 0 1
+1084 2 242 3
+1086 4 73 1
+108a 10 87 2
+109a 2 0 2
+109c 2 242 3
+109e 4 87 2
+10a2 10 90 2
+10b2 2 0 2
+10b4 2 242 3
+10b6 4 90 2
+10ba 22 0 2
+FUNC 10dc 200 0 RollingMeanSuite::testMove()
+INLINE 0 95 2 2 10ea c 110c e 1136 12 114c 4
+INLINE 1 42 1 3 10ea c 110c e 111c a 1128 a 1136 4 1142 6 1190 6 119e 6 11aa 8 11b6 6
+INLINE 2 544 0 4 10ea c 110c e 111c a 1128 a 1136 4 1142 6 1190 6 119e 6 11aa 8 11b6 6
+INLINE 3 964 0 5 10ea c 110c e 111c a 1128 4 112e 4 1136 4 1142 2 1190 6 119e 6 11aa 8 11b6 4
+INLINE 4 472 0 6 10ea c 110c e 111c a 1128 4 112e 4 1136 4 1142 2 1190 6 119e 6 11aa 8 11b6 4
+INLINE 0 94 2 2 10f6 10 111c 16
+INLINE 0 95 2 25 111a 2 1132 4 1148 4 1150 6 1158 12
+INLINE 1 47 1 26 111a 2 1148 4 1150 6 1158 8 1164 6 11a8 2 11bc 6 11c4 a 11d2 6
+INLINE 2 1016 0 27 1150 6 1158 8 1164 6 11c0 2 11c4 a 11d2 6
+INLINE 0 95 2 7 1156 2 116a 4
+INLINE 0 96 2 28 116e 2
+INLINE 0 99 2 8 117c 10 124a 18
+INLINE 1 73 1 9 117c 2 11fe 2
+INLINE 2 77 1 10 117c 2 11fe 2
+INLINE 0 101 2 2 1190 a 119e 6 11aa 12
+INLINE 0 101 2 25 11a4 6 11bc 6 11c4 14
+INLINE 0 101 2 7 11c2 2 11d8 6
+INLINE 0 106 2 8 11fe 10 127a 18
+INLINE 0 107 2 7 1212 12
+INLINE 0 96 2 12 1244 2
+INLINE 1 73 1 12 125c 2 128c 2
+INLINE 0 99 2 12 1274 2
+INLINE 0 106 2 12 12a4 2
+10dc e 93 2
+10ea 6 429 0
+10f0 6 0 0
+10f6 4 42 1
+10fa c 0 1
+1106 6 94 2
+110c e 429 0
+111a 2 1015 0
+111c a 429 0
+1126 2 43 1
+1128 4 429 0
+112c 2 970 0
+112e 4 429 0
+1132 4 47 1
+1136 4 429 0
+113a 8 43 1
+1142 2 429 0
+1144 4 970 0
+1148 4 1015 0
+114c 4 42 1
+1150 6 982 0
+1156 2 30 1
+1158 8 982 0
+1160 4 47 1
+1164 2 982 0
+1166 4 990 0
+116a 4 30 1
+116e 2 88 1
+1170 4 96 2
+1174 2 0 2
+1176 6 98 2
+117c 2 560 0
+117e 4 73 1
+1182 a 74 1
+118c 4 99 2
+1190 6 429 0
+1196 4 43 1
+119a 4 0 2
+119e 6 429 0
+11a4 4 47 1
+11a8 2 1015 0
+11aa 8 429 0
+11b2 4 43 1
+11b6 4 429 0
+11ba 2 970 0
+11bc 4 1015 0
+11c0 2 982 0
+11c2 2 30 1
+11c4 a 982 0
+11ce 4 47 1
+11d2 4 982 0
+11d6 2 990 0
+11d8 4 30 1
+11dc 2 0 1
+11de 8 102 2
+11e6 8 103 2
+11ee 8 104 2
+11f6 8 105 2
+11fe 2 560 0
+1200 4 73 1
+1204 a 74 1
+120e 4 106 2
+1212 6 30 1
+1218 c 0 1
+1224 a 107 2
+122e 4 0 2
+1232 10 96 2
+1242 2 0 2
+1244 2 242 3
+1246 4 96 2
+124a 10 73 1
+125a 2 0 1
+125c 2 242 3
+125e 4 73 1
+1262 10 99 2
+1272 2 0 2
+1274 2 242 3
+1276 4 99 2
+127a 10 73 1
+128a 2 0 1
+128c 2 242 3
+128e 4 73 1
+1292 10 106 2
+12a2 2 0 2
+12a4 2 242 3
+12a6 4 106 2
+12aa 32 0 2
+FUNC 12dc 3c 0 MOZ_ReportAssertionFailure(char const*, char const*, int)
+12dc 10 119 3
+12ec 4 123 3
+12f0 2 122 3
+12f2 2 123 3
+12f4 12 122 3
+1306 8 144 3
+130e a 0 3
+FUNC 1318 c8 0 mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>::~Vector()
+INLINE 0 1022 0 29 131c 6 132a 2 1352 18
+INLINE 0 1022 0 30 1322 6
+INLINE 0 1022 0 31 1332 c 136a 38
+INLINE 0 1025 0 32 1344 8
+INLINE 0 1027 0 33 134e 2
+INLINE 1 33 4 12 1364 2
+INLINE 1 519 0 12 1380 2
+INLINE 1 520 0 12 139c 2
+INLINE 0 1022 0 12 13b8 2
+1318 4 1021 0
+131c 6 33 4
+1322 6 499 0
+1328 2 1022 0
+132a 2 34 4
+132c 6 1022 0
+1332 8 519 0
+133a 4 520 0
+133e 4 1024 0
+1342 2 0 0
+1344 6 116 5
+134a 2 0 5
+134c 2 0 5
+134e 2 39 4
+1350 2 1027 0
+1352 10 33 4
+1362 2 0 4
+1364 2 242 3
+1366 4 33 4
+136a 14 519 0
+137e 2 0 0
+1380 2 242 3
+1382 4 519 0
+1386 14 520 0
+139a 2 0 0
+139c 2 242 3
+139e 4 520 0
+13a2 14 1022 0
+13b6 2 0 0
+13b8 2 242 3
+13ba 4 1022 0
+13be 22 0 0
+FUNC 13e0 e4 0 mozilla::RollingMean<unsigned int, unsigned long long>::insert(unsigned int)
+INLINE 0 53 1 34 13f4 4
+INLINE 0 56 1 35 13fe 6 1406 6 1488 22
+INLINE 1 589 0 36 140a 2
+INLINE 0 53 1 12 1482 2
+INLINE 1 585 0 12 149e 2
+13e0 12 52 1
+13f2 2 53 1
+13f4 4 558 0
+13f8 4 53 1
+13fc 2 55 1
+13fe 6 585 0
+1404 2 56 1
+1406 4 586 0
+140a 2 566 0
+140c 1a 56 1
+1426 4 57 1
+142a 2 58 1
+142c 6 0 1
+1432 6 59 1
+1438 10 62 1
+1448 a 65 1
+1452 2 0 1
+1454 4 65 1
+1458 e 0 1
+1466 6 67 1
+146c 4 0 1
+1470 10 53 1
+1480 2 0 1
+1482 2 242 3
+1484 4 53 1
+1488 14 585 0
+149c 2 0 0
+149e 2 242 3
+14a0 4 585 0
+14a4 6 587 0
+14aa 1a 0 0
+FUNC 14c4 118 0 mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>::append<unsigned int&>(unsigned int&)
+INLINE 0 1495 0 29 14ca 6 14da 2 1528 18
+INLINE 0 1495 0 30 14d0 8
+INLINE 0 1495 0 31 14e2 c 1540 38
+INLINE 0 1508 0 37 150c 16 1578 1c
+INLINE 1 1330 0 38 1512 2
+INLINE 1 1330 0 39 1514 6
+INLINE 0 1510 0 33 1524 2
+INLINE 1 33 4 12 153a 2
+INLINE 1 519 0 12 1556 2
+INLINE 1 520 0 12 1572 2
+INLINE 1 1329 0 12 158e 2
+INLINE 0 1495 0 12 15aa 2
+14c4 6 1494 0
+14ca 6 33 4
+14d0 4 499 0
+14d4 4 0 0
+14d8 2 1495 0
+14da 2 34 4
+14dc 6 1495 0
+14e2 8 519 0
+14ea 4 520 0
+14ee 4 1496 0
+14f2 c 1497 0
+14fe 8 1504 0
+1506 4 1505 0
+150a 2 0 0
+150c 6 1329 0
+1512 2 506 0
+1514 2 252 0
+1516 4 253 0
+151a 8 1331 0
+1522 2 0 0
+1524 2 39 4
+1526 2 1510 0
+1528 6 33 4
+152e 2 0 4
+1530 8 33 4
+1538 2 0 4
+153a 2 242 3
+153c 4 33 4
+1540 14 519 0
+1554 2 0 0
+1556 2 242 3
+1558 4 519 0
+155c 14 520 0
+1570 2 0 0
+1572 2 242 3
+1574 4 520 0
+1578 14 1329 0
+158c 2 0 0
+158e 2 242 3
+1590 4 1329 0
+1594 14 1495 0
+15a8 2 0 0
+15aa 2 242 3
+15ac 4 1495 0
+15b0 2 0 0
+15b2 2 1497 0
+15b4 28 0 0
+FUNC 15dc c0 0 mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>::growStorageBy(unsigned int)
+INLINE 0 1073 0 30 15ec 2
+INLINE 0 1080 0 40 15f2 8 1600 2c 1630 1e 1656 6
+INLINE 1 127 0 41 15f2 8 1600 2c 1630 1e 1656 6
+INLINE 2 102 0 42 160c 16
+INLINE 3 43 0 43 160c 12
+INLINE 4 259 6 44 160c 12
+INLINE 5 207 6 45 160c 12
+INLINE 2 120 0 43 1640 e 1656 4
+INLINE 3 259 6 44 1640 e 1656 4
+INLINE 4 207 6 45 1640 e 1656 4
+INLINE 0 1087 0 30 1654 2
+INLINE 0 1069 0 12 168c 2
+15dc c 1069 0
+15e8 4 1073 0
+15ec 2 499 0
+15ee 4 1073 0
+15f2 8 76 0
+15fa 4 1091 0
+15fe 2 0 0
+1600 6 92 0
+1606 6 0 0
+160c 12 181 6
+161e 4 43 0
+1622 4 101 0
+1626 6 102 0
+162c 4 1091 0
+1630 4 114 0
+1634 2 0 0
+1636 6 114 0
+163c 4 0 0
+1640 e 181 6
+164e 4 1081 0
+1652 2 0 0
+1654 2 499 0
+1656 4 181 6
+165a 2 121 0
+165c 2 1087 0
+165e 6 1091 0
+1664 4 1088 0
+1668 2 0 0
+166a 4 1088 0
+166e 8 1092 0
+1676 8 1069 0
+167e 4 0 0
+1682 8 1069 0
+168a 2 0 0
+168c 2 242 3
+168e 4 1069 0
+1692 a 0 0
+FUNC 169c 12c 0 mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>::convertToHeapStorage(unsigned int)
+INLINE 0 1047 0 30 16a4 2
+INLINE 0 1050 0 42 16b4 24 1774 1c
+INLINE 1 43 0 43 16b4 c 16c4 12 1774 1c
+INLINE 2 259 6 44 16c4 12
+INLINE 3 207 6 45 16c4 12
+INLINE 0 1051 0 48 16de a
+INLINE 1 101 5 49 16de a
+INLINE 0 1057 0 38 16ec 4
+INLINE 0 1057 0 50 16f0 56
+INLINE 1 292 0 51 16f0 56
+INLINE 2 285 0 52 1726 c 173a 8
+INLINE 0 1047 0 12 176e 2
+INLINE 2 257 6 12 178a 2
+INLINE 0 1050 0 12 17a6 2
+169c 8 1046 0
+16a4 2 499 0
+16a6 4 1047 0
+16aa a 0 0
+16b4 c 257 6
+16c0 4 0 0
+16c4 12 181 6
+16d6 2 43 0
+16d8 4 1050 0
+16dc 2 0 0
+16de 6 81 5
+16e4 4 83 5
+16e8 4 1052 0
+16ec 4 506 0
+16f0 2 284 0
+16f2 4 0 0
+16f6 a 284 0
+1700 2 0 0
+1702 c 284 0
+170e 2 0 0
+1710 16 284 0
+1726 6 252 0
+172c 6 253 0
+1732 6 284 0
+1738 2 0 0
+173a 4 252 0
+173e 4 253 0
+1742 4 284 0
+1746 2 0 0
+1748 4 1063 0
+174c 4 1061 0
+1750 8 1065 0
+1758 8 1047 0
+1760 4 0 0
+1764 8 1047 0
+176c 2 0 0
+176e 2 242 3
+1770 4 1047 0
+1774 14 257 6
+1788 2 0 6
+178a 2 242 3
+178c 4 257 6
+1790 14 1050 0
+17a4 2 0 0
+17a6 2 242 3
+17a8 4 1050 0
+17ac 2 0 0
+17ae 2 1052 0
+17b0 18 0 0
+FUNC 17c8 b8 0 mozilla::detail::VectorImpl<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy, true>::growTo(mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>&, unsigned int)
+INLINE 0 303 0 30 17ce 2
+INLINE 0 304 0 42 17d6 1c 182a 1c
+INLINE 1 43 0 43 17d8 18 182a 1c
+INLINE 2 259 6 44 17de 12
+INLINE 3 207 6 45 17de 12
+INLINE 0 306 0 46 17f8 a
+INLINE 1 111 5 47 17f8 a
+INLINE 0 303 0 12 1824 2
+INLINE 2 257 6 12 1840 2
+INLINE 0 304 0 12 185c 2
+17c8 6 302 0
+17ce 2 499 0
+17d0 4 303 0
+17d4 2 0 0
+17d6 2 42 0
+17d8 6 257 6
+17de 12 181 6
+17f0 2 43 0
+17f2 4 304 0
+17f6 2 0 0
+17f8 6 94 5
+17fe 4 96 5
+1802 2 307 0
+1804 2 0 0
+1806 2 312 0
+1808 2 310 0
+180a 4 314 0
+180e 8 303 0
+1816 4 0 0
+181a 8 303 0
+1822 2 0 0
+1824 2 242 3
+1826 4 303 0
+182a 8 257 6
+1832 4 0 6
+1836 8 257 6
+183e 2 0 6
+1840 2 242 3
+1842 4 257 6
+1846 14 304 0
+185a 2 0 0
+185c 2 242 3
+185e 4 304 0
+1862 2 0 0
+1864 2 314 0
+1866 1a 0 0
+FUNC 1880 bc 0 mozilla::Vector<unsigned int, (unsigned int)0, mozilla::MallocAllocPolicy>::clear()
+INLINE 0 1242 0 29 1884 6 1892 2 18ca 18
+INLINE 0 1242 0 30 188a 6
+INLINE 0 1242 0 31 189a e 18ae 1c 18e2 1c
+INLINE 0 1245 0 33 18a8 2
+INLINE 1 520 0 12 18c4 2
+INLINE 1 33 4 12 18dc 2
+INLINE 1 519 0 12 18f8 2
+INLINE 0 1242 0 12 1914 2
+1880 4 1241 0
+1884 6 33 4
+188a 6 499 0
+1890 2 1242 0
+1892 2 34 4
+1894 6 1242 0
+189a 8 519 0
+18a2 2 520 0
+18a4 4 0 0
+18a8 2 39 4
+18aa 2 1244 0
+18ac 2 1245 0
+18ae 14 520 0
+18c2 2 0 0
+18c4 2 242 3
+18c6 4 520 0
+18ca 10 33 4
+18da 2 0 4
+18dc 2 242 3
+18de 4 33 4
+18e2 14 519 0
+18f6 2 0 0
+18f8 2 242 3
+18fa 4 519 0
+18fe 14 1242 0
+1912 2 0 0
+1914 2 242 3
+1916 4 1242 0
+191a 22 0 0
+FUNC 193c d0 0 mozilla::RollingMean<MyClass, MyClass>::insert(MyClass)
+INLINE 0 53 1 53 1950 4
+INLINE 0 56 1 54 195a 6 1962 6 19d0 22
+INLINE 1 589 0 55 1966 2
+INLINE 0 56 1 56 1968 8
+INLINE 0 56 1 57 1970 4
+INLINE 0 62 1 57 1988 6
+INLINE 0 53 1 12 19ca 2
+INLINE 1 585 0 12 19e6 2
+193c 12 52 1
+194e 2 53 1
+1950 4 558 0
+1954 4 53 1
+1958 2 55 1
+195a 6 585 0
+1960 2 56 1
+1962 4 586 0
+1966 2 566 0
+1968 8 27 2
+1970 4 23 2
+1974 2 56 1
+1976 4 57 1
+197a 2 58 1
+197c 6 0 1
+1982 6 59 1
+1988 6 23 2
+198e 2 62 1
+1990 a 65 1
+199a 2 0 1
+199c 4 65 1
+19a0 e 0 1
+19ae 6 67 1
+19b4 4 0 1
+19b8 10 53 1
+19c8 2 0 1
+19ca 2 242 3
+19cc 4 53 1
+19d0 14 585 0
+19e4 2 0 0
+19e6 2 242 3
+19e8 4 585 0
+19ec 6 587 0
+19f2 1a 0 0
+FUNC 1a0c 118 0 mozilla::Vector<MyClass, (unsigned int)0, mozilla::MallocAllocPolicy>::append<MyClass&>(MyClass&)
+INLINE 0 1495 0 58 1a12 6 1a22 2 1a70 18
+INLINE 0 1495 0 59 1a18 8
+INLINE 0 1495 0 60 1a2a c 1a88 38
+INLINE 0 1508 0 61 1a54 16 1ac0 1c
+INLINE 1 1330 0 62 1a5a 2
+INLINE 1 1330 0 63 1a5c 6
+INLINE 0 1510 0 33 1a6c 2
+INLINE 1 33 4 12 1a82 2
+INLINE 1 519 0 12 1a9e 2
+INLINE 1 520 0 12 1aba 2
+INLINE 1 1329 0 12 1ad6 2
+INLINE 0 1495 0 12 1af2 2
+1a0c 6 1494 0
+1a12 6 33 4
+1a18 4 499 0
+1a1c 4 0 0
+1a20 2 1495 0
+1a22 2 34 4
+1a24 6 1495 0
+1a2a 8 519 0
+1a32 4 520 0
+1a36 4 1496 0
+1a3a c 1497 0
+1a46 8 1504 0
+1a4e 4 1505 0
+1a52 2 0 0
+1a54 6 1329 0
+1a5a 2 506 0
+1a5c 6 155 0
+1a62 8 1331 0
+1a6a 2 0 0
+1a6c 2 39 4
+1a6e 2 1510 0
+1a70 6 33 4
+1a76 2 0 4
+1a78 8 33 4
+1a80 2 0 4
+1a82 2 242 3
+1a84 4 33 4
+1a88 14 519 0
+1a9c 2 0 0
+1a9e 2 242 3
+1aa0 4 519 0
+1aa4 14 520 0
+1ab8 2 0 0
+1aba 2 242 3
+1abc 4 520 0
+1ac0 14 1329 0
+1ad4 2 0 0
+1ad6 2 242 3
+1ad8 4 1329 0
+1adc 14 1495 0
+1af0 2 0 0
+1af2 2 242 3
+1af4 4 1495 0
+1af8 2 0 0
+1afa 2 1497 0
+1afc 28 0 0
+FUNC 1b24 c0 0 mozilla::Vector<MyClass, (unsigned int)0, mozilla::MallocAllocPolicy>::growStorageBy(unsigned int)
+INLINE 0 1073 0 59 1b34 2
+INLINE 0 1080 0 40 1b3a 8 1b48 2c 1b78 1e 1b9e 6
+INLINE 1 127 0 41 1b3a 8 1b48 2c 1b78 1e 1b9e 6
+INLINE 2 102 0 42 1b54 16
+INLINE 3 43 0 43 1b54 12
+INLINE 4 259 6 44 1b54 12
+INLINE 5 207 6 45 1b54 12
+INLINE 2 120 0 43 1b88 e 1b9e 4
+INLINE 3 259 6 44 1b88 e 1b9e 4
+INLINE 4 207 6 45 1b88 e 1b9e 4
+INLINE 0 1087 0 59 1b9c 2
+INLINE 0 1069 0 12 1bd4 2
+1b24 c 1069 0
+1b30 4 1073 0
+1b34 2 499 0
+1b36 4 1073 0
+1b3a 8 76 0
+1b42 4 1091 0
+1b46 2 0 0
+1b48 6 92 0
+1b4e 6 0 0
+1b54 12 181 6
+1b66 4 43 0
+1b6a 4 101 0
+1b6e 6 102 0
+1b74 4 1091 0
+1b78 4 114 0
+1b7c 2 0 0
+1b7e 6 114 0
+1b84 4 0 0
+1b88 e 181 6
+1b96 4 1081 0
+1b9a 2 0 0
+1b9c 2 499 0
+1b9e 4 181 6
+1ba2 2 121 0
+1ba4 2 1087 0
+1ba6 6 1091 0
+1bac 4 1088 0
+1bb0 2 0 0
+1bb2 4 1088 0
+1bb6 8 1092 0
+1bbe 8 1069 0
+1bc6 4 0 0
+1bca 8 1069 0
+1bd2 2 0 0
+1bd4 2 242 3
+1bd6 4 1069 0
+1bda a 0 0
+FUNC 1be4 134 0 mozilla::detail::VectorImpl<MyClass, (unsigned int)0, mozilla::MallocAllocPolicy, false>::growTo(mozilla::Vector<MyClass, (unsigned int)0, mozilla::MallocAllocPolicy>&, unsigned int)
+INLINE 0 218 0 59 1bee 2
+INLINE 0 219 0 42 1bfe 24 1cc8 1c
+INLINE 1 43 0 43 1bfe c 1c0e 12 1cc8 1c
+INLINE 2 259 6 44 1c0e 12
+INLINE 3 207 6 45 1c0e 12
+INLINE 0 220 0 64 1c28 a
+INLINE 1 101 5 65 1c28 a
+INLINE 0 227 0 66 1c7a c 1c8a 8
+INLINE 0 230 0 67 1c96 8
+INLINE 0 218 0 12 1cc2 2
+INLINE 2 257 6 12 1cde 2
+INLINE 0 219 0 12 1cf6 2
+1be4 a 217 0
+1bee 2 499 0
+1bf0 4 218 0
+1bf4 a 0 0
+1bfe c 257 6
+1c0a 4 0 0
+1c0e 12 181 6
+1c20 2 43 0
+1c22 4 219 0
+1c26 2 0 0
+1c28 6 81 5
+1c2e 4 83 5
+1c32 4 221 0
+1c36 6 0 0
+1c3c 2 226 0
+1c3e 4 0 0
+1c42 20 226 0
+1c62 2 0 0
+1c64 16 226 0
+1c7a c 155 0
+1c86 4 226 0
+1c8a 8 155 0
+1c92 4 226 0
+1c96 6 116 5
+1c9c 2 0 5
+1c9e 4 233 0
+1ca2 4 231 0
+1ca6 a 235 0
+1cb0 6 218 0
+1cb6 2 0 0
+1cb8 8 218 0
+1cc0 2 0 0
+1cc2 2 242 3
+1cc4 4 218 0
+1cc8 14 257 6
+1cdc 2 0 6
+1cde 2 242 3
+1ce0 4 257 6
+1ce4 10 219 0
+1cf4 2 0 0
+1cf6 2 242 3
+1cf8 4 219 0
+1cfc 2 0 0
+1cfe 2 221 0
+1d00 18 0 0
+PUBLIC m 1d18 0 __aeabi_uidiv
+PUBLIC 1ee8 0 __aeabi_idiv0
+PUBLIC 1eec 0 __aeabi_ldiv0
+PUBLIC 1ef0 0 __aeabi_uidivmod
+PUBLIC 1f0c 0 __aeabi_uldivmod
+PUBLIC 1f30 0 <.plt ELF section in TestRollingMean>
+STACK CFI INIT bd4 8c .cfa: sp 0 + .ra: lr
+STACK CFI bd6 .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI bd8 .cfa: r7 8 +
+STACK CFI INIT c60 150 .cfa: sp 0 + .ra: lr
+STACK CFI c62 .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r5: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI c64 .cfa: r7 8 +
+STACK CFI INIT db0 240 .cfa: sp 0 + .ra: lr
+STACK CFI db2 .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI db4 .cfa: r7 8 +
+STACK CFI INIT ff0 ec .cfa: sp 0 + .ra: lr
+STACK CFI ff2 .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI ff4 .cfa: r7 8 +
+STACK CFI INIT 10dc 200 .cfa: sp 0 + .ra: lr
+STACK CFI 10de .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 10e0 .cfa: r7 8 +
+STACK CFI 10e4 r10: .cfa -24 + ^ r9: .cfa -28 + ^ r8: .cfa -32 + ^
+STACK CFI INIT 12dc 3c .cfa: sp 0 + .ra: lr
+STACK CFI 12de .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 12e0 .cfa: r7 8 +
+STACK CFI 12e4 r11: .cfa -24 + ^
+STACK CFI INIT 1318 c8 .cfa: sp 0 + .ra: lr
+STACK CFI 131a .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 131c .cfa: r7 8 +
+STACK CFI INIT 13e0 e4 .cfa: sp 0 + .ra: lr
+STACK CFI 13e2 .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 13e4 .cfa: r7 8 +
+STACK CFI INIT 14c4 118 .cfa: sp 0 + .ra: lr
+STACK CFI 14c6 .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r5: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 14c8 .cfa: r7 8 +
+STACK CFI INIT 15dc c0 .cfa: sp 0 + .ra: lr
+STACK CFI 1674 .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 1676 .cfa: r7 8 +
+STACK CFI INIT 169c 12c .cfa: sp 0 + .ra: lr
+STACK CFI 169e .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 16a0 .cfa: r7 8 +
+STACK CFI 16a4 r10: .cfa -24 + ^ r9: .cfa -28 + ^ r8: .cfa -32 + ^
+STACK CFI INIT 17c8 b8 .cfa: sp 0 + .ra: lr
+STACK CFI 17ca .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r5: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 17cc .cfa: r7 8 +
+STACK CFI INIT 1880 bc .cfa: sp 0 + .ra: lr
+STACK CFI 1882 .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 1884 .cfa: r7 8 +
+STACK CFI INIT 193c d0 .cfa: sp 0 + .ra: lr
+STACK CFI 193e .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 1940 .cfa: r7 8 +
+STACK CFI INIT 1a0c 118 .cfa: sp 0 + .ra: lr
+STACK CFI 1a0e .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r5: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 1a10 .cfa: r7 8 +
+STACK CFI INIT 1b24 c0 .cfa: sp 0 + .ra: lr
+STACK CFI 1bbc .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 1bbe .cfa: r7 8 +
+STACK CFI INIT 0 12c .cfa: sp 0 + .ra: lr
+STACK CFI 2 .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 4 .cfa: r7 8 +
+STACK CFI 8 r10: .cfa -24 + ^ r9: .cfa -28 + ^ r8: .cfa -32 + ^
+STACK CFI INIT 1be4 134 .cfa: sp 0 + .ra: lr
+STACK CFI 1be6 .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 1be8 .cfa: r7 8 +
+STACK CFI 1bec r11: .cfa -24 + ^ r10: .cfa -28 + ^ r9: .cfa -32 + ^ r8: .cfa -36 + ^
+STACK CFI INIT 0 bc .cfa: sp 0 + .ra: lr
+STACK CFI 2 .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 4 .cfa: r7 8 +
+STACK CFI INIT 0 c8 .cfa: sp 0 + .ra: lr
+STACK CFI 2 .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 4 .cfa: r7 8 +

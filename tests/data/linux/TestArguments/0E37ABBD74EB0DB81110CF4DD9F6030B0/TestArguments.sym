@@ -1,0 +1,26 @@
+MODULE Linux arm 0E37ABBD74EB0DB81110CF4DD9F6030B0 TestArguments
+INFO CODE_ID BDAB370EEB74B80D1110CF4DD9F6030B5AA61D4F
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 hg:hg.mozilla.org/try:xpcom/tests/TestArguments.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+PUBLIC 43c 0 _start
+PUBLIC 44c 0 _start_main
+PUBLIC 4b8 0 __atexit_handler_wrapper
+PUBLIC 4d0 0 atexit
+PUBLIC 4fc 0 pthread_atfork
+PUBLIC 518 0 call_fini_array
+FUNC 55c c4 0 main
+55c 8 4 0
+564 6 16 0
+56a 14 6 0
+57e 12 7 0
+590 12 8 0
+5a2 12 9 0
+5b4 12 10 0
+5c6 12 11 0
+5d8 12 12 0
+5ea 10 13 0
+5fa 26 0 0
+PUBLIC 620 0 <.plt ELF section in TestArguments>
+STACK CFI INIT 55c c4 .cfa: sp 0 + .ra: lr
+STACK CFI 568 .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 56a .cfa: r7 8 +

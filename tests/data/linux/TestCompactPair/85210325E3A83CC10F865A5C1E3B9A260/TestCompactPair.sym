@@ -1,0 +1,17 @@
+MODULE Linux arm 85210325E3A83CC10F865A5C1E3B9A260 TestCompactPair
+INFO CODE_ID 25032185A8E3C13C0F865A5C1E3B9A2654A95EEF
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 hg:hg.mozilla.org/try:mfbt/tests/TestCompactPair.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+PUBLIC 3a8 0 _start
+PUBLIC 3b8 0 _start_main
+PUBLIC 424 0 __atexit_handler_wrapper
+PUBLIC 43c 0 atexit
+PUBLIC 468 0 pthread_atfork
+PUBLIC 484 0 call_fini_array
+FUNC 4c8 8 0 main
+4c8 4 135 0
+4cc 4 159 0
+PUBLIC 4d0 0 <.plt ELF section in TestCompactPair>
+STACK CFI INIT 4c8 8 .cfa: sp 0 + .ra: lr
+STACK CFI 4ca .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI 4cc .cfa: r7 8 +

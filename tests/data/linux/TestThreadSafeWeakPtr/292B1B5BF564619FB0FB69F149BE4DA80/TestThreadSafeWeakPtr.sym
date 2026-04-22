@@ -1,0 +1,667 @@
+MODULE Linux arm 292B1B5BF564619FB0FB69F149BE4DA80 TestThreadSafeWeakPtr
+INFO CODE_ID 5B1B2B2964F59F61B0FB69F149BE4DA863167376
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__atomic/support/c11.h
+FILE 1 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__atomic/support.h
+FILE 2 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__atomic/atomic.h
+FILE 3 hg:hg.mozilla.org/try:mfbt/RefCounted.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 4 hg:hg.mozilla.org/try:mfbt/ThreadSafeWeakPtr.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 5 hg:hg.mozilla.org/try:mfbt/RefPtr.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 6 hg:hg.mozilla.org/try:mfbt/tests/TestThreadSafeWeakPtr.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 7 hg:hg.mozilla.org/try:mfbt/Assertions.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 8 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__atomic/fence.h
+INLINE_ORIGIN 0 C::C()
+INLINE_ORIGIN 1 mozilla::SupportsThreadSafeWeakPtr<C>::SupportsThreadSafeWeakPtr()
+INLINE_ORIGIN 2 mozilla::detail::ThreadSafeWeakReference::ThreadSafeWeakReference(mozilla::detail::SupportsThreadSafeWeakPtrBase*)
+INLINE_ORIGIN 3 mozilla::external::AtomicRefCounted<mozilla::detail::ThreadSafeWeakReference>::AtomicRefCounted()
+INLINE_ORIGIN 4 mozilla::detail::RefCounted<mozilla::detail::ThreadSafeWeakReference, (mozilla::detail::RefCountAtomicity)0>::RefCounted()
+INLINE_ORIGIN 5 mozilla::detail::RC<unsigned int, (mozilla::detail::RefCountAtomicity)0>::RC(unsigned int)
+INLINE_ORIGIN 6 std::__ndk1::atomic<unsigned int>::atomic[abi:dn210000](unsigned int)
+INLINE_ORIGIN 7 std::__ndk1::__atomic_base<unsigned int, true>::__atomic_base[abi:dn210000](unsigned int)
+INLINE_ORIGIN 8 std::__ndk1::__atomic_base<unsigned int, false>::__atomic_base[abi:dn210000](unsigned int)
+INLINE_ORIGIN 9 std::__ndk1::__cxx_atomic_impl<unsigned int, std::__ndk1::__cxx_atomic_base_impl<unsigned int> >::__cxx_atomic_impl[abi:dn210000](unsigned int)
+INLINE_ORIGIN 10 std::__ndk1::__cxx_atomic_base_impl<unsigned int>::__cxx_atomic_base_impl(unsigned int)
+INLINE_ORIGIN 11 RefPtr<mozilla::detail::ThreadSafeWeakReference>::RefPtr(mozilla::detail::ThreadSafeWeakReference*)
+INLINE_ORIGIN 12 RefPtr<mozilla::detail::ThreadSafeWeakReference>::ConstRemovingRefPtrTraits<mozilla::detail::ThreadSafeWeakReference>::AddRef(mozilla::detail::ThreadSafeWeakReference*)
+INLINE_ORIGIN 13 mozilla::RefPtrTraits<mozilla::detail::ThreadSafeWeakReference>::AddRef(mozilla::detail::ThreadSafeWeakReference*)
+INLINE_ORIGIN 14 mozilla::detail::RefCounted<mozilla::detail::ThreadSafeWeakReference, (mozilla::detail::RefCountAtomicity)0>::AddRef() const
+INLINE_ORIGIN 15 mozilla::detail::RC<unsigned int, (mozilla::detail::RefCountAtomicity)0>::operator unsigned int() const
+INLINE_ORIGIN 16 std::__ndk1::__atomic_base<unsigned int, false>::load[abi:dn210000](std::__ndk1::memory_order) const
+INLINE_ORIGIN 17 std::__ndk1::__cxx_atomic_load[abi:dn210000]<unsigned int>(std::__ndk1::__cxx_atomic_base_impl<std::__ndk1::__cxx_atomic_load[abi:dn210000]> const*, std::__ndk1::memory_order)
+INLINE_ORIGIN 18 mozilla::detail::RC<unsigned int, (mozilla::detail::RefCountAtomicity)0>::operator++()
+INLINE_ORIGIN 19 std::__ndk1::__atomic_base<unsigned int, true>::fetch_add[abi:dn210000](unsigned int, std::__ndk1::memory_order)
+INLINE_ORIGIN 20 std::__ndk1::__cxx_atomic_fetch_add[abi:dn210000]<unsigned int>(std::__ndk1::__cxx_atomic_base_impl<std::__ndk1::__cxx_atomic_fetch_add[abi:dn210000]>*, std::__ndk1::__cxx_atomic_fetch_add[abi:dn210000], std::__ndk1::memory_order)
+INLINE_ORIGIN 21 RefPtr<C>::RefPtr(C*)
+INLINE_ORIGIN 22 RefPtr<C>::ConstRemovingRefPtrTraits<C>::AddRef(C*)
+INLINE_ORIGIN 23 mozilla::RefPtrTraits<C>::AddRef(C*)
+INLINE_ORIGIN 24 mozilla::SupportsThreadSafeWeakPtr<C>::AddRef() const
+INLINE_ORIGIN 25 RefPtr<mozilla::detail::ThreadSafeWeakReference>::operator->() const
+INLINE_ORIGIN 26 mozilla::ThreadSafeWeakPtr<C>::ThreadSafeWeakPtr(RefPtr<C> const&)
+INLINE_ORIGIN 27 mozilla::ThreadSafeWeakPtr<C>::operator=(RefPtr<C> const&)
+INLINE_ORIGIN 28 mozilla::SupportsThreadSafeWeakPtr<C>::getThreadSafeWeakReference() const
+INLINE_ORIGIN 29 RefPtr<mozilla::detail::ThreadSafeWeakReference>::operator mozilla::detail::ThreadSafeWeakReference*() const &
+INLINE_ORIGIN 30 RefPtr<mozilla::detail::ThreadSafeWeakReference>::get() const
+INLINE_ORIGIN 31 RefPtr<mozilla::detail::ThreadSafeWeakReference>::operator=(mozilla::detail::ThreadSafeWeakReference*)
+INLINE_ORIGIN 32 RefPtr<mozilla::detail::ThreadSafeWeakReference>::assign_with_AddRef(mozilla::detail::ThreadSafeWeakReference*)
+INLINE_ORIGIN 33 mozilla::ThreadSafeWeakPtr<C>::operator RefPtr<C>() const
+INLINE_ORIGIN 34 mozilla::ThreadSafeWeakPtr<C>::getRefPtr() const
+INLINE_ORIGIN 35 mozilla::detail::RC<unsigned int, (mozilla::detail::RefCountAtomicity)0>::IncrementIfNonzero()
+INLINE_ORIGIN 36 std::__ndk1::__atomic_base<unsigned int, false>::compare_exchange_weak[abi:dn210000](unsigned int&, unsigned int, std::__ndk1::memory_order, unsigned int&)
+INLINE_ORIGIN 37 std::__ndk1::__cxx_atomic_compare_exchange_weak[abi:dn210000]<unsigned int>(std::__ndk1::__cxx_atomic_base_impl<unsigned int>*, std::__ndk1::__cxx_atomic_base_impl*, std::__ndk1::__cxx_atomic_base_impl, std::__ndk1::memory_order, std::__ndk1::__cxx_atomic_base_impl*)
+INLINE_ORIGIN 38 MOZ_CrashSequence(void*, int)
+INLINE_ORIGIN 39 RefPtr<C>::~RefPtr()
+INLINE_ORIGIN 40 RefPtr<C>::ConstRemovingRefPtrTraits<C>::Release(C*)
+INLINE_ORIGIN 41 mozilla::RefPtrTraits<C>::Release(C*)
+INLINE_ORIGIN 42 mozilla::ThreadSafeWeakPtr<C>::operator==(RefPtr<C> const&) const
+INLINE_ORIGIN 43 mozilla::ThreadSafeWeakPtr<C>::operator==(C const*) const
+INLINE_ORIGIN 44 mozilla::ThreadSafeWeakPtr<C>::~ThreadSafeWeakPtr()
+INLINE_ORIGIN 45 RefPtr<mozilla::detail::ThreadSafeWeakReference>::~RefPtr()
+INLINE_ORIGIN 46 RefPtr<mozilla::detail::ThreadSafeWeakReference>::ConstRemovingRefPtrTraits<mozilla::detail::ThreadSafeWeakReference>::Release(mozilla::detail::ThreadSafeWeakReference*)
+INLINE_ORIGIN 47 mozilla::RefPtrTraits<mozilla::detail::ThreadSafeWeakReference>::Release(mozilla::detail::ThreadSafeWeakReference*)
+INLINE_ORIGIN 48 RefPtr<C>::operator->() const
+INLINE_ORIGIN 49 RefPtr<C>::operator=(std::nullptr_t)
+INLINE_ORIGIN 50 RefPtr<C>::assign_assuming_AddRef(C*)
+INLINE_ORIGIN 51 mozilla::ThreadSafeWeakPtr<C>::IsDead() const
+INLINE_ORIGIN 52 mozilla::detail::RC<unsigned int, (mozilla::detail::RefCountAtomicity)0>::operator--()
+INLINE_ORIGIN 53 std::__ndk1::__atomic_base<unsigned int, true>::fetch_sub[abi:dn210000](unsigned int, std::__ndk1::memory_order)
+INLINE_ORIGIN 54 std::__ndk1::__cxx_atomic_fetch_sub[abi:dn210000]<unsigned int>(std::__ndk1::__cxx_atomic_base_impl<std::__ndk1::__cxx_atomic_fetch_sub[abi:dn210000]>*, std::__ndk1::__cxx_atomic_fetch_sub[abi:dn210000], std::__ndk1::memory_order)
+INLINE_ORIGIN 55 std::__ndk1::atomic_thread_fence[abi:dn210000](std::__ndk1::memory_order)
+INLINE_ORIGIN 56 std::__ndk1::__cxx_atomic_thread_fence[abi:dn210000](std::__ndk1::memory_order)
+INLINE_ORIGIN 57 mozilla::detail::RC<unsigned int, (mozilla::detail::RefCountAtomicity)0>::operator=(unsigned int const&)
+INLINE_ORIGIN 58 std::__ndk1::__atomic_base<unsigned int, false>::store[abi:dn210000](unsigned int, std::__ndk1::memory_order)
+INLINE_ORIGIN 59 std::__ndk1::__cxx_atomic_store[abi:dn210000]<unsigned int>(std::__ndk1::__cxx_atomic_base_impl<unsigned int>*, std::__ndk1::__cxx_atomic_base_impl, std::__ndk1::memory_order)
+INLINE_ORIGIN 60 mozilla::external::AtomicRefCounted<mozilla::detail::ThreadSafeWeakReference>::~AtomicRefCounted()
+INLINE_ORIGIN 61 mozilla::detail::RefCounted<mozilla::detail::ThreadSafeWeakReference, (mozilla::detail::RefCountAtomicity)0>::~RefCounted()
+INLINE_ORIGIN 62 C::~C()
+INLINE_ORIGIN 63 mozilla::SupportsThreadSafeWeakPtr<C>::~SupportsThreadSafeWeakPtr()
+PUBLIC 91c 0 _start
+PUBLIC 92c 0 _start_main
+PUBLIC 998 0 __atexit_handler_wrapper
+PUBLIC 9b0 0 atexit
+PUBLIC 9dc 0 pthread_atfork
+PUBLIC 9f8 0 call_fini_array
+FUNC a3c 924 0 main
+INLINE 0 40 6 0 a4e 2a a7c 2 ba6 1c
+INLINE 1 21 6 1 a4e 2a ba6 1c ca8 2e f54 1c
+INLINE 2 148 4 2 a56 6 cb0 8
+INLINE 3 81 4 3 a58 4 cb4 4
+INLINE 4 335 3 4 a58 4 cb4 4
+INLINE 5 247 3 5 a58 4 cb4 4
+INLINE 6 164 3 6 a58 4 cb4 4
+INLINE 7 241 2 7 a58 4 cb4 4
+INLINE 8 150 2 8 a58 4 cb4 4
+INLINE 9 137 2 9 a58 4 cb4 4
+INLINE 10 119 1 10 a58 4 cb4 4
+INLINE 2 148 4 11 a5c 1c ba6 1c cb8 1e f54 1c
+INLINE 3 108 5 12 a5e 1a ba6 1c cbc 1a f54 1c
+INLINE 4 408 5 13 a5e 1a ba6 1c cbc 1a dc2 1c f54 1c 1096 1c
+INLINE 5 48 5 14 a5e 1a ba6 1c cbc 1a dc2 1c f54 1c 1096 1c
+INLINE 6 256 3 15 a5e 6 cbc 6 dc2 8
+INLINE 7 217 3 16 a5e 6 cbc 6 dc2 8
+INLINE 8 67 2 17 a5e 6 cbc 6 dc2 8
+INLINE 6 257 3 18 a6a e cc8 e dd0 e
+INLINE 7 180 3 19 a6a e cc8 e dd0 e
+INLINE 8 156 2 20 a6a e cc8 e dd0 e
+INLINE 0 40 6 21 a78 4 a7e 22 bc2 34
+INLINE 1 108 5 22 a78 4 a7e 22 bc2 34 cd6 6 ce0 22 f70 34
+INLINE 2 408 5 23 a78 4 a7e 22 bc2 34 cd6 6 ce0 22 f70 34
+INLINE 3 48 5 24 a78 4 a7e 22 bc2 34 cd6 6 ce0 22 f70 34
+INLINE 4 156 4 25 a78 4 a7e 6 bc2 1c cd6 6 ce0 6 f70 1c
+INLINE 4 157 4 15 a84 6 ce6 6
+INLINE 5 217 3 16 a84 6 ce6 6
+INLINE 6 67 2 17 a84 6 ce6 6
+INLINE 4 158 4 18 a92 e cf4 e
+INLINE 5 180 3 19 a92 e cf4 e
+INLINE 6 156 2 20 a92 e cf4 e
+INLINE 0 47 6 26 aa8 1e c0e 1c
+INLINE 1 227 4 27 aa8 1e b34 1e c0e 1c c5c 22 d76 1c ef0 1c
+INLINE 2 220 4 28 aa8 2 b34 2 c5c 2
+INLINE 3 197 4 29 aa8 2 b34 2 c48 2 c5c 2 c7e 2 c92 2 fc8 2
+INLINE 4 327 5 30 aa8 2 b34 2 c48 2 c5c 2 c7e 2 c92 2 fc8 2
+INLINE 2 220 4 31 aaa 1c b36 1c c0e 1c c5e 20 d76 1c ef0 1c
+INLINE 3 202 5 32 aaa 1c b36 1c c0e 1c c5e 20 d76 1c ef0 1c
+INLINE 4 59 5 12 aac 1a b38 1a c0e 1c c64 1a d76 1c ef0 1c
+INLINE 5 408 5 13 aac 1a b38 1a c0e 1c c64 1a d76 1c ef0 1c
+INLINE 6 48 5 14 aac 1a b38 1a c0e 1c c64 1a d76 1c ef0 1c
+INLINE 7 256 3 15 aac 6 b38 6 c64 6
+INLINE 8 217 3 16 aac 6 b38 6 c64 6
+INLINE 9 67 2 17 aac 6 b38 6 c64 6
+INLINE 7 257 3 18 ab8 e b44 e c70 e
+INLINE 8 180 3 19 ab8 e b44 e c70 e
+INLINE 9 156 2 20 ab8 e b44 e c70 e
+INLINE 0 49 6 33 ac6 44 c2a 18
+INLINE 1 274 4 34 ac6 44 b52 38 c2a 18 d08 36 d92 18 de4 3c fa4 18 fe2 36 102c 36 10b2 18 10e0 36 1210 30 1290 18
+INLINE 2 284 4 35 ac6 6 ad4 30 b52 2 b58 2c c2a 18 d08 30 d92 18 de4 4 dec 2c fa4 18 fe2 30 102c 2e 10b2 18 10e0 2e 1210 30 1290 18
+INLINE 3 226 3 16 ac6 6 b52 2 d08 4 de4 4 fe2 4 102c 2 10e0 2
+INLINE 4 67 2 17 ac6 6 b52 2 d08 4 de4 4 fe2 4 102c 2 10e0 2
+INLINE 3 231 3 36 ade 4 ae4 20 b62 4 b68 1c d16 4 d1c 1c df6 4 dfc 1c ff0 4 ff6 1c 1038 4 103e 1c 10ec 4 10f2 1c
+INLINE 4 84 2 37 ade 4 ae4 20 b62 4 b68 1c d16 4 d1c 1c df6 4 dfc 1c ff0 4 ff6 1c 1038 4 103e 1c 10ec 4 10f2 1c
+INLINE 0 51 6 38 b20 2
+INLINE 0 55 6 39 b30 4
+INLINE 1 80 5 40 b30 4 c58 4 db2 4 fd8 4 10d6 4
+INLINE 2 409 5 41 b30 4 c58 4 db2 4 fd8 4 10d6 4
+INLINE 0 58 6 26 b34 1e d76 1c
+INLINE 0 60 6 33 b52 38 d92 18
+INLINE 0 61 6 38 ba0 2
+INLINE 6 256 3 38 bbc 2 f6a 2 10ac 2
+INLINE 5 342 5 38 bd8 2 f86 2
+INLINE 4 157 4 38 bf0 2 f9e 2
+INLINE 0 41 6 38 c08 2
+INLINE 7 256 3 38 c24 2 d8c 2 f06 2
+INLINE 3 228 3 38 c3c 2 da4 2 fb6 2 10c4 2 1222 2 123a 2 12a2 2
+INLINE 0 63 6 42 c48 2
+INLINE 1 253 4 43 c48 2 c7e 2 c92 2 fc8 2
+INLINE 2 265 4 28 c48 2 c7e 2 c92 2 fc8 2
+INLINE 0 65 6 39 c58 4
+INLINE 0 72 6 26 c5c 22 ef0 1c
+INLINE 0 73 6 42 c7e 2
+INLINE 0 74 6 44 c86 4
+INLINE 1 205 4 45 c86 4 1128 c
+INLINE 2 80 5 46 c86 4 1128 c
+INLINE 3 409 5 47 c86 4 1128 c
+INLINE 0 80 6 42 c92 2
+INLINE 0 85 6 0 ca8 2e cdc 4 f54 1c
+INLINE 0 85 6 21 cd6 6 ce0 22 f70 34
+INLINE 0 88 6 33 d08 36 fa4 18
+INLINE 0 89 6 48 d3e 20
+INLINE 1 342 5 38 d58 2
+INLINE 0 52 6 38 d70 2
+INLINE 0 90 6 39 db2 4
+INLINE 0 91 6 27 db6 2e 1096 1c 1240 8
+INLINE 1 220 4 28 db6 4
+INLINE 2 197 4 29 db6 4
+INLINE 3 327 5 30 db6 4
+INLINE 1 220 4 31 dba 24 1096 1c
+INLINE 2 202 5 32 dba 24 1096 1c
+INLINE 3 59 5 12 dc2 1c 1096 1c
+INLINE 0 93 6 33 de4 3c 10b2 18
+INLINE 0 94 6 38 e38 2
+INLINE 0 62 6 38 eba 2
+INLINE 0 64 6 38 ed2 2
+INLINE 0 73 6 38 eea 2
+INLINE 0 77 6 38 f1e 2
+INLINE 0 80 6 38 f36 2
+INLINE 0 81 6 38 f4e 2
+INLINE 0 97 6 42 fc8 2
+INLINE 0 99 6 39 fd8 4
+INLINE 0 103 6 49 fdc 6
+INLINE 1 180 5 50 fdc 6 10da 6
+INLINE 2 68 5 40 fdc 6 10da 6
+INLINE 3 409 5 41 fdc 6 10da 6
+INLINE 0 105 6 33 fe2 36 1210 18
+INLINE 0 108 6 51 101e 8
+INLINE 1 246 4 15 101e 8 10ca 6 111c 6
+INLINE 2 217 3 16 101e 8 10ca 6 111c 6
+INLINE 3 67 2 17 101e 8 10ca 6 111c 6
+INLINE 0 111 6 33 102c 36 1228 18
+INLINE 0 112 6 38 1078 2
+INLINE 0 89 6 38 1090 2
+INLINE 0 115 6 51 10ca 6
+INLINE 0 117 6 39 10d6 4
+INLINE 0 119 6 49 10da 6
+INLINE 0 121 6 33 10e0 36 1290 18
+INLINE 0 124 6 51 111c 6
+INLINE 0 127 6 44 1128 c
+INLINE 0 97 6 38 1150 2
+INLINE 0 95 6 38 1168 2
+INLINE 0 96 6 38 1180 2
+INLINE 0 98 6 38 1198 2
+INLINE 0 108 6 38 120a 2
+INLINE 0 106 6 38 125a 2
+INLINE 0 115 6 38 1272 2
+INLINE 0 124 6 38 128a 2
+INLINE 0 63 6 38 12ba 2
+INLINE 0 122 6 38 12d2 2
+a3c a 39 6
+a46 8 40 6
+a4e 6 148 4
+a54 2 0 4
+a56 2 82 4
+a58 4 37 0
+a5c 2 106 5
+a5e 6 81 0
+a64 6 256 3
+a6a e 181 0
+a78 4 342 5
+a7c 2 21 6
+a7e 6 342 5
+a84 6 81 0
+a8a 6 157 4
+a90 2 0 4
+a92 e 181 0
+aa0 8 41 6
+aa8 2 314 5
+aaa 2 58 5
+aac 6 81 0
+ab2 6 256 3
+ab8 e 181 0
+ac6 2 81 0
+ac8 4 0 0
+acc 8 284 4
+ad4 2 227 3
+ad6 2 0 3
+ad8 6 227 3
+ade 4 164 0
+ae2 2 231 3
+ae4 1a 164 0
+afe 2 0 0
+b00 4 164 0
+b04 2 285 4
+b06 4 289 4
+b0a 14 51 6
+b1e 2 0 6
+b20 2 242 7
+b22 4 51 6
+b26 6 52 6
+b2c 2 0 6
+b2e 2 53 6
+b30 4 49 5
+b34 2 314 5
+b36 2 58 5
+b38 6 81 0
+b3e 6 256 3
+b44 e 181 0
+b52 2 81 0
+b54 4 284 4
+b58 2 227 3
+b5a 2 0 3
+b5c 6 227 3
+b62 4 164 0
+b66 2 231 3
+b68 16 164 0
+b7e 2 0 0
+b80 4 164 0
+b84 2 285 4
+b86 4 289 4
+b8a 14 61 6
+b9e 2 0 6
+ba0 2 242 7
+ba2 4 61 6
+ba6 14 256 3
+bba 2 0 3
+bbc 2 242 7
+bbe 4 256 3
+bc2 14 342 5
+bd6 2 0 5
+bd8 2 242 7
+bda 4 342 5
+bde 10 157 4
+bee 2 0 4
+bf0 2 242 7
+bf2 4 157 4
+bf6 10 41 6
+c06 2 0 6
+c08 2 242 7
+c0a 4 41 6
+c0e 14 256 3
+c22 2 0 3
+c24 2 242 7
+c26 4 256 3
+c2a 10 228 3
+c3a 2 0 3
+c3c 2 242 7
+c3e 4 228 3
+c42 6 62 6
+c48 2 314 5
+c4a 6 63 6
+c50 8 64 6
+c58 4 49 5
+c5c 2 314 5
+c5e 6 58 5
+c64 6 81 0
+c6a 6 256 3
+c70 e 181 0
+c7e 2 314 5
+c80 6 73 6
+c86 4 49 5
+c8a 8 77 6
+c92 2 314 5
+c94 6 80 6
+c9a 6 81 6
+ca0 8 85 6
+ca8 6 148 4
+cae 2 0 4
+cb0 4 82 4
+cb4 4 37 0
+cb8 4 106 5
+cbc 6 81 0
+cc2 6 256 3
+cc8 e 181 0
+cd6 6 342 5
+cdc 4 21 6
+ce0 6 342 5
+ce6 6 81 0
+cec 6 157 4
+cf2 2 0 4
+cf4 e 181 0
+d02 2 0 0
+d04 4 86 6
+d08 4 81 0
+d0c 2 227 3
+d0e 2 0 3
+d10 6 227 3
+d16 4 164 0
+d1a 2 231 3
+d1c 16 164 0
+d32 2 0 0
+d34 4 164 0
+d38 2 285 4
+d3a 4 289 4
+d3e 18 342 5
+d56 2 0 5
+d58 2 242 7
+d5a 4 342 5
+d5e 10 52 6
+d6e 2 0 6
+d70 2 242 7
+d72 4 52 6
+d76 14 256 3
+d8a 2 0 3
+d8c 2 242 7
+d8e 4 256 3
+d92 10 228 3
+da2 2 0 3
+da4 2 242 7
+da6 4 228 3
+daa 8 89 6
+db2 4 49 5
+db6 4 314 5
+dba 8 58 5
+dc2 8 81 0
+dca 6 256 3
+dd0 e 181 0
+dde 6 0 4
+de4 4 81 0
+de8 4 284 4
+dec 2 227 3
+dee 2 0 3
+df0 6 227 3
+df6 4 164 0
+dfa 2 231 3
+dfc 16 164 0
+e12 2 0 0
+e14 4 164 0
+e18 2 285 4
+e1a 6 289 4
+e20 16 94 6
+e36 2 0 6
+e38 2 242 7
+e3a 4 94 6
+e3e 6a 0 6
+ea8 10 62 6
+eb8 2 0 6
+eba 2 242 7
+ebc 4 62 6
+ec0 10 64 6
+ed0 2 0 6
+ed2 2 242 7
+ed4 4 64 6
+ed8 10 73 6
+ee8 2 0 6
+eea 2 242 7
+eec 4 73 6
+ef0 14 256 3
+f04 2 0 3
+f06 2 242 7
+f08 4 256 3
+f0c 10 77 6
+f1c 2 0 6
+f1e 2 242 7
+f20 4 77 6
+f24 10 80 6
+f34 2 0 6
+f36 2 242 7
+f38 4 80 6
+f3c 10 81 6
+f4c 2 0 6
+f4e 2 242 7
+f50 4 81 6
+f54 14 256 3
+f68 2 0 3
+f6a 2 242 7
+f6c 4 256 3
+f70 14 342 5
+f84 2 0 5
+f86 2 242 7
+f88 4 342 5
+f8c 10 157 4
+f9c 2 0 4
+f9e 2 242 7
+fa0 4 157 4
+fa4 10 228 3
+fb4 2 0 3
+fb6 2 242 7
+fb8 4 228 3
+fbc 6 95 6
+fc2 6 96 6
+fc8 2 314 5
+fca 6 97 6
+fd0 8 98 6
+fd8 4 49 5
+fdc 6 49 5
+fe2 4 81 0
+fe6 2 227 3
+fe8 2 0 3
+fea 6 227 3
+ff0 4 164 0
+ff4 2 231 3
+ff6 16 164 0
+100c 2 0 0
+100e 4 164 0
+1012 2 285 4
+1014 4 289 4
+1018 6 106 6
+101e 8 81 0
+1026 6 108 6
+102c 2 81 0
+102e 2 227 3
+1030 2 0 3
+1032 6 227 3
+1038 4 164 0
+103c 2 231 3
+103e 16 164 0
+1054 2 0 0
+1056 4 164 0
+105a 2 285 4
+105c 6 289 4
+1062 14 112 6
+1076 2 0 6
+1078 2 242 7
+107a 4 112 6
+107e 10 89 6
+108e 2 0 6
+1090 2 242 7
+1092 4 89 6
+1096 14 256 3
+10aa 2 0 3
+10ac 2 242 7
+10ae 4 256 3
+10b2 10 228 3
+10c2 2 0 3
+10c4 2 242 7
+10c6 4 228 3
+10ca 6 81 0
+10d0 6 115 6
+10d6 4 49 5
+10da 6 49 5
+10e0 2 81 0
+10e2 2 227 3
+10e4 2 0 3
+10e6 6 227 3
+10ec 4 164 0
+10f0 2 231 3
+10f2 16 164 0
+1108 2 0 0
+110a 4 164 0
+110e 2 285 4
+1110 6 289 4
+1116 6 122 6
+111c 6 81 0
+1122 6 124 6
+1128 6 49 5
+112e 6 49 5
+1134 a 127 6
+113e 10 97 6
+114e 2 0 6
+1150 2 242 7
+1152 4 97 6
+1156 10 95 6
+1166 2 0 6
+1168 2 242 7
+116a 4 95 6
+116e 10 96 6
+117e 2 0 6
+1180 2 242 7
+1182 4 96 6
+1186 10 98 6
+1196 2 0 6
+1198 2 242 7
+119a 4 98 6
+119e 5a 0 6
+11f8 10 108 6
+1208 2 0 6
+120a 2 242 7
+120c 4 108 6
+1210 10 228 3
+1220 2 0 3
+1222 2 242 7
+1224 4 228 3
+1228 10 228 3
+1238 2 0 3
+123a 2 242 7
+123c 4 228 3
+1240 8 0 4
+1248 10 106 6
+1258 2 0 6
+125a 2 242 7
+125c 4 106 6
+1260 10 115 6
+1270 2 0 6
+1272 2 242 7
+1274 4 115 6
+1278 10 124 6
+1288 2 0 6
+128a 2 242 7
+128c 4 124 6
+1290 10 228 3
+12a0 2 0 3
+12a2 2 242 7
+12a4 4 228 3
+12a8 10 63 6
+12b8 2 0 6
+12ba 2 242 7
+12bc 4 63 6
+12c0 10 122 6
+12d0 2 0 6
+12d2 2 242 7
+12d4 4 122 6
+12d8 88 0 6
+FUNC 1360 3c 0 MOZ_ReportAssertionFailure(char const*, char const*, int)
+1360 10 119 7
+1370 4 123 7
+1374 2 122 7
+1376 2 123 7
+1378 12 122 7
+138a 8 144 7
+1392 a 0 7
+FUNC 139c 94 0 mozilla::detail::RefCounted<mozilla::detail::ThreadSafeWeakReference, (mozilla::detail::RefCountAtomicity)0>::Release() const
+INLINE 0 263 3 15 13a0 6
+INLINE 1 217 3 16 13a0 6
+INLINE 2 67 2 17 13a0 6
+INLINE 0 265 3 52 13aa 14 13c6 8
+INLINE 1 188 3 53 13aa 12
+INLINE 2 162 2 54 13aa 12
+INLINE 1 200 3 55 13c6 8
+INLINE 2 22 8 56 13c6 8
+INLINE 0 275 3 57 13ce a
+INLINE 1 210 3 58 13ce a
+INLINE 2 59 2 59 13ce a
+INLINE 0 277 3 60 13d8 8 13ea 18
+INLINE 1 341 3 61 13d8 8 13ea 18
+INLINE 2 249 3 15 13d8 6
+INLINE 3 217 3 16 13d8 6
+INLINE 4 67 2 17 13d8 6
+INLINE 2 249 3 38 13fc 2
+INLINE 0 263 3 38 1418 2
+139c 4 261 3
+13a0 6 81 0
+13a6 4 263 3
+13aa 12 207 0
+13bc 2 189 3
+13be 4 279 3
+13c2 4 0 3
+13c6 4 44 0
+13ca 4 0 0
+13ce a 68 0
+13d8 6 81 0
+13de 2 249 3
+13e0 a 277 3
+13ea 10 249 3
+13fa 2 0 3
+13fc 2 242 7
+13fe 4 249 3
+1402 14 263 3
+1416 2 0 3
+1418 2 242 7
+141a 4 263 3
+141e 12 0 3
+FUNC 1430 90 0 mozilla::SupportsThreadSafeWeakPtr<C>::Release() const
+INLINE 0 164 4 25 1434 4 147c 1c
+INLINE 0 165 4 15 1438 6
+INLINE 1 217 3 16 1438 6
+INLINE 2 67 2 17 1438 6
+INLINE 0 167 4 52 1444 14 145c 8
+INLINE 1 188 3 53 1444 12
+INLINE 2 162 2 54 1444 12
+INLINE 1 200 3 55 145c 8
+INLINE 2 22 8 56 145c 8
+INLINE 0 179 4 62 1464 10
+INLINE 1 27 6 63 1464 2 1468 c
+INLINE 2 141 4 45 1464 2 1468 c
+INLINE 3 80 5 46 146c 8
+INLINE 4 409 5 47 146c 8
+INLINE 1 342 5 38 1492 2
+INLINE 0 165 4 38 14aa 2
+1430 4 163 4
+1434 4 342 5
+1438 6 81 0
+143e 4 165 4
+1442 2 0 4
+1444 12 207 0
+1456 2 189 3
+1458 4 181 4
+145c 4 44 0
+1460 4 0 0
+1464 2 79 5
+1466 2 26 6
+1468 2 79 5
+146a 2 0 5
+146c 6 49 5
+1472 2 0 5
+1474 4 179 4
+1478 4 181 4
+147c 14 342 5
+1490 2 0 5
+1492 2 242 7
+1494 4 342 5
+1498 10 165 4
+14a8 2 0 4
+14aa 2 242 7
+14ac 4 165 4
+14b0 10 0 4
+PUBLIC 14c1 0 __ThumbV7PILongThunk__ZdlPv
+PUBLIC 14d0 0 <.plt ELF section in TestThreadSafeWeakPtr>
+STACK CFI INIT a3c 924 .cfa: sp 0 + .ra: lr
+STACK CFI a3e .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI a40 .cfa: r7 8 +
+STACK CFI a44 r11: .cfa -24 + ^ r10: .cfa -28 + ^ r9: .cfa -32 + ^ r8: .cfa -36 + ^
+STACK CFI INIT 1360 3c .cfa: sp 0 + .ra: lr
+STACK CFI 1362 .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 1364 .cfa: r7 8 +
+STACK CFI 1368 r11: .cfa -24 + ^
+STACK CFI INIT 139c 94 .cfa: sp 0 + .ra: lr
+STACK CFI 139e .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 13a0 .cfa: r7 8 +
+STACK CFI INIT 1430 90 .cfa: sp 0 + .ra: lr
+STACK CFI 1432 .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r5: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 1434 .cfa: r7 8 +

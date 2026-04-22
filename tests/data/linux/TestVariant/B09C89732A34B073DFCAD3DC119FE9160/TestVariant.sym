@@ -1,0 +1,81 @@
+MODULE Linux arm B09C89732A34B073DFCAD3DC119FE9160 TestVariant
+INFO CODE_ID 73899CB0342A73B0DFCAD3DC119FE9166B26CB14
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 hg:hg.mozilla.org/try:mfbt/tests/TestVariant.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 1 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__memory/unique_ptr.h
+INLINE_ORIGIN 0 testDetails()
+INLINE_ORIGIN 1 testSimple()
+INLINE_ORIGIN 2 testDuplicate()
+INLINE_ORIGIN 3 testEmplaceWithType()
+INLINE_ORIGIN 4 testEmplaceWithIndex()
+INLINE_ORIGIN 5 testCopy()
+INLINE_ORIGIN 6 testMove()
+INLINE_ORIGIN 7 std::__ndk1::unique_ptr<Destroyer, std::__ndk1::default_delete<Destroyer> >::~unique_ptr[abi:dn210000]()
+INLINE_ORIGIN 8 std::__ndk1::unique_ptr<Destroyer, std::__ndk1::default_delete<Destroyer> >::reset[abi:dn210000](Destroyer*)
+INLINE_ORIGIN 9 std::__ndk1::default_delete<Destroyer>::operator()[abi:dn210000](Destroyer*) const
+INLINE_ORIGIN 10 Destroyer::~Destroyer()
+INLINE_ORIGIN 11 testDestructor()
+INLINE_ORIGIN 12 testEquality()
+INLINE_ORIGIN 13 testMatching()
+INLINE_ORIGIN 14 testMatchingLambda()
+INLINE_ORIGIN 15 testMatchingLambdaWithIndex()
+INLINE_ORIGIN 16 testMatchingLambdas()
+INLINE_ORIGIN 17 testMatchingLambdasWithIndex()
+INLINE_ORIGIN 18 testAddTagToHash()
+PUBLIC 4e4 0 _start
+PUBLIC 4f4 0 _start_main
+PUBLIC 560 0 __atexit_handler_wrapper
+PUBLIC 578 0 atexit
+PUBLIC 5a4 0 pthread_atfork
+PUBLIC 5c0 0 call_fini_array
+FUNC 604 d8 0 main
+INLINE 0 1133 0 0 608 8
+INLINE 0 1134 0 1 610 8
+INLINE 0 1135 0 2 618 8
+INLINE 0 1138 0 3 620 8
+INLINE 0 1139 0 4 628 8
+INLINE 0 1140 0 5 630 8
+INLINE 0 1141 0 6 638 c 646 2 64a 2
+INLINE 1 413 0 7 640 4 646 2 64a 2
+INLINE 2 269 1 8 640 4 646 2 64a 2
+INLINE 3 300 1 9 640 4 646 2 64a 2
+INLINE 4 78 1 10 640 4 646 2 64a 2
+INLINE 0 1142 0 11 644 2 648 2 64c 4 654 2
+INLINE 0 1143 0 12 650 4 656 6
+INLINE 1 443 0 10 654 2
+INLINE 0 1144 0 13 65c 8
+INLINE 0 1145 0 14 664 8
+INLINE 0 1146 0 15 66c 8
+INLINE 0 1147 0 16 674 8
+INLINE 0 1148 0 17 67c 8
+INLINE 0 1149 0 18 684 8
+604 4 1132 0
+608 8 26 0
+610 8 241 0
+618 8 294 0
+620 8 333 0
+628 8 351 0
+630 8 379 0
+638 8 393 0
+640 4 20 0
+644 2 418 0
+646 2 20 0
+648 2 418 0
+64a 2 20 0
+64c 4 418 0
+650 4 449 0
+654 2 20 0
+656 6 449 0
+65c 8 583 0
+664 8 722 0
+66c 8 800 0
+674 8 893 0
+67c 8 995 0
+684 8 1102 0
+68c 8 1151 0
+694 4 1152 0
+698 44 0 0
+PUBLIC 6e0 0 <.plt ELF section in TestVariant>
+STACK CFI INIT 604 d8 .cfa: sp 0 + .ra: lr
+STACK CFI 606 .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 608 .cfa: r7 8 +

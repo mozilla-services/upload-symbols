@@ -1,0 +1,450 @@
+MODULE Linux arm 6CC9BFE674EEB866280D5CACDB75FD590 TestFastBernoulliTrial
+INFO CODE_ID E6BFC96CEE7466B8280D5CACDB75FD5976F3D32C
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 hg:hg.mozilla.org/try:mfbt/FastBernoulliTrial.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 1 hg:hg.mozilla.org/try:mfbt/XorShift128PlusRNG.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 2 hg:hg.mozilla.org/try:mfbt/tests/TestFastBernoulliTrial.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 3 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__math/rounding_functions.h
+FILE 4 hg:hg.mozilla.org/try:mfbt/Assertions.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+INLINE_ORIGIN 0 TestProportions()
+INLINE_ORIGIN 1 mozilla::FastBernoulliTrial::trial()
+INLINE_ORIGIN 2 mozilla::FastBernoulliTrial::chooseSkipCount()
+INLINE_ORIGIN 3 mozilla::non_crypto::XorShift128PlusRNG::nextDouble()
+INLINE_ORIGIN 4 mozilla::non_crypto::XorShift128PlusRNG::next()
+INLINE_ORIGIN 5 mozilla::FastBernoulliTrial::setProbability(double)
+INLINE_ORIGIN 6 TestHarmonics()
+INLINE_ORIGIN 7 TestTrialN()
+INLINE_ORIGIN 8 mozilla::FastBernoulliTrial::trial(unsigned int)
+INLINE_ORIGIN 9 TestCuspProbabilities()
+INLINE_ORIGIN 10 _ZNSt6__ndk16__math9nextafterB8dn210000IiiTnNS_9enable_ifIXaasr13is_arithmeticIT_EE5valuesr13is_arithmeticIT0_EE5valueEiE4typeELi0EEENS_9__promoteIJS3_S4_EE4typeES3_S4_
+INLINE_ORIGIN 11 std::__ndk1::__math::nextafter[abi:dn210000]<int>(double, double)
+INLINE_ORIGIN 12 mozilla::FastBernoulliTrial::FastBernoulliTrial(double, unsigned long long, unsigned long long)
+INLINE_ORIGIN 13 MOZ_CrashSequence(void*, int)
+PUBLIC 898 0 _start
+PUBLIC 8a8 0 _start_main
+PUBLIC 914 0 __atexit_handler_wrapper
+PUBLIC 92c 0 atexit
+PUBLIC 958 0 pthread_atfork
+PUBLIC 974 0 call_fini_array
+FUNC 9b8 ed8 0 main
+INLINE 0 170 2 0 a12 318 16e0 48
+INLINE 1 28 2 1 a12 2 a20 80
+INLINE 2 198 0 2 a24 7c b5c 84 c98 7c db4 80 1368 96 154e 8 168e 8
+INLINE 3 369 0 3 a24 4c ab6 4e b5c 54 bf4 4c c98 4c db4 50 ee4 4c f8e 4c 103c 4c 10ea 4c 119e 4c 137e 50 14a0 50 15d6 4c
+INLINE 4 96 1 4 a24 3c ab6 3e b5c 44 bf4 3c c98 3c db4 40 ee4 3c f8e 3c 103c 3c 10ea 3c 119e 3c 137e 40 14a0 40 15d6 3c
+INLINE 1 33 2 5 ab6 92
+INLINE 2 288 0 2 ab6 92 bf4 8e 1478 2 147e a2 15ba 98
+INLINE 1 35 2 1 b48 2 b58 88
+INLINE 1 40 2 5 bf4 8e
+INLINE 1 42 2 1 c82 2 c90 84
+INLINE 0 171 2 6 d34 16e 12c2 18
+INLINE 1 56 2 1 d98 a dac 88
+INLINE 0 172 2 7 ed0 362 1728 78
+INLINE 1 80 2 8 ed0 2 ee0 80
+INLINE 2 223 0 2 ee4 7c f8e 7c 103c 7c 10ea 7c 119e 7c
+INLINE 1 88 2 8 f7c 2 f8a 80
+INLINE 1 97 2 8 1028 4 1038 80
+INLINE 1 106 2 8 10d6 4 10e6 80
+INLINE 1 115 2 8 1186 4 1198 82
+INLINE 0 174 2 9 123a 88 12ea 3b4 16c8 18 17a0 78
+INLINE 1 149 2 10 123a 10
+INLINE 2 164 3 11 123a 10 1416 10
+INLINE 1 149 2 12 124a 78 12ea 50 17a0 18
+INLINE 2 184 0 5 124a 78 12ea 50 17a0 18
+INLINE 1 69 2 13 12d4 2
+INLINE 3 288 0 2 12f0 4a
+INLINE 1 152 2 1 1362 9c
+INLINE 1 158 2 10 1416 10
+INLINE 1 158 2 5 1426 fa 17b8 18
+INLINE 1 159 2 1 154c a
+INLINE 1 165 2 5 1566 ec 17d0 18
+INLINE 1 166 2 1 168c a
+INLINE 1 152 2 13 16da 2
+INLINE 1 29 2 13 16f2 2
+INLINE 1 36 2 13 170a 2
+INLINE 1 43 2 13 1722 2
+INLINE 1 83 2 13 173a 2
+INLINE 1 92 2 13 1752 2
+INLINE 1 101 2 13 176a 2
+INLINE 1 110 2 13 1782 2
+INLINE 1 119 2 13 179a 2
+INLINE 3 231 0 13 17b2 2
+INLINE 2 231 0 13 17ca 2 17e2 2
+INLINE 1 159 2 13 17fa 2
+INLINE 1 166 2 13 1812 2
+9b8 5a 169 2
+a12 2 194 0
+a14 a 28 2
+a1e 2 0 2
+a20 4 193 0
+a24 c 75 1
+a30 28 76 1
+a58 8 77 1
+a60 4 96 1
+a64 c 97 1
+a70 1c 369 0
+a8c a 370 0
+a96 a 371 0
+aa0 e 0 0
+aae 8 29 2
+ab6 c 75 1
+ac2 28 76 1
+aea 2 0 1
+aec 8 77 1
+af4 4 96 1
+af8 c 97 1
+b04 8 369 0
+b0c 4 0 0
+b10 14 369 0
+b24 4 0 0
+b28 1e 370 0
+b46 2 0 0
+b48 2 194 0
+b4a c 35 2
+b56 2 0 2
+b58 4 193 0
+b5c 10 75 1
+b6c 4 0 1
+b70 4 75 1
+b74 24 76 1
+b98 8 77 1
+ba0 4 96 1
+ba4 c 97 1
+bb0 1c 369 0
+bcc a 370 0
+bd6 a 371 0
+be0 c 0 0
+bec 8 36 2
+bf4 4 75 1
+bf8 2 0 1
+bfa e 75 1
+c08 20 76 1
+c28 8 77 1
+c30 4 96 1
+c34 c 97 1
+c40 8 369 0
+c48 4 0 0
+c4c 14 369 0
+c60 2 0 0
+c62 1e 370 0
+c80 2 0 0
+c82 2 194 0
+c84 a 42 2
+c8e 2 0 2
+c90 4 193 0
+c94 4 0 0
+c98 c 75 1
+ca4 28 76 1
+ccc 8 77 1
+cd4 4 96 1
+cd8 c 97 1
+ce4 1c 369 0
+d00 a 370 0
+d0a a 371 0
+d14 e 0 0
+d22 8 43 2
+d2a a 0 2
+d34 a 55 2
+d3e 5a 0 2
+d98 4 194 0
+d9c 6 193 0
+da2 8 56 2
+daa 2 0 2
+dac 4 193 0
+db0 4 0 0
+db4 c 75 1
+dc0 2c 76 1
+dec 8 77 1
+df4 4 96 1
+df8 c 97 1
+e04 1c 369 0
+e20 a 370 0
+e2a a 371 0
+e34 2c 0 0
+e60 c 61 2
+e6c 4 63 2
+e70 4 62 2
+e74 4 63 2
+e78 4 62 2
+e7c 6 0 2
+e82 a 67 2
+e8c a 69 2
+e96 6 65 2
+e9c 6 60 2
+ea2 2e 0 2
+ed0 2 219 0
+ed2 c 80 2
+ede 2 0 2
+ee0 4 218 0
+ee4 c 75 1
+ef0 28 76 1
+f18 8 77 1
+f20 4 96 1
+f24 c 97 1
+f30 1c 369 0
+f4c a 370 0
+f56 a 371 0
+f60 e 0 0
+f6e 6 83 2
+f74 8 0 2
+f7c 2 219 0
+f7e a 88 2
+f88 2 0 2
+f8a 4 218 0
+f8e c 75 1
+f9a 28 76 1
+fc2 8 77 1
+fca 4 96 1
+fce c 97 1
+fda 1c 369 0
+ff6 a 370 0
+1000 a 371 0
+100a e 0 0
+1018 8 92 2
+1020 8 0 2
+1028 4 219 0
+102c a 97 2
+1036 2 0 2
+1038 4 218 0
+103c c 75 1
+1048 28 76 1
+1070 8 77 1
+1078 4 96 1
+107c c 97 1
+1088 1c 369 0
+10a4 a 370 0
+10ae a 371 0
+10b8 e 0 0
+10c6 8 101 2
+10ce 8 0 2
+10d6 4 219 0
+10da a 106 2
+10e4 2 0 2
+10e6 4 218 0
+10ea c 75 1
+10f6 28 76 1
+111e 8 77 1
+1126 4 96 1
+112a c 97 1
+1136 1c 369 0
+1152 a 370 0
+115c a 371 0
+1166 12 0 0
+1178 6 110 2
+117e 8 0 2
+1186 4 219 0
+118a c 115 2
+1196 2 0 2
+1198 6 218 0
+119e c 75 1
+11aa 28 76 1
+11d2 8 77 1
+11da 4 96 1
+11de c 97 1
+11ea 1c 369 0
+1206 a 370 0
+1210 a 371 0
+121a 12 0 0
+122c 6 119 2
+1232 8 0 2
+123a 10 153 3
+124a 18 231 0
+1262 14 233 0
+1276 4 0 0
+127a 6 233 0
+1280 14 0 0
+1294 a 233 0
+129e 10 281 0
+12ae a 282 0
+12b8 8 0 0
+12c0 2 282 0
+12c2 10 69 2
+12d2 2 0 2
+12d4 2 242 4
+12d6 4 69 2
+12da 10 0 2
+12ea 2 233 0
+12ec 4 285 0
+12f0 a 322 0
+12fa 6 0 0
+1300 2 322 0
+1302 a 331 0
+130c a 0 0
+1316 10 369 0
+1326 a 370 0
+1330 a 371 0
+133a 24 0 0
+135e 4 152 2
+1362 6 193 0
+1368 a 322 0
+1372 c 331 0
+137e 4 75 1
+1382 4 76 1
+1386 c 75 1
+1392 24 76 1
+13b6 8 77 1
+13be 4 96 1
+13c2 c 97 1
+13ce 1c 369 0
+13ea a 370 0
+13f4 a 371 0
+13fe c 0 0
+140a 4 152 2
+140e 8 0 2
+1416 10 153 3
+1426 18 231 0
+143e a 233 0
+1448 4 0 0
+144c a 233 0
+1456 10 281 0
+1466 a 282 0
+1470 8 0 0
+1478 2 331 0
+147a 4 285 0
+147e a 322 0
+1488 6 0 0
+148e 2 322 0
+1490 a 331 0
+149a 4 0 0
+149e 2 331 0
+14a0 4 75 1
+14a4 4 76 1
+14a8 c 75 1
+14b4 24 76 1
+14d8 8 77 1
+14e0 4 96 1
+14e4 c 97 1
+14f0 1c 369 0
+150c a 370 0
+1516 a 371 0
+1520 2c 0 0
+154c 2 193 0
+154e 8 322 0
+1556 8 159 2
+155e 4 0 2
+1562 4 165 2
+1566 18 231 0
+157e a 233 0
+1588 4 0 0
+158c a 233 0
+1596 10 281 0
+15a6 a 282 0
+15b0 6 0 0
+15b6 4 285 0
+15ba a 322 0
+15c4 6 0 0
+15ca 2 322 0
+15cc a 331 0
+15d6 4 75 1
+15da 4 76 1
+15de c 75 1
+15ea 20 76 1
+160a 8 77 1
+1612 4 96 1
+1616 c 97 1
+1622 1c 369 0
+163e a 370 0
+1648 a 371 0
+1652 3a 0 0
+168c 2 193 0
+168e 8 322 0
+1696 8 166 2
+169e e 0 2
+16ac 18 176 2
+16c4 4 0 2
+16c8 10 152 2
+16d8 2 0 2
+16da 2 242 4
+16dc 4 152 2
+16e0 6 29 2
+16e6 2 0 2
+16e8 8 29 2
+16f0 2 0 2
+16f2 2 242 4
+16f4 4 29 2
+16f8 10 36 2
+1708 2 0 2
+170a 2 242 4
+170c 4 36 2
+1710 10 43 2
+1720 2 0 2
+1722 2 242 4
+1724 4 43 2
+1728 6 83 2
+172e 2 0 2
+1730 8 83 2
+1738 2 0 2
+173a 2 242 4
+173c 4 83 2
+1740 6 92 2
+1746 2 0 2
+1748 8 92 2
+1750 2 0 2
+1752 2 242 4
+1754 4 92 2
+1758 6 101 2
+175e 2 0 2
+1760 8 101 2
+1768 2 0 2
+176a 2 242 4
+176c 4 101 2
+1770 6 110 2
+1776 2 0 2
+1778 8 110 2
+1780 2 0 2
+1782 2 242 4
+1784 4 110 2
+1788 6 119 2
+178e 2 0 2
+1790 8 119 2
+1798 2 0 2
+179a 2 242 4
+179c 4 119 2
+17a0 10 231 0
+17b0 2 0 0
+17b2 2 242 4
+17b4 4 231 0
+17b8 10 231 0
+17c8 2 0 0
+17ca 2 242 4
+17cc 4 231 0
+17d0 10 231 0
+17e0 2 0 0
+17e2 2 242 4
+17e4 4 231 0
+17e8 6 159 2
+17ee 2 0 2
+17f0 8 159 2
+17f8 2 0 2
+17fa 2 242 4
+17fc 4 159 2
+1800 6 166 2
+1806 2 0 2
+1808 8 166 2
+1810 2 0 2
+1812 2 242 4
+1814 4 166 2
+1818 78 0 2
+FUNC 1890 3c 0 MOZ_ReportAssertionFailure(char const*, char const*, int)
+1890 10 119 4
+18a0 4 123 4
+18a4 2 122 4
+18a6 2 123 4
+18a8 12 122 4
+18ba 8 144 4
+18c2 a 0 4
+PUBLIC m 18cc 0 __aeabi_uidiv
+PUBLIC m 1aa0 0 __aeabi_ul2d
+PUBLIC 1ad8 0 __aeabi_idiv0
+PUBLIC 1adc 0 __aeabi_ldiv0
+PUBLIC m 1ae0 0 __aeabi_memset8
+PUBLIC m 1af0 0 __aeabi_memclr
+PUBLIC 1b00 0 <.plt ELF section in TestFastBernoulliTrial>
+STACK CFI INIT 9b8 ed8 .cfa: sp 0 + .ra: lr
+STACK CFI 9ba .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 9bc .cfa: r7 8 +
+STACK CFI 9c0 r11: .cfa -24 + ^ r10: .cfa -28 + ^ r9: .cfa -32 + ^ r8: .cfa -36 + ^
+STACK CFI INIT 1890 3c .cfa: sp 0 + .ra: lr
+STACK CFI 1892 .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 1894 .cfa: r7 8 +
+STACK CFI 1898 r11: .cfa -24 + ^

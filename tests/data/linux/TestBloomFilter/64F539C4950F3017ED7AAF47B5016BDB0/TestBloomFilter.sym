@@ -1,0 +1,108 @@
+MODULE Linux arm 64F539C4950F3017ED7AAF47B5016BDB0 TestBloomFilter
+INFO CODE_ID C439F5640F951730ED7AAF47B5016BDB6C252FBE
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 hg:hg.mozilla.org/try:mfbt/tests/TestBloomFilter.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 1 hg:hg.mozilla.org/try:mfbt/Assertions.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 2 hg:hg.mozilla.org/try:mfbt/BloomFilter.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+INLINE_ORIGIN 0 mozilla::CountingBloomFilter<(unsigned int)12, FilterChecker>::add(FilterChecker const*)
+INLINE_ORIGIN 1 mozilla::CountingBloomFilter<(unsigned int)12, FilterChecker>::add(unsigned int)
+INLINE_ORIGIN 2 mozilla::CountingBloomFilter<(unsigned int)12, FilterChecker>::remove(FilterChecker const*)
+INLINE_ORIGIN 3 mozilla::CountingBloomFilter<(unsigned int)12, FilterChecker>::remove(unsigned int)
+INLINE_ORIGIN 4 mozilla::CountingBloomFilter<(unsigned int)12, FilterChecker>::full(unsigned char const&)
+INLINE_ORIGIN 5 mozilla::CountingBloomFilter<(unsigned int)12, FilterChecker>::mightContain(FilterChecker const*) const
+INLINE_ORIGIN 6 mozilla::CountingBloomFilter<(unsigned int)12, FilterChecker>::mightContain(unsigned int) const
+INLINE_ORIGIN 7 MOZ_CrashSequence(void*, int)
+PUBLIC 690 0 _start
+PUBLIC 6a0 0 _start_main
+PUBLIC 70c 0 __atexit_handler_wrapper
+PUBLIC 724 0 atexit
+PUBLIC 750 0 pthread_atfork
+PUBLIC 76c 0 call_fini_array
+FUNC 7b0 6 0 testBitBloomFilter()
+7b0 4 27 0
+7b4 2 52 0
+FUNC 7b8 38 0 MOZ_ReportAssertionFailure(char const*, char const*, int)
+7b8 a 119 1
+7c2 4 123 1
+7c6 2 122 1
+7c8 2 123 1
+7ca 16 122 1
+7e0 4 144 1
+7e4 c 0 1
+FUNC 7f0 d4 0 testCountingBloomFilter()
+INLINE 0 87 0 0 7fe 8
+INLINE 1 299 2 1 7fe 8 840 8
+INLINE 0 95 0 2 80c 1c
+INLINE 1 320 2 3 80c 1c 84e 18
+INLINE 2 311 2 4 80c 2 850 2
+INLINE 2 307 2 4 81e 2 85c 2
+INLINE 0 104 0 0 840 8
+INLINE 0 112 0 2 84e 18
+INLINE 0 118 0 5 874 2
+INLINE 1 334 2 6 874 2
+INLINE 0 118 0 7 888 2
+INLINE 0 97 0 7 89c 2
+INLINE 0 114 0 7 8b0 2
+7f0 c 54 0
+7fc 2 86 0
+7fe 4 291 2
+802 4 287 2
+806 2 86 0
+808 4 0 0
+80c 2 274 2
+80e 6 311 2
+814 4 0 2
+818 6 311 2
+81e 2 274 2
+820 8 307 2
+828 4 94 0
+82c 4 0 0
+830 2 94 0
+832 4 97 0
+836 8 0 0
+83e 2 103 0
+840 4 291 2
+844 4 287 2
+848 2 103 0
+84a 4 0 0
+84e 2 311 2
+850 2 274 2
+852 a 311 2
+85c 2 274 2
+85e 8 307 2
+866 4 111 0
+86a 4 0 0
+86e 2 111 0
+870 4 114 0
+874 2 327 2
+876 4 134 0
+87a c 118 0
+886 2 0 0
+888 2 242 1
+88a 4 118 0
+88e c 97 0
+89a 2 0 0
+89c 2 242 1
+89e 4 97 0
+8a2 c 114 0
+8ae 2 0 0
+8b0 2 242 1
+8b2 4 114 0
+8b6 e 0 0
+FUNC 8c4 c 0 main
+8c4 4 136 0
+8c8 4 138 0
+8cc 4 140 0
+PUBLIC 8d0 0 <.plt ELF section in TestBloomFilter>
+STACK CFI INIT 7b0 6 .cfa: sp 0 + .ra: lr
+STACK CFI 7b2 .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI 7b4 .cfa: r7 8 +
+STACK CFI INIT 7b8 38 .cfa: sp 0 + .ra: lr
+STACK CFI 7ba .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r5: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 7bc .cfa: r7 8 +
+STACK CFI INIT 7f0 d4 .cfa: sp 0 + .ra: lr
+STACK CFI 7f2 .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 7f4 .cfa: r7 8 +
+STACK CFI INIT 8c4 c .cfa: sp 0 + .ra: lr
+STACK CFI 8c6 .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI 8c8 .cfa: r7 8 +

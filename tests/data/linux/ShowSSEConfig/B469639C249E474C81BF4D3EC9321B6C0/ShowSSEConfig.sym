@@ -1,0 +1,28 @@
+MODULE Linux arm B469639C249E474C81BF4D3EC9321B6C0 ShowSSEConfig
+INFO CODE_ID 9C6369B49E244C4781BF4D3EC9321B6C739E2ED6
+INFO GENERATOR mozilla/dump_syms 2.3.7
+FILE 0 git:github.com/mozilla-firefox/firefox:mozglue/tests/ShowSSEConfig.cpp:07e27bfce5acf193bdb89c7ba2aa73451a3e43b4
+PUBLIC 498 0 _start
+PUBLIC 4a8 0 _start_main
+PUBLIC 514 0 __atexit_handler_wrapper
+PUBLIC 52c 0 atexit
+PUBLIC 558 0 pthread_atfork
+PUBLIC 574 0 call_fini_array
+FUNC 5b8 dc 0 main
+5b8 6 13 0
+5be c 14 0
+5ca 8 110 0
+5d2 18 115 0
+5ea 10 116 0
+5fa 10 117 0
+60a 10 118 0
+61a 10 119 0
+62a 10 120 0
+63a 10 121 0
+64a 10 122 0
+65a 6 123 0
+660 34 0 0
+PUBLIC 6a0 0 <.plt ELF section in ShowSSEConfig>
+STACK CFI INIT 5b8 dc .cfa: sp 0 + .ra: lr
+STACK CFI 5ba .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r5: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 5bc .cfa: r7 8 +

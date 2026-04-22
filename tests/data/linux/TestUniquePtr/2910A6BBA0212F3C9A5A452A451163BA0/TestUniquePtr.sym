@@ -1,0 +1,773 @@
+MODULE Linux arm 2910A6BBA0212F3C9A5A452A451163BA0 TestUniquePtr
+INFO CODE_ID BBA6102921A03C2F9A5A452A451163BACF28CE66
+INFO GENERATOR mozilla/dump_syms 2.3.6
+FILE 0 hg:hg.mozilla.org/try:mfbt/tests/TestUniquePtr.cpp:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 1 /builds/worker/fetches/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/__memory/unique_ptr.h
+FILE 2 hg:hg.mozilla.org/try:mfbt/Vector.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 3 hg:hg.mozilla.org/try:mfbt/Assertions.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 4 hg:hg.mozilla.org/try:mfbt/ReentrancyGuard.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 5 hg:hg.mozilla.org/try:mfbt/AllocPolicy.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+FILE 6 hg:hg.mozilla.org/try:mfbt/MathAlgorithms.h:bbdd9862e2f3fd0e897d79100b238eb7caf2c2d3
+INLINE_ORIGIN 0 TestDefaultFree()
+INLINE_ORIGIN 1 TestDefaultFreeGuts()
+INLINE_ORIGIN 2 TestFreeClass()
+INLINE_ORIGIN 3 std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >::~unique_ptr[abi:dn210000]()
+INLINE_ORIGIN 4 std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >::reset[abi:dn210000](A*)
+INLINE_ORIGIN 5 std::__ndk1::default_delete<A>::operator()[abi:dn210000](A*) const
+INLINE_ORIGIN 6 B::~B()
+INLINE_ORIGIN 7 B::~B()
+INLINE_ORIGIN 8 A::~A()
+INLINE_ORIGIN 9 TestFunctionReferenceDeleter()
+INLINE_ORIGIN 10 TestReferenceDeleter()
+INLINE_ORIGIN 11 std::__ndk1::unique_ptr<int, FreeClass>::reset[abi:dn210000](int*)
+INLINE_ORIGIN 12 FreeClass::operator()(int*)
+INLINE_ORIGIN 13 TestVector()
+INLINE_ORIGIN 14 TestVectorGuts()
+INLINE_ORIGIN 15 mozilla::Vector<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy>::Vector()
+INLINE_ORIGIN 16 mozilla::Vector<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy>::Vector(mozilla::MallocAllocPolicy)
+INLINE_ORIGIN 17 mozilla::Vector<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy>::CRAndStorage<(unsigned int)0, (unsigned int)0>::CRAndStorage(unsigned int, unsigned int)
+INLINE_ORIGIN 18 mozilla::Vector<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy>::CapacityAndReserved::CapacityAndReserved(unsigned int, unsigned int)
+INLINE_ORIGIN 19 std::__ndk1::unique_ptr<int, DeleteIntFunction>::~unique_ptr[abi:dn210000]()
+INLINE_ORIGIN 20 std::__ndk1::unique_ptr<int, DeleteIntFunction>::reset[abi:dn210000](int*)
+INLINE_ORIGIN 21 DeleteIntFunction::operator()(void*)
+INLINE_ORIGIN 22 B::B()
+INLINE_ORIGIN 23 A::A()
+INLINE_ORIGIN 24 mozilla::Vector<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy>::begin()
+INLINE_ORIGIN 25 TestTempPtrToSetter()
+INLINE_ORIGIN 26 TestTempPtrToSetter()::$_0::operator()(TestTempPtrToSetter()::Foo**) const
+INLINE_ORIGIN 27 TestTempPtrToSetter()::Foo::Foo()
+INLINE_ORIGIN 28 TestArray()
+INLINE_ORIGIN 29 std::__ndk1::unique_ptr<A [], std::__ndk1::default_delete<A []> >::~unique_ptr[abi:dn210000]()
+INLINE_ORIGIN 30 std::__ndk1::unique_ptr<A [], std::__ndk1::default_delete<A []> >::reset[abi:dn210000](std::nullptr_t)
+INLINE_ORIGIN 31 std::__ndk1::default_delete<A []>::operator()[abi:dn210000]<A>(std::__ndk1::default_delete<A []>::_EnableIfConvertible*) const
+INLINE_ORIGIN 32 std::__ndk1::unique_ptr<TestTempPtrToSetter()::Foo, std::__ndk1::default_delete<TestTempPtrToSetter()::Foo> >::~unique_ptr[abi:dn210000]()
+INLINE_ORIGIN 33 std::__ndk1::unique_ptr<TestTempPtrToSetter()::Foo, std::__ndk1::default_delete<TestTempPtrToSetter()::Foo> >::reset[abi:dn210000](TestTempPtrToSetter()::Foo*)
+INLINE_ORIGIN 34 std::__ndk1::default_delete<TestTempPtrToSetter()::Foo>::operator()[abi:dn210000](TestTempPtrToSetter()::Foo*) const
+INLINE_ORIGIN 35 TestTempPtrToSetter()::Foo::~Foo()
+INLINE_ORIGIN 36 MOZ_CrashSequence(void*, int)
+INLINE_ORIGIN 37 mozilla::ReentrancyGuard::ReentrancyGuard<mozilla::Vector<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy> >()
+INLINE_ORIGIN 38 mozilla::Vector<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy>::usingInlineStorage() const
+INLINE_ORIGIN 39 mozilla::Vector<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy>::reserved() const
+INLINE_ORIGIN 40 mozilla::Vector<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy>::internalAppend<B*>(B*&&)
+INLINE_ORIGIN 41 mozilla::Vector<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy>::endNoCheck()
+INLINE_ORIGIN 42 mozilla::detail::VectorImpl<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy, false>::new_<B*>(std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >*, B*&&)
+INLINE_ORIGIN 43 std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >::unique_ptr[abi:dn210000]<true, void>()
+INLINE_ORIGIN 44 mozilla::ReentrancyGuard::~ReentrancyGuard()
+INLINE_ORIGIN 45 mozilla::detail::VectorImpl<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy, false>::destroy(std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >*, std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >*)
+INLINE_ORIGIN 46 mozilla::MallocAllocPolicy::free_<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> > >(std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >*, unsigned int)
+INLINE_ORIGIN 47 mozilla::detail::ComputeGrowth<mozilla::MallocAllocPolicy, (unsigned int)4>(unsigned int, unsigned int, int)
+INLINE_ORIGIN 48 mozilla::detail::GrowEltsByDoubling<(unsigned int)4>(unsigned int, unsigned int)
+INLINE_ORIGIN 49 mozilla::detail::CapacityHasExcessSpace<(unsigned int)4>(unsigned int)
+INLINE_ORIGIN 50 mozilla::RoundUpPow2(unsigned int)
+INLINE_ORIGIN 51 mozilla::CeilingLog2<unsigned int>(unsigned int)
+INLINE_ORIGIN 52 mozilla::detail::CeilingLog2<unsigned int, (unsigned int)4>::compute(unsigned int)
+INLINE_ORIGIN 53 mozilla::MallocAllocPolicy::pod_malloc<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> > >(unsigned int)
+INLINE_ORIGIN 54 mozilla::MallocAllocPolicy::maybe_pod_malloc<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> > >(unsigned int)
+INLINE_ORIGIN 55 mozilla::detail::VectorImpl<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy, false>::new_<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> > >(std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >*, std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >&&)
+INLINE_ORIGIN 56 std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >::unique_ptr[abi:dn210000](std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >&&)
+INLINE_ORIGIN 57 std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >::release[abi:dn210000]()
+INLINE_ORIGIN 58 mozilla::detail::VectorImpl<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy, false>::moveConstruct<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> > >(std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >*, std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >*, std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >*)
+INLINE_ORIGIN 59 mozilla::Vector<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy>::internalAppend<std::nullptr_t>(std::nullptr_t&&)
+INLINE_ORIGIN 60 mozilla::detail::VectorImpl<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy, false>::new_<std::nullptr_t>(std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >*, std::nullptr_t&&)
+INLINE_ORIGIN 61 std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >::unique_ptr[abi:dn210000]<true, void>()
+PUBLIC af4 0 _start
+PUBLIC b04 0 _start_main
+PUBLIC b70 0 __atexit_handler_wrapper
+PUBLIC b88 0 atexit
+PUBLIC bb4 0 pthread_atfork
+PUBLIC bd0 0 call_fini_array
+FUNC c14 42c 0 main
+INLINE 0 580 0 0 c1e 24 c46 4 c4c 2 e1e 30
+INLINE 1 205 0 1 c1e 24 c46 4 c4c 2 e1e 30
+INLINE 0 583 0 2 c42 4 c4a 2 c4e 8 c60 2 e4e 18
+INLINE 2 202 0 3 c46 4 c4c 2
+INLINE 3 269 1 4 c46 4 c4c 2
+INLINE 4 300 1 5 c46 4 c4c 2
+INLINE 5 78 1 6 c46 4 c4c 2
+INLINE 6 48 0 7 c46 4 c4c 2
+INLINE 7 48 0 8 c46 4
+INLINE 0 589 0 9 c56 6 c5e 2 c64 8 c92 2 e66 1c
+INLINE 0 586 0 10 c5c 2 c62 2
+INLINE 1 254 0 11 c60 2
+INLINE 2 300 1 12 c60 2
+INLINE 0 592 0 13 c6e 24 c94 11c de6 38 e82 10e
+INLINE 1 409 0 14 c72 6 c7a 18 c94 104 de6 38 e82 c4
+INLINE 2 380 0 15 c72 6 c7a 10 c8e 2 c94 8
+INLINE 3 544 2 16 c72 6 c7a 10 c8e 2 c94 8
+INLINE 4 964 2 17 c72 6 c7a 10 c94 8
+INLINE 5 472 2 18 c72 6 c7a 10 c94 8
+INLINE 1 358 0 19 c92 2
+INLINE 2 269 1 20 c92 2
+INLINE 3 300 1 21 c92 2
+INLINE 2 381 0 22 ca0 6 ca8 a
+INLINE 2 382 0 23 cc4 4 cca e
+INLINE 2 384 0 22 cfa 8
+INLINE 2 388 0 24 d10 12 d2c 2 ef2 1c
+INLINE 2 391 0 23 d3c 4
+INLINE 2 391 0 22 d50 8
+INLINE 2 393 0 24 d66 a e02 1c
+INLINE 0 604 0 25 db0 2 db6 20 f90 1c
+INLINE 1 562 0 26 db0 2 db6 4 dbc 6
+INLINE 2 556 0 27 db0 2 db6 4 dbc 6
+INLINE 0 595 0 28 db2 4
+INLINE 1 479 0 29 db2 4
+INLINE 2 581 1 30 db2 4
+INLINE 3 626 1 31 db2 4
+INLINE 4 103 1 8 db4 2
+INLINE 1 571 0 32 dc8 e
+INLINE 2 269 1 33 dc8 e
+INLINE 3 300 1 34 dc8 e
+INLINE 4 78 1 35 dc8 e
+INLINE 2 391 0 36 dfc 2
+INLINE 3 565 2 36 e18 2 f08 2
+INLINE 2 131 0 36 e30 2
+INLINE 2 136 0 36 e48 2
+INLINE 1 227 0 36 e60 2
+INLINE 1 354 0 36 e7c 2
+INLINE 2 381 0 36 e98 2
+INLINE 2 382 0 36 eb4 2
+INLINE 2 383 0 36 ed0 2
+INLINE 2 384 0 36 eec 2
+INLINE 2 400 0 36 f24 2
+INLINE 2 401 0 36 f40 2
+INLINE 1 411 0 36 f5c 2
+INLINE 1 412 0 36 f8a 2
+INLINE 1 563 0 36 fa6 2
+c14 a 577 0
+c1e 18 131 0
+c36 c 136 0
+c42 4 227 0
+c46 4 38 0
+c4a 2 227 0
+c4c 2 48 0
+c4e 8 227 0
+c56 6 354 0
+c5c 2 314 0
+c5e 2 354 0
+c60 2 218 0
+c62 2 315 0
+c64 8 354 0
+c6c 2 0 0
+c6e 4 407 0
+c72 6 429 2
+c78 2 406 0
+c7a 10 429 2
+c8a 4 380 0
+c8e 2 970 2
+c90 2 381 0
+c92 2 326 0
+c94 8 429 2
+c9c 4 381 0
+ca0 6 47 0
+ca6 2 381 0
+ca8 4 47 0
+cac 2 0 0
+cae 4 47 0
+cb2 c 381 0
+cbe 6 382 0
+cc4 4 37 0
+cc8 2 382 0
+cca c 37 0
+cd6 2 0 0
+cd8 a 382 0
+ce2 4 0 0
+ce6 a 383 0
+cf0 6 384 0
+cf6 4 0 0
+cfa 8 47 0
+d02 e 384 0
+d10 a 565 2
+d1a 2 566 2
+d1c 6 0 2
+d22 a 0 2
+d2c 2 566 2
+d2e e 391 0
+d3c 4 37 0
+d40 8 391 0
+d48 2 0 0
+d4a 6 391 0
+d50 8 47 0
+d58 e 391 0
+d66 8 565 2
+d6e 2 566 2
+d70 4 392 0
+d74 4 393 0
+d78 2 0 0
+d7a 8 400 0
+d82 a 401 0
+d8c 8 0 0
+d94 4 403 0
+d98 a 411 0
+da2 2 412 0
+da4 2 0 0
+da6 a 412 0
+db0 2 550 0
+db2 2 103 1
+db4 2 38 0
+db6 4 550 0
+dba 2 563 0
+dbc 6 550 0
+dc2 4 563 0
+dc6 2 0 0
+dc8 e 552 0
+dd6 c 608 0
+de2 4 0 0
+de6 14 391 0
+dfa 2 0 0
+dfc 2 242 3
+dfe 4 391 0
+e02 14 565 2
+e16 2 0 2
+e18 2 242 3
+e1a 4 565 2
+e1e 10 131 0
+e2e 2 0 0
+e30 2 242 3
+e32 4 131 0
+e36 10 136 0
+e46 2 0 0
+e48 2 242 3
+e4a 4 136 0
+e4e 10 227 0
+e5e 2 0 0
+e60 2 242 3
+e62 4 227 0
+e66 14 354 0
+e7a 2 0 0
+e7c 2 242 3
+e7e 4 354 0
+e82 14 381 0
+e96 2 0 0
+e98 2 242 3
+e9a 4 381 0
+e9e 14 382 0
+eb2 2 0 0
+eb4 2 242 3
+eb6 4 382 0
+eba 14 383 0
+ece 2 0 0
+ed0 2 242 3
+ed2 4 383 0
+ed6 14 384 0
+eea 2 0 0
+eec 2 242 3
+eee 4 384 0
+ef2 14 565 2
+f06 2 0 2
+f08 2 242 3
+f0a 4 565 2
+f0e 14 400 0
+f22 2 0 0
+f24 2 242 3
+f26 4 400 0
+f2a 14 401 0
+f3e 2 0 0
+f40 2 242 3
+f42 4 401 0
+f46 14 411 0
+f5a 2 0 0
+f5c 2 242 3
+f5e 4 411 0
+f62 12 0 0
+f74 14 412 0
+f88 2 0 0
+f8a 2 242 3
+f8c 4 412 0
+f90 14 563 0
+fa4 2 0 0
+fa6 2 242 3
+fa8 4 563 0
+fac 94 0 0
+FUNC 1040 3c 0 MOZ_ReportAssertionFailure(char const*, char const*, int)
+1040 10 119 3
+1050 4 123 3
+1054 2 122 3
+1056 2 123 3
+1058 12 122 3
+106a 8 144 3
+1072 a 0 3
+FUNC 107c 20 0 A::~A()
+107c 18 38 0
+1094 8 0 0
+FUNC 109c 1c 0 A::~A()
+INLINE 0 38 0 8 10a0 a
+109c 4 38 0
+10a0 a 38 0
+10aa 8 38 0
+10b2 6 0 0
+FUNC 10b8 38 0 B::~B()
+INLINE 0 48 0 8 10be 4 10c4 4 10cc 8 10da 6
+10b8 6 48 0
+10be 4 38 0
+10c2 2 48 0
+10c4 4 38 0
+10c8 4 48 0
+10cc 8 38 0
+10d4 6 48 0
+10da 6 38 0
+10e0 2 48 0
+10e2 e 0 0
+FUNC 10f0 2c 0 B::~B()
+INLINE 0 48 0 7 10f4 18
+INLINE 1 48 0 8 10f6 2 10fa 2 10fe 4 1106 6
+10f0 4 48 0
+10f4 2 48 0
+10f6 2 38 0
+10f8 2 48 0
+10fa 2 38 0
+10fc 2 48 0
+10fe 4 38 0
+1102 4 48 0
+1106 6 38 0
+110c 8 48 0
+1114 8 0 0
+FUNC 111c 118 0 mozilla::Vector<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy>::append<B*>(B*&&)
+INLINE 0 1495 2 37 1122 6 1132 2 1180 18
+INLINE 0 1495 2 38 1128 8
+INLINE 0 1495 2 39 113a c 1198 38
+INLINE 0 1508 2 40 1164 16 11d0 1c
+INLINE 1 1330 2 41 116a 2
+INLINE 1 1330 2 42 116c 6
+INLINE 2 155 2 43 116e 4
+INLINE 0 1510 2 44 117c 2
+INLINE 1 33 4 36 1192 2
+INLINE 1 519 2 36 11ae 2
+INLINE 1 520 2 36 11ca 2
+INLINE 1 1329 2 36 11e6 2
+INLINE 0 1495 2 36 1202 2
+111c 6 1494 2
+1122 6 33 4
+1128 4 499 2
+112c 4 0 2
+1130 2 1495 2
+1132 2 34 4
+1134 6 1495 2
+113a 8 519 2
+1142 4 520 2
+1146 4 1496 2
+114a c 1497 2
+1156 8 1504 2
+115e 4 1505 2
+1162 2 0 2
+1164 6 1329 2
+116a 2 506 2
+116c 2 155 2
+116e 4 203 1
+1172 8 1331 2
+117a 2 0 2
+117c 2 39 4
+117e 2 1510 2
+1180 6 33 4
+1186 2 0 4
+1188 8 33 4
+1190 2 0 4
+1192 2 242 3
+1194 4 33 4
+1198 14 519 2
+11ac 2 0 2
+11ae 2 242 3
+11b0 4 519 2
+11b4 14 520 2
+11c8 2 0 2
+11ca 2 242 3
+11cc 4 520 2
+11d0 14 1329 2
+11e4 2 0 2
+11e6 2 242 3
+11e8 4 1329 2
+11ec 14 1495 2
+1200 2 0 2
+1202 2 242 3
+1204 4 1495 2
+1208 2 0 2
+120a 2 1497 2
+120c 28 0 2
+FUNC 1234 94 0 AppendNullptrTwice<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> > >::operator()(mozilla::Vector<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy>&)
+INLINE 0 370 0 36 128e 2
+INLINE 0 371 0 36 12aa 2
+1234 16 369 0
+124a a 370 0
+1254 2 0 0
+1256 a 371 0
+1260 c 0 0
+126c 8 372 0
+1274 4 0 0
+1278 14 370 0
+128c 2 0 0
+128e 2 242 3
+1290 4 370 0
+1294 14 371 0
+12a8 2 0 0
+12aa 2 242 3
+12ac 4 371 0
+12b0 18 0 0
+FUNC 12c8 fc 0 mozilla::Vector<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy>::~Vector()
+INLINE 0 1022 2 37 12d2 6 12e4 4 1336 18
+INLINE 0 1022 2 38 12d8 a
+INLINE 0 1022 2 39 12ee 10 134e 38
+INLINE 0 1023 2 45 12fe 1c
+INLINE 1 162 2 3 1306 e
+INLINE 2 269 1 4 1306 e
+INLINE 3 300 1 5 130c 8
+INLINE 0 1024 2 38 131a 4
+INLINE 0 1025 2 46 1320 a
+INLINE 0 1027 2 44 132a 4
+INLINE 1 33 4 36 1348 2
+INLINE 1 519 2 36 1364 2
+INLINE 1 520 2 36 1380 2
+INLINE 0 1022 2 36 139c 2
+12c8 a 1021 2
+12d2 6 33 4
+12d8 a 499 2
+12e2 2 1022 2
+12e4 4 34 4
+12e8 6 1022 2
+12ee c 519 2
+12fa 4 520 2
+12fe 2 161 2
+1300 6 0 2
+1306 2 297 1
+1308 2 298 1
+130a 2 299 1
+130c 8 78 1
+1314 6 161 2
+131a 4 499 2
+131e 2 1024 2
+1320 8 116 5
+1328 2 0 5
+132a 4 39 4
+132e 8 1027 2
+1336 10 33 4
+1346 2 0 4
+1348 2 242 3
+134a 4 33 4
+134e 14 519 2
+1362 2 0 2
+1364 2 242 3
+1366 4 519 2
+136a 14 520 2
+137e 2 0 2
+1380 2 242 3
+1382 4 520 2
+1386 14 1022 2
+139a 2 0 2
+139c 2 242 3
+139e 4 1022 2
+13a2 22 0 2
+FUNC 13c4 c0 0 mozilla::Vector<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy>::growStorageBy(unsigned int)
+INLINE 0 1073 2 38 13d4 2
+INLINE 0 1080 2 47 13da 8 13e8 2c 1418 1e 143e 6
+INLINE 1 127 2 48 13da 8 13e8 2c 1418 1e 143e 6
+INLINE 2 102 2 49 13f4 16
+INLINE 3 43 2 50 13f4 12
+INLINE 4 259 6 51 13f4 12
+INLINE 5 207 6 52 13f4 12
+INLINE 2 120 2 50 1428 e 143e 4
+INLINE 3 259 6 51 1428 e 143e 4
+INLINE 4 207 6 52 1428 e 143e 4
+INLINE 0 1087 2 38 143c 2
+INLINE 0 1069 2 36 1474 2
+13c4 c 1069 2
+13d0 4 1073 2
+13d4 2 499 2
+13d6 4 1073 2
+13da 8 76 2
+13e2 4 1091 2
+13e6 2 0 2
+13e8 6 92 2
+13ee 6 0 2
+13f4 12 181 6
+1406 4 43 2
+140a 4 101 2
+140e 6 102 2
+1414 4 1091 2
+1418 4 114 2
+141c 2 0 2
+141e 6 114 2
+1424 4 0 2
+1428 e 181 6
+1436 4 1081 2
+143a 2 0 2
+143c 2 499 2
+143e 4 181 6
+1442 2 121 2
+1444 2 1087 2
+1446 6 1091 2
+144c 4 1088 2
+1450 2 0 2
+1452 4 1088 2
+1456 8 1092 2
+145e 8 1069 2
+1466 4 0 2
+146a 8 1069 2
+1472 2 0 2
+1474 2 242 3
+1476 4 1069 2
+147a a 0 2
+FUNC 1484 188 0 mozilla::Vector<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy>::convertToHeapStorage(unsigned int)
+INLINE 0 1047 2 38 148e 2
+INLINE 0 1050 2 49 14a0 26 15b6 1c
+INLINE 1 43 2 50 14a0 e 14b2 12 15b6 1c
+INLINE 2 259 6 51 14b2 12
+INLINE 3 207 6 52 14b2 12
+INLINE 0 1051 2 53 14ce a
+INLINE 1 101 5 54 14ce a
+INLINE 0 1057 2 41 14e0 4
+INLINE 0 1057 2 58 14e4 7e
+INLINE 1 195 2 55 153c 10 1554 a
+INLINE 2 155 2 56 153c 10 1554 a
+INLINE 3 222 1 57 153c a 1554 6
+INLINE 0 1058 2 41 1562 4
+INLINE 0 1058 2 45 1566 20
+INLINE 1 162 2 3 1572 e
+INLINE 2 269 1 4 1572 e
+INLINE 3 300 1 5 1578 8
+INLINE 0 1047 2 36 15b0 2
+INLINE 2 257 6 36 15cc 2
+INLINE 0 1050 2 36 15e8 2
+1484 a 1046 2
+148e 2 499 2
+1490 6 1047 2
+1496 a 0 2
+14a0 e 257 6
+14ae 4 0 2
+14b2 12 181 6
+14c4 2 43 2
+14c6 6 1050 2
+14cc 2 0 2
+14ce 6 81 5
+14d4 4 83 5
+14d8 6 1052 2
+14de 2 0 2
+14e0 4 506 2
+14e4 4 194 2
+14e8 4 0 2
+14ec 10 194 2
+14fc 4 0 2
+1500 1a 194 2
+151a 2 0 2
+151c 6 194 2
+1522 2 0 2
+1524 18 194 2
+153c 6 291 1
+1542 4 292 1
+1546 6 222 1
+154c 6 194 2
+1552 2 0 2
+1554 2 291 1
+1556 4 292 1
+155a 4 222 1
+155e 4 194 2
+1562 4 506 2
+1566 2 161 2
+1568 a 0 2
+1572 2 297 1
+1574 2 298 1
+1576 2 299 1
+1578 8 78 1
+1580 6 161 2
+1586 2 0 2
+1588 4 1063 2
+158c 4 1061 2
+1590 a 1065 2
+159a 8 1047 2
+15a2 4 0 2
+15a6 8 1047 2
+15ae 2 0 2
+15b0 2 242 3
+15b2 4 1047 2
+15b6 14 257 6
+15ca 2 0 6
+15cc 2 242 3
+15ce 4 257 6
+15d2 14 1050 2
+15e6 2 0 2
+15e8 2 242 3
+15ea 4 1050 2
+15ee 2 0 2
+15f0 2 1052 2
+15f2 1a 0 2
+FUNC 160c 104 0 mozilla::detail::VectorImpl<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy, false>::growTo(mozilla::Vector<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy>&, unsigned int)
+INLINE 0 218 2 38 1614 2
+INLINE 0 219 2 49 161c 1e 16c0 1c
+INLINE 1 43 2 50 1620 18 16c0 1c
+INLINE 2 259 6 51 1626 12
+INLINE 3 207 6 52 1626 12
+INLINE 0 220 2 53 1640 a
+INLINE 1 101 5 54 1640 a
+INLINE 0 226 2 41 1650 4 1660 4 1668 4
+INLINE 0 227 2 55 165a 6 1664 4
+INLINE 1 155 2 56 165a 6 1664 4
+INLINE 2 222 1 57 165a 6
+INLINE 0 229 2 45 1670 18
+INLINE 1 162 2 3 1674 e
+INLINE 2 269 1 4 1674 e
+INLINE 3 300 1 5 167a 8
+INLINE 0 230 2 46 1690 8
+INLINE 0 218 2 36 16ba 2
+INLINE 2 257 6 36 16d6 2
+INLINE 0 219 2 36 16ee 2
+160c 8 217 2
+1614 2 499 2
+1616 4 218 2
+161a 2 0 2
+161c 2 42 2
+161e 2 0 2
+1620 6 257 6
+1626 12 181 6
+1638 2 43 2
+163a 4 219 2
+163e 2 0 2
+1640 6 81 5
+1646 4 83 5
+164a 4 221 2
+164e 2 0 2
+1650 4 506 2
+1654 2 226 2
+1656 4 0 2
+165a 2 291 1
+165c 4 292 1
+1660 4 506 2
+1664 4 222 1
+1668 4 506 2
+166c 4 226 2
+1670 2 161 2
+1672 2 0 2
+1674 2 297 1
+1676 2 298 1
+1678 2 299 1
+167a 8 78 1
+1682 6 161 2
+1688 6 230 2
+168e 2 0 2
+1690 6 116 5
+1696 2 0 5
+1698 4 233 2
+169c 4 231 2
+16a0 8 235 2
+16a8 6 218 2
+16ae 2 0 2
+16b0 8 218 2
+16b8 2 0 2
+16ba 2 242 3
+16bc 4 218 2
+16c0 14 257 6
+16d4 2 0 6
+16d6 2 242 3
+16d8 4 257 6
+16dc 10 219 2
+16ec 2 0 2
+16ee 2 242 3
+16f0 4 219 2
+16f4 2 0 2
+16f6 2 221 2
+16f8 18 0 2
+FUNC 1710 118 0 mozilla::Vector<std::__ndk1::unique_ptr<A, std::__ndk1::default_delete<A> >, (unsigned int)0, mozilla::MallocAllocPolicy>::append<std::nullptr_t>(std::nullptr_t&&)
+INLINE 0 1495 2 37 1716 6 1724 2 1772 18
+INLINE 0 1495 2 38 171c 6
+INLINE 0 1495 2 39 172c c 178a 38
+INLINE 0 1508 2 59 1756 16 17c2 1c
+INLINE 1 1330 2 41 175c 4
+INLINE 1 1330 2 60 1760 4
+INLINE 2 155 2 61 1760 4
+INLINE 0 1510 2 44 176e 2
+INLINE 1 33 4 36 1784 2
+INLINE 1 519 2 36 17a0 2
+INLINE 1 520 2 36 17bc 2
+INLINE 1 1329 2 36 17d8 2
+INLINE 0 1495 2 36 17f4 2
+1710 6 1494 2
+1716 6 33 4
+171c 4 499 2
+1720 2 0 2
+1722 2 1495 2
+1724 2 34 4
+1726 6 1495 2
+172c 8 519 2
+1734 4 520 2
+1738 4 1496 2
+173c c 1497 2
+1748 8 1504 2
+1750 4 1505 2
+1754 2 0 2
+1756 6 1329 2
+175c 4 506 2
+1760 4 199 1
+1764 8 1331 2
+176c 2 0 2
+176e 2 39 4
+1770 2 1510 2
+1772 6 33 4
+1778 2 0 4
+177a 8 33 4
+1782 2 0 4
+1784 2 242 3
+1786 4 33 4
+178a 14 519 2
+179e 2 0 2
+17a0 2 242 3
+17a2 4 519 2
+17a6 14 520 2
+17ba 2 0 2
+17bc 2 242 3
+17be 4 520 2
+17c2 14 1329 2
+17d6 2 0 2
+17d8 2 242 3
+17da 4 1329 2
+17de 14 1495 2
+17f2 2 0 2
+17f4 2 242 3
+17f6 4 1495 2
+17fa 2 0 2
+17fc 2 1497 2
+17fe 2a 0 2
+PUBLIC 1829 0 __ThumbV7PILongThunk__ZdlPv
+PUBLIC 1840 0 <.plt ELF section in TestUniquePtr>
+STACK CFI INIT c14 42c .cfa: sp 0 + .ra: lr
+STACK CFI c16 .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI c18 .cfa: r7 8 +
+STACK CFI c1c r11: .cfa -24 + ^ r10: .cfa -28 + ^ r9: .cfa -32 + ^ r8: .cfa -36 + ^
+STACK CFI INIT 1040 3c .cfa: sp 0 + .ra: lr
+STACK CFI 1042 .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 1044 .cfa: r7 8 +
+STACK CFI 1048 r11: .cfa -24 + ^
+STACK CFI INIT 107c 20 .cfa: sp 0 + .ra: lr
+STACK CFI 107e .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI 1080 .cfa: r7 8 +
+STACK CFI INIT 109c 1c .cfa: sp 0 + .ra: lr
+STACK CFI 109e .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI 10a0 .cfa: r7 8 +
+STACK CFI INIT 10b8 38 .cfa: sp 0 + .ra: lr
+STACK CFI 10ba .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI 10bc .cfa: r7 8 +
+STACK CFI INIT 10f0 2c .cfa: sp 0 + .ra: lr
+STACK CFI 10f2 .cfa: sp 8 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^
+STACK CFI 10f4 .cfa: r7 8 +
+STACK CFI INIT 111c 118 .cfa: sp 0 + .ra: lr
+STACK CFI 111e .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r5: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 1120 .cfa: r7 8 +
+STACK CFI INIT 0 118 .cfa: sp 0 + .ra: lr
+STACK CFI 2 .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r5: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 4 .cfa: r7 8 +
+STACK CFI INIT 1234 94 .cfa: sp 0 + .ra: lr
+STACK CFI 1236 .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r5: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 1238 .cfa: r7 8 +
+STACK CFI INIT 12c8 fc .cfa: sp 0 + .ra: lr
+STACK CFI 12ca .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 12cc .cfa: r7 8 +
+STACK CFI 12d0 r8: .cfa -24 + ^
+STACK CFI INIT 13c4 c0 .cfa: sp 0 + .ra: lr
+STACK CFI 145c .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 145e .cfa: r7 8 +
+STACK CFI INIT 1484 188 .cfa: sp 0 + .ra: lr
+STACK CFI 1486 .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 1488 .cfa: r7 8 +
+STACK CFI 148c r11: .cfa -24 + ^ r10: .cfa -28 + ^ r9: .cfa -32 + ^ r8: .cfa -36 + ^
+STACK CFI INIT 160c 104 .cfa: sp 0 + .ra: lr
+STACK CFI 160e .cfa: sp 20 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r5: .cfa -16 + ^ r4: .cfa -20 + ^
+STACK CFI 1610 .cfa: r7 8 +
+STACK CFI 1614 r10: .cfa -24 + ^ r9: .cfa -28 + ^ r8: .cfa -32 + ^
+STACK CFI INIT 1710 118 .cfa: sp 0 + .ra: lr
+STACK CFI 1712 .cfa: sp 16 + .ra: .cfa -4 + ^ r7: .cfa -8 + ^ r6: .cfa -12 + ^ r4: .cfa -16 + ^
+STACK CFI 1714 .cfa: r7 8 +
