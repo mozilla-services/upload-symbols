@@ -85,9 +85,8 @@ pub enum InvalidKeyError {
 /// ```
 /// The iterator will return `SymbolFile` instances for all regular files found. Entries in the
 /// directory tree that aren't regular files are silently ignored, unless they are symlinks
-/// pointing to regular files. For files that don't have the above path structure, and
-/// `Error::IgnoredFile` error is returned. For files with non-UTF8 paths
-/// `Error::PathNotValidUtf8` is returned.
+/// pointing to regular files. For files with paths that aren't valid symbols files keys
+/// [`InvalidKeyError`] is returned. Iteration continues normally after errors.
 pub fn discover<P: Into<PathBuf>>(
     root: P,
 ) -> impl Iterator<Item = Result<SymbolsFile, InvalidKeyError>> {
