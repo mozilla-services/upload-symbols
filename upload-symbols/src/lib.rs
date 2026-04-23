@@ -137,8 +137,9 @@ impl ClientBuilder {
 
     /// Set the maximum number of concurrent uploads using the v1 upload API.
     ///
-    /// The default is 3.
+    /// The default is 3. Panics if `max_connections` is 0.
     pub fn max_connections_v1(mut self, max_connections_v1: usize) -> Self {
+        assert_ne!(max_connections_v1, 0, "must allow at least one connection");
         self.max_connections_v1 = max_connections_v1;
         self
     }
