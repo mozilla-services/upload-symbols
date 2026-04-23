@@ -70,8 +70,12 @@ pub async fn upload_directory(client: &Client, root: &Path) -> Result<UploadSumm
         }
     }
 
-    // Explicitly close temp_dir so we can propagate any errors.
-    temp_dir.close()?;
+    // Explicitly close temp_dir so we can propagate any errors. We don't want to return any
+    // errors in this operation directly, since then the caller wouldn't get any information
+    // about the uploads that were performed, so we add any potential error to `upload_errors`.
+    if let Err(e) = temp_dir.close() {
+        upload_errors.push(e.into());
+    }
 
     let summary = UploadSummary {
         uploaded_keys,
