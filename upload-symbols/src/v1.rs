@@ -174,7 +174,7 @@ async fn upload_zip_archive(client: Client, path: PathBuf) -> Result<UploadRespo
         // We know the semaphore hasn't been closed, so we can unwrap.
         let permit = client.conn_limit_upload_v1.acquire().await.unwrap();
         let response = client
-            .request(Method::POST, "/upload/")?
+            .request(Method::POST, "upload/")?
             .multipart(form)
             .send()
             .await?;
