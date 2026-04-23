@@ -1,6 +1,6 @@
 //! Utilities to discover and handle symbols files.
 
-use std::{ffi::OsStr, fs::File, io, path::PathBuf};
+use std::{ffi::OsStr, fs::File, io, path::{Path, PathBuf}};
 use walkdir::WalkDir;
 
 /// A reference to a symbols file on the filesystem.
@@ -22,6 +22,11 @@ impl SymbolsFile {
             path: path.into(),
             key: key.into(),
         }
+    }
+
+    // Return the filesystem path for this symbols file.
+    pub fn path(&self) -> &Path {
+        &self.path
     }
 
     /// Return the storage key for this symbols file.
