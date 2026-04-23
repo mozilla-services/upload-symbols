@@ -16,8 +16,8 @@ use url::Url;
 pub enum Error {
     #[error("not a directory: {0}")]
     NotADirectory(PathBuf),
-    #[error("invalid base URL")]
-    UrlParseError(#[from] url::ParseError),
+    #[error("URL must have http or https scheme: {0}")]
+    InvalidBaseUrlScheme(Url),
     #[error("I/O error")]
     IOError(#[from] std::io::Error),
     #[error("ZIP archiver error")]
@@ -75,12 +75,13 @@ impl Client {
     }
 
     /// Perform an authenticated request to the symbols server.
-    fn request(&self, method: reqwest::Method, path: &str) -> Result<reqwest::RequestBuilder> {
-        let builder = self
-            .client
-            .request(method, self.base_url.join(path)?)
-            .header("auth-token", &self.auth_token);
-        Ok(builder)
+    fn request(&self, method: reqwest::Method, path: &str) -> reqwest::RequestBuilder {
+        self.client
+            // We validate the URL in the builder to make sure it can be used as a base URL.
+            // The `path` is a hardcoded string from this library, so `join()` can't return an
+            // error here and we can unwrap.
+            .request(method, self.base_url.join(path).unwrap())
+            .header("auth-token", &self.auth_token)
     }
 }
 
@@ -107,9 +108,7 @@ impl ClientBuilder {
                 Some(client) => client,
                 None => reqwest::Client::builder().user_agent(USER_AGENT).build()?,
             },
-            base_url: self
-                .base_url
-                .unwrap_or_else(|| Url::parse("https://symbols.mozilla.org/").unwrap()),
+            base_url: Self::validate_base_url(self.base_url)?,
             auth_token: self.auth_token,
             conn_limit_upload_v1: Arc::new(Semaphore::new(self.max_connections_v1)),
             zip_size_threshold_v1: self.zip_size_threshold_v1,
@@ -117,6 +116,26 @@ impl ClientBuilder {
             retry_delay_v1: self.retry_delay_v1,
         };
         Ok(client)
+    }
+
+    // This function ensures that the base URL actually is an absolute URL with an http(s)
+    // scheme. The [`url`] crate ensures that the host of such URLs is non-empty. We also add
+    // a trailing slash to the path if it doesn't have one.
+    fn validate_base_url(base_url: Option<Url>) -> Result<Url> {
+        match base_url {
+            Some(mut base_url) => {
+                if base_url.scheme() != "http" && base_url.scheme() != "https" {
+                    return Err(Error::InvalidBaseUrlScheme(base_url));
+                }
+                if !base_url.path().ends_with('/') {
+                    // We already know the URL is an absolute http(s) URL, so
+                    // `path_segments_mut()` can't return an error.
+                    base_url.path_segments_mut().unwrap().push("");
+                }
+                Ok(base_url)
+            }
+            None => Ok(Url::parse("https://symbols.mozilla.org/").unwrap()),
+        }
     }
 
     /// Provide a custom [`reqwest::Client`] to perform HTTP requests.
@@ -194,3 +213,37 @@ static USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_V
 
 pub mod sym_files;
 mod v1;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use url::Url;
+
+    #[test]
+    fn test_validate_base_url() {
+        for (base_url, expected) in [
+            (None, Ok("https://symbols.mozilla.org/")),
+            (
+                Some("https://symbols.allizom.org/"),
+                Ok("https://symbols.allizom.org/"),
+            ),
+            (
+                Some("https://symbols.mozilla.org/v1"),
+                Ok("https://symbols.mozilla.org/v1/"),
+            ),
+            (Some("ftp://ftp.mozilla.org/"), Err(())),
+        ] {
+            let actual = ClientBuilder::validate_base_url(base_url.map(|u| Url::parse(u).unwrap()));
+            match actual {
+                Ok(base_url) => assert_eq!(Ok(base_url.as_str()), expected),
+                Err(e) => {
+                    if let Error::InvalidBaseUrlScheme(_) = e {
+                        assert_eq!(Err(()), expected);
+                    } else {
+                        panic!("expected InvalidBaseUrl error");
+                    }
+                }
+            }
+        }
+    }
+}
