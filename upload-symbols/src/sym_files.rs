@@ -4,7 +4,7 @@ use std::{
     ffi::OsStr,
     fs::File,
     io,
-    path::{Path, PathBuf},
+    path::{MAIN_SEPARATOR, Path, PathBuf},
 };
 use walkdir::WalkDir;
 
@@ -131,8 +131,8 @@ impl Iterator for Discovery {
                         return Some(Err(InvalidKeyError::PathNotValidUtf8(rel_path.into())));
                     };
                     // We know the path must contain two slashes, so we can unwrap.
-                    let (_, rest) = key.split_once('/').unwrap();
-                    let (debug_id, _) = rest.split_once('/').unwrap();
+                    let (_, rest) = key.split_once(MAIN_SEPARATOR).unwrap();
+                    let (debug_id, _) = rest.split_once(MAIN_SEPARATOR).unwrap();
                     if !debug_id.chars().all(|c| c.is_ascii_hexdigit()) {
                         // The debug_id is not a hex string; ignore the file.
                         return Some(Err(InvalidKeyError::InvalidDebugId(key.into())));
