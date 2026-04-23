@@ -18,7 +18,7 @@ async fn upload_directory_locally() {
         .zip_size_threshold_v1(1 << 20) // 1 MiB
         .build()
         .unwrap();
-    let summary = client.upload_directory("tests/data/linux").await.unwrap();
+    let summary = client.upload_directory("../tests/data/linux").await.unwrap();
     let successful_keys: HashSet<String> = summary
         .uploaded_keys
         .into_iter()

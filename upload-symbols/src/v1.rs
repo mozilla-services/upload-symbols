@@ -32,7 +32,7 @@ pub async fn upload_directory(client: &Client, root: &Path) -> Result<UploadSumm
     // archive as soon as it is ready.
     let (tx, mut rx) = mpsc::channel(64);
     let path = root.to_path_buf();
-    let temp_dir = crate::tmpdir::TempDir::new("upload-symbols.")?;
+    let temp_dir = tempdir::TempDir::new("upload-symbols.")?;
     let temp_path = temp_dir.path().to_path_buf();
     let zip_size_threshold = client.zip_size_threshold_v1;
     let create_zip_handle =

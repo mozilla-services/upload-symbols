@@ -1477,6 +1477,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "tempdir"
+version = "0.1.0"
+dependencies = [
+ "rand 0.10.1",
+]
+
+[[package]]
 name = "thiserror"
 version = "1.0.69"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1720,9 +1727,9 @@ checksum = "8ecb6da28b8a351d773b68d5825ac39017e680750f980f3a1a85cd8dd28a47c1"
 name = "upload-symbols"
 version = "0.1.0"
 dependencies = [
- "rand 0.10.1",
  "reqwest",
  "serde",
+ "tempdir",
  "thiserror 2.0.18",
  "tokio",
  "url",

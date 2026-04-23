@@ -1,6 +1,6 @@
 //! A temporary directory that gets deleted once it goes out of scope.
 //!
-//! The [`TempDir`] type in the module is similar to the one provided by the `tempdir` crate.
+//! The [`TempDir`] type in this crate is similar to the one provided by the `tempdir` crate.
 //! That crate appears to be unmaintained and pulls in some dependencies we don't need. The
 //! functionality is easy enough to re-implement, so we can avoid these dependencies.
 

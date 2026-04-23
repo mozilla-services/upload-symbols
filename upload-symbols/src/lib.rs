@@ -192,5 +192,4 @@ pub struct UploadSummary {
 static USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"),);
 
 pub mod sym_files;
-mod tmpdir;
 mod v1;
