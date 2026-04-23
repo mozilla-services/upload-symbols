@@ -9,13 +9,13 @@ use axum::{
     routing::post,
 };
 use serde::Serialize;
-use url::Url;
 use std::{
     collections::HashSet,
     io::Cursor,
     sync::{Arc, Mutex, MutexGuard},
 };
 use tokio::{net::TcpListener, sync::oneshot};
+use url::Url;
 
 type UploadedFiles = Arc<Mutex<HashSet<String>>>;
 

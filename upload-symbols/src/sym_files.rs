@@ -1,6 +1,11 @@
 //! Utilities to discover and handle symbols files.
 
-use std::{ffi::OsStr, fs::File, io, path::{Path, PathBuf}};
+use std::{
+    ffi::OsStr,
+    fs::File,
+    io,
+    path::{Path, PathBuf},
+};
 use walkdir::WalkDir;
 
 /// A reference to a symbols file on the filesystem.
