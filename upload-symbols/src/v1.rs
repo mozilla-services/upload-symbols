@@ -40,9 +40,9 @@ pub async fn upload_directory(client: &Client, root: &Path) -> Result<UploadSumm
 
     // Upload ZIP archives as they get created.
     let mut set = JoinSet::new();
-    while let Some((zip_archive_path, keys)) = rx.recv().await {
+    while let Some((zip_archive_path, zip_keys)) = rx.recv().await {
         let client = client.clone();
-        set.spawn(async move { (upload_zip_archive(client, zip_archive_path).await, keys) });
+        set.spawn(async move { (upload_zip_archive(client, zip_archive_path).await, zip_keys) });
     }
 
     // Unwrap the outer JoinError. This will basically propagate panics.
@@ -54,15 +54,17 @@ pub async fn upload_directory(client: &Client, root: &Path) -> Result<UploadSumm
     let mut upload_errors = vec![];
     while let Some(join_result) = set.join_next().await {
         // Unwrap the outer result to propagate panics.
-        let (upload_result, keys) = join_result.unwrap();
+        let (upload_result, zip_keys) = join_result.unwrap();
         match upload_result {
             Ok(UploadResponse { upload }) => {
-                let skipped_set: HashSet<String> = upload.skipped_keys.into_iter().collect();
-                uploaded_keys.extend(keys.into_iter().filter(|key| !skipped_set.contains(key)));
-                skipped_keys.extend(skipped_set);
+                let not_skipped = zip_keys
+                    .into_iter()
+                    .filter(|key| !upload.skipped_keys.contains(key));
+                uploaded_keys.extend(not_skipped);
+                skipped_keys.extend(upload.skipped_keys);
             }
             Err(e) => {
-                failed_keys.extend(keys);
+                failed_keys.extend(zip_keys);
                 upload_errors.push(e);
             }
         }
@@ -207,5 +209,5 @@ struct UploadResponse {
 
 #[derive(Deserialize)]
 struct Upload {
-    skipped_keys: Vec<String>,
+    skipped_keys: HashSet<String>,
 }
