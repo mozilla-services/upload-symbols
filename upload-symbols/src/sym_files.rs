@@ -1,6 +1,11 @@
 //! Utilities to discover and handle symbols files.
 
-use std::{ffi::OsStr, fs::File, io, path::{Path, PathBuf}};
+use std::{
+    ffi::OsStr,
+    fs::File,
+    io,
+    path::{MAIN_SEPARATOR, Path, PathBuf},
+};
 use walkdir::WalkDir;
 
 /// A reference to a symbols file on the filesystem.
@@ -80,9 +85,8 @@ pub enum InvalidKeyError {
 /// ```
 /// The iterator will return `SymbolFile` instances for all regular files found. Entries in the
 /// directory tree that aren't regular files are silently ignored, unless they are symlinks
-/// pointing to regular files. For files that don't have the above path structure, and
-/// `Error::IgnoredFile` error is returned. For files with non-UTF8 paths
-/// `Error::PathNotValidUtf8` is returned.
+/// pointing to regular files. For files with paths that aren't valid symbols files keys
+/// [`InvalidKeyError`] is returned. Iteration continues normally after errors.
 pub fn discover<P: Into<PathBuf>>(
     root: P,
 ) -> impl Iterator<Item = Result<SymbolsFile, InvalidKeyError>> {
@@ -127,8 +131,8 @@ impl Iterator for Discovery {
                         return Some(Err(InvalidKeyError::PathNotValidUtf8(rel_path.into())));
                     };
                     // We know the path must contain two slashes, so we can unwrap.
-                    let (_, rest) = key.split_once('/').unwrap();
-                    let (debug_id, _) = rest.split_once('/').unwrap();
+                    let (_, rest) = key.split_once(MAIN_SEPARATOR).unwrap();
+                    let (debug_id, _) = rest.split_once(MAIN_SEPARATOR).unwrap();
                     if !debug_id.chars().all(|c| c.is_ascii_hexdigit()) {
                         // The debug_id is not a hex string; ignore the file.
                         return Some(Err(InvalidKeyError::InvalidDebugId(key.into())));
