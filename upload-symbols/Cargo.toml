@@ -5,17 +5,17 @@ edition = "2024"
 
 [dependencies]
 reqwest = { version = "0.13.2", features = ["json", "multipart", "stream"] }
-serde = { version = "1.0.228", features = ["derive"] }
+serde = { workspace = true }
 tempdir = { path = "../tempdir" }
 thiserror = "2.0.18"
-tokio = { version = "1.52.1", features = ["rt", "sync", "time"] }
-url = "2.5.8"
+tokio = { workspace = true, features = ["rt", "sync", "time"] }
+url = { workspace = true }
 walkdir = "2.5.0"
-zip = "8.5.1"
+zip = { workspace = true }
 
 [dev-dependencies]
-axum = { version = "0.8.9", features = ["multipart"] }
-tokio = { version = "1.52.1", features = ["macros", "net", "rt-multi-thread"] }
+fake-tecken = { path = "../fake-tecken" }
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
 
 [features]
 local-upload-test = []
