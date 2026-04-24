@@ -3,11 +3,8 @@
 //! This test uses a fake Tecken implementation, so it doesn't require a running Tecken
 //! development stack.
 
-use crate::common::fake_tecken::FakeTecken;
 use std::{collections::HashSet, fs::create_dir_all, os::unix::fs::symlink};
 use upload_symbols::{Client, sym_files};
-
-mod common;
 
 static TEST_DATA_PATH: &str = "../tests/data/linux";
 
@@ -24,7 +21,7 @@ async fn upload_directory() {
     }
 
     // Create a fake symbols server and a client.
-    let tecken = FakeTecken::new().await;
+    let tecken = fake_tecken::FakeTecken::new().await;
     let client = Client::builder("fake_auth_token")
         .base_url(tecken.url())
         .zip_size_threshold_v1(1 << 20) // 1 MiB

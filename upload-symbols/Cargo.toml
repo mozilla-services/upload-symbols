@@ -14,8 +14,8 @@ walkdir = "2.5.0"
 zip = "8.5.1"
 
 [dev-dependencies]
-axum = { version = "0.8.9", features = ["multipart"] }
-tokio = { version = "1.52.1", features = ["macros", "net", "rt-multi-thread"] }
+fake-tecken = { path = "../fake-tecken" }
+tokio = { version = "1.52.1", features = ["macros", "rt-multi-thread"] }
 
 [features]
 local-upload-test = []
