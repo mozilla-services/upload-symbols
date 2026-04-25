@@ -3,7 +3,25 @@ members = ["fake-tecken", "tempdir", "upload-symbols"]
 resolver = "3"
 
 [workspace.dependencies]
+clap = { version = "4.6.1", features = ["derive", "env"] }
 serde = { version = "1.0.228", features = ["derive"] }
 tokio = { version = "1.52.1" }
 url = "2.5.8"
 zip = "8.5.1"
+
+
+[package]
+name = "upload-symbols-cli"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1.0.102"
+clap = { workspace = true }
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
+upload-symbols = { path = "upload-symbols", features = ["clap"] }
+url = { workspace = true }
+
+[[bin]]
+name = "upload-symbols"
+path = "src/main.rs"

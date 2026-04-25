@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+clap = { workspace = true, optional = true }
 reqwest = { version = "0.13.2", features = ["json", "multipart", "stream"] }
 serde = { workspace = true }
 tempdir = { path = "../tempdir" }
@@ -18,4 +19,5 @@ fake-tecken = { path = "../fake-tecken" }
 tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
 
 [features]
+clap = ["dep:clap"]
 local-upload-test = []
