@@ -18,17 +18,23 @@ pub enum Error {
     NotADirectory(PathBuf),
     #[error("URL must have http or https scheme: {0}")]
     InvalidBaseUrlScheme(Url),
-    #[error("I/O error")]
+    #[error("I/O error: {0}")]
     IOError(#[from] std::io::Error),
-    #[error("ZIP archiver error")]
+    #[error("ZIP archiver error: {0}")]
     ZipError(#[from] zip::result::ZipError),
-    #[error("error sending HTTP request")]
+    #[error("error sending HTTP request: {0}")]
     ReqwestError(#[from] reqwest::Error),
     #[error("bad request to symbols server: {0}")]
     SymbolsServerBadRequest(String),
 }
 
 type Result<T> = std::result::Result<T, Error>;
+
+// Update the docstrings of the `ClientBuilder` methods when changing these defaults.
+const DEFAULT_MAX_CONNECTIONS_V1: u32 = 3;
+const DEFAULT_ZIP_SIZE_THRESHOLD_V1: u64 = 1 << 26; // 64 MiB
+const DEFAULT_RETRIES_V1: usize = 5;
+const DEFAULT_RETRY_DELAY_SECONDS_V1: u64 = 60;
 
 /// The Mozill Symbols Server upload client.
 ///
@@ -56,10 +62,10 @@ impl Client {
             client: None,
             base_url: None,
             auth_token: auth_token.into(),
-            max_connections_v1: 3,
-            zip_size_threshold_v1: 1 << 26, // 64 MiB
-            retries_v1: 2,
-            retry_delay_v1: Duration::from_secs(120),
+            max_connections_v1: DEFAULT_MAX_CONNECTIONS_V1,
+            zip_size_threshold_v1: DEFAULT_ZIP_SIZE_THRESHOLD_V1,
+            retries_v1: DEFAULT_RETRIES_V1,
+            retry_delay_seconds_v1: DEFAULT_RETRY_DELAY_SECONDS_V1,
         }
     }
 
@@ -87,14 +93,50 @@ impl Client {
 
 /// A configurable builder for a [`Client`].
 #[derive(Debug)]
+#[cfg_attr(feature = "clap", derive(clap::Args))]
 pub struct ClientBuilder {
+    #[cfg_attr(feature = "clap", arg(skip))]
     client: Option<reqwest::Client>,
+
+    /// Set the base URL of the symbols server to upload to.
+    ///
+    /// This defaults to <https://symbols.mozilla.org/>.
+    #[cfg_attr(feature = "clap", arg(long = "server-url"))]
     base_url: Option<Url>,
+
+    /// A Mozilla Symbols Server authentication token with upload permissions.
+    #[cfg_attr(
+        feature = "clap",
+        arg(long, required = true, env = "SYMBOLS_AUTH_TOKEN")
+    )]
     auth_token: String,
-    max_connections_v1: usize,
+
+    /// The maximum number of concurrent uploads using the v1 upload API.
+    #[cfg_attr(feature = "clap", arg(
+        long,
+        default_value_t = DEFAULT_MAX_CONNECTIONS_V1,
+        value_parser = clap::value_parser!(u32).range(1..=16)
+    ))]
+    max_connections_v1: u32,
+
+    /// Set the ZIP archive size threshold in bytes.
+    ///
+    /// When building ZIP archives for v1 of the upload API, a new archive is started once the
+    /// size of the current archive exceeds this threshold. ZIP archives still can get much
+    /// bigger than this value since member files can be big.
+    #[cfg_attr(feature = "clap", arg(long, default_value_t = DEFAULT_ZIP_SIZE_THRESHOLD_V1))]
     zip_size_threshold_v1: u64,
+
+    /// Set the number of retries for the version 1 upload API.
+    ///
+    /// On retriable status codes, uploading ZIP archives is retried this number of times, in
+    /// addition to the original request. A value of 0 disables retrying.
+    #[cfg_attr(feature = "clap", arg(long, default_value_t = DEFAULT_RETRIES_V1))]
     retries_v1: usize,
-    retry_delay_v1: Duration,
+
+    /// Set the delay in seconds between retries for version 1 of the upload API.
+    #[cfg_attr(feature = "clap", arg(long, default_value_t = DEFAULT_RETRY_DELAY_SECONDS_V1))]
+    retry_delay_seconds_v1: u64,
 }
 
 impl ClientBuilder {
@@ -110,10 +152,10 @@ impl ClientBuilder {
             },
             base_url: Self::validate_base_url(self.base_url)?,
             auth_token: self.auth_token,
-            conn_limit_upload_v1: Arc::new(Semaphore::new(self.max_connections_v1)),
+            conn_limit_upload_v1: Arc::new(Semaphore::new(self.max_connections_v1 as _)),
             zip_size_threshold_v1: self.zip_size_threshold_v1,
             retries_v1: self.retries_v1,
-            retry_delay_v1: self.retry_delay_v1,
+            retry_delay_v1: Duration::from_secs(self.retry_delay_seconds_v1),
         };
         Ok(client)
     }
@@ -157,13 +199,13 @@ impl ClientBuilder {
     /// Set the maximum number of concurrent uploads using the v1 upload API.
     ///
     /// The default is 3. Panics if `max_connections` is 0.
-    pub fn max_connections_v1(mut self, max_connections_v1: usize) -> Self {
+    pub fn max_connections_v1(mut self, max_connections_v1: u32) -> Self {
         assert_ne!(max_connections_v1, 0, "must allow at least one connection");
         self.max_connections_v1 = max_connections_v1;
         self
     }
 
-    /// Set the ZIP archive size threshold.
+    /// Set the ZIP archive size threshold in bytes.
     ///
     /// When building ZIP archives for v1 of the upload API, a new archive is started once the
     /// size of the current archive exceeds this threshold. ZIP archives still can get much
@@ -180,17 +222,17 @@ impl ClientBuilder {
     /// On retriable status codes, uploading ZIP archives is retried this number of times, in
     /// addition to the original request. A value of 0 disables retrying.
     ///
-    /// The default is 2.
+    /// The default is 5.
     pub fn retries_v1(mut self, retries_v1: usize) -> Self {
         self.retries_v1 = retries_v1;
         self
     }
 
-    /// Set the delay between retries for version 1 of the upload API.
+    /// Set the delay in seconds between retries for version 1 of the upload API.
     ///
-    /// The default is 120 seconds.
+    /// The default is 60 seconds.
     pub fn retry_delay_v1_seconds(mut self, retry_delay_v1_seconds: u64) -> Self {
-        self.retry_delay_v1 = Duration::from_secs(retry_delay_v1_seconds);
+        self.retry_delay_seconds_v1 = retry_delay_v1_seconds;
         self
     }
 }
@@ -207,6 +249,13 @@ pub struct UploadSummary {
     pub discovery_errors: Vec<sym_files::InvalidKeyError>,
     /// Errors during uploads.
     pub upload_errors: Vec<Error>,
+}
+
+impl UploadSummary {
+    /// Indicate whether the upload completed successfully without any errors.
+    pub fn success(&self) -> bool {
+        self.discovery_errors.is_empty() && self.upload_errors.is_empty()
+    }
 }
 
 static USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"),);
