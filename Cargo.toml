@@ -20,6 +20,8 @@ edition = "2024"
 [dependencies]
 anyhow = { workspace = true }
 clap = { workspace = true }
+reqwest = { workspace = true }
+sentry = { version = "0.48.0", default-features = false, features = ["backtrace", "contexts", "panic", "reqwest", "rustls"] }
 tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
 upload-symbols = { path = "upload-symbols", features = ["clap"] }
 url = { workspace = true }
