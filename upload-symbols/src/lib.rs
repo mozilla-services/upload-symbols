@@ -9,7 +9,7 @@ use std::{
     time::Duration,
 };
 use tokio::sync::Semaphore;
-use url::Url;
+use reqwest::Url;
 
 /// Errors that may occur while uploading symbols.
 #[derive(Debug, thiserror::Error)]
@@ -266,7 +266,7 @@ mod v1;
 #[cfg(test)]
 mod tests {
     use super::*;
-    use url::Url;
+    use reqwest::Url;
 
     #[test]
     fn test_validate_base_url() {

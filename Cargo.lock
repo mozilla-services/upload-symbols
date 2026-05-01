@@ -2558,7 +2558,6 @@ dependencies = [
  "tempdir",
  "thiserror 2.0.18",
  "tokio",
- "url",
  "walkdir",
  "zip",
 ]
