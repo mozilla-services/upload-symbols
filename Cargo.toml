@@ -5,11 +5,11 @@ resolver = "3"
 [workspace.dependencies]
 anyhow = "1.0.102"
 clap = { version = "4.6.1", features = ["derive", "env"] }
-reqwest = { version = "0.13.2" }
+reqwest = { version = "0.13.3" }
 serde = { version = "1.0.228", features = ["derive"] }
 tokio = { version = "1.52.1" }
 url = "2.5.8"
-zip = "8.5.1"
+zip = "8.6.0"
 
 
 [package]
