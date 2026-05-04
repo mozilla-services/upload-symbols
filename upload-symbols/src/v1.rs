@@ -16,6 +16,7 @@ use tokio::{
     task::{JoinSet, spawn_blocking},
     time::sleep,
 };
+use tracing::{Instrument, debug, debug_span, field, info_span, instrument};
 use zip::{CompressionMethod, ZipWriter};
 
 /// Upload a directory of files to the Mozilla Symbols Server.
@@ -27,6 +28,7 @@ use zip::{CompressionMethod, ZipWriter};
 /// Since the original version of the upload API only supports uploading ZIP archives, we first
 /// need to create ZIP archives in a temporary directory before sending the actual HTTP
 /// requests.
+#[instrument(level = "debug", skip(client))]
 pub async fn upload_directory(client: &Client, root: &Path) -> Result<UploadSummary> {
     // Create ZIP archives in a background thread so we can start uploading the first
     // archive as soon as it is ready.
@@ -88,6 +90,7 @@ pub async fn upload_directory(client: &Client, root: &Path) -> Result<UploadSumm
 }
 
 /// Create ZIP archives for all symbols files in the given directory.
+#[instrument(level = "debug", skip(tx))]
 fn create_zip_archives(
     tx: mpsc::Sender<(PathBuf, Vec<String>)>,
     root: PathBuf,
@@ -120,18 +123,24 @@ fn create_zip_archives(
     Ok(errors)
 }
 
+#[derive(Debug)]
 struct ZipArchive {
     path: PathBuf,
     writer: ZipWriter<std::fs::File>,
     keys: Vec<String>,
+    span: tracing::span::EnteredSpan,
 }
 
 impl ZipArchive {
     fn new(path: PathBuf) -> std::io::Result<Self> {
+        let span = info_span!("ZipArchive", ?path, size = field::Empty).entered();
         let file = std::fs::File::create_new(&path)?;
-        let writer = ZipWriter::new(file);
-        let keys = vec![];
-        Ok(Self { path, writer, keys })
+        Ok(Self {
+            path,
+            writer: ZipWriter::new(file),
+            keys: vec![],
+            span,
+        })
     }
 
     fn add_sym_file(&mut self, sym_file: SymbolsFile) -> Result<()> {
@@ -154,13 +163,16 @@ impl ZipArchive {
     }
 
     fn finish(self, tx: &mpsc::Sender<(PathBuf, Vec<String>)>) -> zip::result::ZipResult<()> {
-        self.writer.finish()?;
+        let mut file = self.writer.finish()?;
+        self.span.record("size", file.stream_position()?);
+        self.span.exit();
         // We know the receiver hasn't hung up yet, so we can unwrap.
         tx.blocking_send((self.path, self.keys)).unwrap();
         Ok(())
     }
 }
 
+#[instrument(skip(client))]
 async fn upload_zip_archive(client: Client, path: PathBuf) -> Result<UploadResponse> {
     let mut remaining_retries = client.retries_v1;
     // We know the file name is of the form `symbols-{i}.zip`. So we can unwrap the result of
@@ -177,8 +189,11 @@ async fn upload_zip_archive(client: Client, path: PathBuf) -> Result<UploadRespo
             .request(Method::POST, "upload/")
             .multipart(form)
             .send()
+            .instrument(debug_span!("v1 upload request"))
             .await?;
-        match response.status().as_u16() {
+        let status = response.status().as_u16();
+        debug!("v1 upload request status {status}");
+        match status {
             429 | 502 | 503 | 504 => {
                 if remaining_retries == 0 {
                     return Err(response.error_for_status().unwrap_err().into());
@@ -197,6 +212,10 @@ async fn upload_zip_archive(client: Client, path: PathBuf) -> Result<UploadRespo
         }
         response.error_for_status_ref()?;
         let upload_response: UploadResponse = response.json().await?;
+        debug!(
+            "v1 upload request successful after {} attempt(s)",
+            client.retries_v1 + 1 - remaining_retries
+        );
         return Ok(upload_response);
     }
 }

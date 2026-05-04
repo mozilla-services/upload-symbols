@@ -3,13 +3,15 @@
 //! This library provides a [`Client`] to upload a directory of files to the [Mozilla Symbols
 //! Server](https://symbols.mozilla.org/).
 
+use reqwest::Url;
 use std::{
+    fmt::Debug,
     path::{Path, PathBuf},
     sync::Arc,
     time::Duration,
 };
 use tokio::sync::Semaphore;
-use reqwest::Url;
+use tracing::instrument;
 
 /// Errors that may occur while uploading symbols.
 #[derive(Debug, thiserror::Error)]
@@ -72,7 +74,11 @@ impl Client {
     /// Upload a directory on the filesystem to the symbols server.
     ///
     /// The files to be uploaded are discovered using [`sym_files::discover`].
-    pub async fn upload_directory<P: AsRef<Path>>(&self, path: P) -> Result<UploadSummary> {
+    #[instrument(skip(self))]
+    pub async fn upload_directory<P>(&self, path: P) -> Result<UploadSummary>
+    where
+        P: AsRef<Path> + Debug,
+    {
         let path = std::fs::canonicalize(path.as_ref())?;
         if !path.is_dir() {
             return Err(Error::NotADirectory(path));

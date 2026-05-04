@@ -7,8 +7,8 @@
 
 use std::collections::HashSet;
 
-use upload_symbols::Client;
 use reqwest::Url;
+use upload_symbols::Client;
 
 #[tokio::test]
 async fn upload_directory_locally() {
