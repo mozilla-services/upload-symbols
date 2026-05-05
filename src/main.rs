@@ -3,8 +3,8 @@ use clap::{
     Parser,
     builder::{Styles, styling::AnsiColor},
 };
-use std::{path::PathBuf, process::ExitCode};
-use upload_symbols::ClientBuilder;
+use std::{env::VarError, path::PathBuf, process::ExitCode};
+use upload_symbols::{Client, ClientBuilder};
 
 /// Upload symbols files to the Mozilla Symbols Server.
 ///
@@ -31,13 +31,35 @@ const CLAP_STYLES: Styles = Styles::styled()
     .valid(AnsiColor::BrightCyan.on_default().bold())
     .invalid(AnsiColor::Yellow.on_default().bold());
 
-#[tokio::main]
-async fn main() -> Result<ExitCode> {
+fn main() -> Result<ExitCode> {
+    let _guard = setup_sentry();
     let args = Args::parse();
     let client = args.client_builder.build()?;
-    println!("Uploading symbols files in {}...", args.directory.display());
-    let summary = client.upload_directory(args.directory).await?;
+    upload_directory(client, args.directory)
+}
 
+fn setup_sentry() -> Result<Option<sentry::ClientInitGuard>> {
+    let dsn = match std::env::var("SENTRY_DSN") {
+        Ok(dsn) => Some(dsn),
+        Err(VarError::NotPresent) => option_env!("SENTRY_DSN").map(String::from),
+        Err(err @ VarError::NotUnicode(_)) => Err(err)?,
+    };
+    let guard = dsn.map(|dsn| {
+        sentry::init((
+            dsn,
+            sentry::ClientOptions {
+                release: sentry::release_name!(),
+                ..Default::default()
+            },
+        ))
+    });
+    Ok(guard)
+}
+
+#[tokio::main]
+async fn upload_directory(client: Client, directory: PathBuf) -> Result<ExitCode> {
+    println!("Uploading symbols files in {}...", directory.display());
+    let summary = client.upload_directory(directory).await?;
     if !summary.upload_errors.is_empty() {
         eprintln!("\nerror: the following keys failed to upload:");
         for key in &summary.failed_keys {
