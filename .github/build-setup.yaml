@@ -1,0 +1,5 @@
+- name: Make SENTRY_DSN available to build jobs
+  env:
+    SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+  run: |
+    echo "SENTRY_DSN=$SENTRY_DSN" >> "$GITHUB_ENV"
