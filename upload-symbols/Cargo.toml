@@ -11,7 +11,7 @@ serde = { workspace = true }
 tempdir = { path = "../tempdir" }
 thiserror = "2.0.18"
 tokio = { workspace = true, features = ["rt", "sync", "time"] }
-url = { workspace = true }
+tracing = { workspace = true }
 walkdir = "2.5.0"
 zip = { workspace = true }
 

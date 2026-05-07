@@ -4,6 +4,7 @@ use clap::{
     builder::{Styles, styling::AnsiColor},
 };
 use std::{env::VarError, path::PathBuf, process::ExitCode};
+use tracing_subscriber::{EnvFilter, fmt::format::FmtSpan};
 use upload_symbols::{Client, ClientBuilder};
 
 /// Upload symbols files to the Mozilla Symbols Server.
@@ -33,6 +34,7 @@ const CLAP_STYLES: Styles = Styles::styled()
 
 fn main() -> Result<ExitCode> {
     let _guard = setup_sentry();
+    setup_tracing();
     let args = Args::parse();
     let client = args.client_builder.build()?;
     upload_directory(client, args.directory)
@@ -54,6 +56,13 @@ fn setup_sentry() -> Result<Option<sentry::ClientInitGuard>> {
         ))
     });
     Ok(guard)
+}
+
+fn setup_tracing() {
+    tracing_subscriber::fmt()
+        .with_span_events(FmtSpan::NEW | FmtSpan::CLOSE)
+        .with_env_filter(EnvFilter::from_env("UPLOAD_SYMBOLS_LOG"))
+        .init();
 }
 
 #[tokio::main]
