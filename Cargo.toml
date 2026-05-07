@@ -2,6 +2,11 @@
 members = ["download-symbols", "fake-tecken", "tempdir", "upload-symbols"]
 resolver = "3"
 
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+repository = "https://github.com/mozilla-services/upload-symbols"
+
 [workspace.dependencies]
 anyhow = "1.0.102"
 clap = { version = "4.6.1", features = ["derive", "env"] }
@@ -14,8 +19,9 @@ zip = "8.6.0"
 
 [package]
 name = "upload-symbols-cli"
-version = "0.1.0"
-edition = "2024"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
 
 [dependencies]
 anyhow = { workspace = true }
@@ -29,3 +35,8 @@ url = { workspace = true }
 [[bin]]
 name = "upload-symbols"
 path = "src/main.rs"
+
+# The profile that 'dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
