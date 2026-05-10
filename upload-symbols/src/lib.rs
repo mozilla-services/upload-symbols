@@ -38,7 +38,7 @@ const DEFAULT_ZIP_SIZE_THRESHOLD_V1: u64 = 1 << 26; // 64 MiB
 const DEFAULT_RETRIES_V1: usize = 5;
 const DEFAULT_RETRY_DELAY_SECONDS_V1: u64 = 60;
 
-/// The Mozill Symbols Server upload client.
+/// The Mozilla Symbols Server upload client.
 ///
 /// The main functionality is provided by the [`Client::upload_directory`] method.
 ///
@@ -46,9 +46,7 @@ const DEFAULT_RETRY_DELAY_SECONDS_V1: u64 = 60;
 /// (which uses [`Arc`] internally) and the limit on concurrent connections to the server.
 #[derive(Clone, Debug)]
 pub struct Client {
-    client: reqwest::Client,
-    base_url: Url,
-    auth_token: String,
+    base: base::Client,
     /// The current upload API doesn't handle load spikes gracefully, so we limit the number
     /// of concurrent connections.
     conn_limit_upload_v1: Arc<Semaphore>,
@@ -84,16 +82,6 @@ impl Client {
             return Err(Error::NotADirectory(path));
         }
         v1::upload_directory(self, &path).await
-    }
-
-    /// Perform an authenticated request to the symbols server.
-    fn request(&self, method: reqwest::Method, path: &str) -> reqwest::RequestBuilder {
-        self.client
-            // We validate the URL in the builder to make sure it can be used as a base URL.
-            // The `path` is a hardcoded string from this library, so `join()` can't return an
-            // error here and we can unwrap.
-            .request(method, self.base_url.join(path).unwrap())
-            .header("auth-token", &self.auth_token)
     }
 }
 
@@ -151,13 +139,16 @@ impl ClientBuilder {
     /// This can fail if no `http_client` was provided and building the default
     /// [`reqwest::Client`] fails.
     pub fn build(self) -> Result<Client> {
-        let client = Client {
+        let base = base::Client {
             client: match self.client {
                 Some(client) => client,
                 None => reqwest::Client::builder().user_agent(USER_AGENT).build()?,
             },
             base_url: Self::validate_base_url(self.base_url)?,
             auth_token: self.auth_token,
+        };
+        let client = Client {
+            base,
             conn_limit_upload_v1: Arc::new(Semaphore::new(self.max_connections_v1 as _)),
             zip_size_threshold_v1: self.zip_size_threshold_v1,
             retries_v1: self.retries_v1,
@@ -266,6 +257,7 @@ impl UploadSummary {
 
 static USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"),);
 
+mod base;
 pub mod sym_files;
 mod v1;
 
