@@ -25,6 +25,8 @@ pub enum Error {
     ReqwestError(#[from] reqwest::Error),
     #[error("status {status} response from symbols server: {msg}")]
     SymbolsServer4xx { status: u16, msg: String },
+    #[error("upload client not implemented: {0:?}")]
+    NotImplemented(UploadApiVersion),
 }
 
 type Result<T> = std::result::Result<T, Error>;
@@ -52,6 +54,7 @@ impl Client {
             client: None,
             base_url: None,
             auth_token: auth_token.into(),
+            upload_api_version: UploadApiVersion::Auto,
             v1: Default::default(),
         }
     }
@@ -74,6 +77,14 @@ impl Client {
     }
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+pub enum UploadApiVersion {
+    Auto,
+    V1,
+    V2,
+}
+
 /// A configurable builder for a [`Client`].
 #[derive(Debug)]
 #[cfg_attr(feature = "clap", derive(clap::Args))]
@@ -94,6 +105,12 @@ pub struct ClientBuilder {
     )]
     auth_token: String,
 
+    /// The upload API version to use.
+    ///
+    /// By default, the version is automatically detected by asking the server.
+    #[cfg_attr(feature = "clap", arg(long, value_enum, default_value_t = UploadApiVersion::Auto))]
+    upload_api_version: UploadApiVersion,
+
     /// Settings for the v1 upload API.
     #[cfg_attr(feature = "clap", command(flatten))]
     v1: v1::Config,
@@ -104,16 +121,23 @@ impl ClientBuilder {
     ///
     /// This can fail if no `http_client` was provided and building the default
     /// [`reqwest::Client`] fails.
-    pub fn build(self) -> Result<Client> {
-        let base = base::Client {
-            client: match self.client {
-                Some(client) => client,
-                None => reqwest::Client::builder().user_agent(USER_AGENT).build()?,
-            },
-            base_url: Self::validate_base_url(self.base_url)?,
-            auth_token: self.auth_token,
+    pub async fn build(self) -> Result<Client> {
+        let client = match self.client {
+            Some(client) => client,
+            None => reqwest::Client::builder().user_agent(USER_AGENT).build()?,
         };
-        let inner = ClientInner::V1(v1::Client::new(base, self.v1));
+        let base_url = Self::validate_base_url(self.base_url)?;
+        let base = base::Client::new(client, base_url, self.auth_token);
+        let auth_info = base.get_auth_info().await?;
+        let inner = match (self.upload_api_version, auth_info.upload_api_version) {
+            (UploadApiVersion::V1, _) | (UploadApiVersion::Auto, 1) => {
+                ClientInner::V1(v1::Client::new(base, self.v1))
+            }
+            (UploadApiVersion::V2, _) | (UploadApiVersion::Auto, 2) => {
+                return Err(Error::NotImplemented(UploadApiVersion::V2));
+            }
+            _ => unreachable!("invalid API version returned by Symbols Server"),
+        };
         Ok(Client { inner })
     }
 

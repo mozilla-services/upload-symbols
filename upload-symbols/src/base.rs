@@ -1,21 +1,32 @@
-use crate::{Error, Result};
-use reqwest::Url;
-use serde::{Deserialize, de::DeserializeOwned};
-use std::time::Duration;
+use crate::Error;
+use reqwest::{Method, Url};
+use serde::{Deserialize, Deserializer, de::DeserializeOwned};
+use std::{
+    collections::HashMap,
+    time::{Duration, SystemTime, UNIX_EPOCH},
+};
 use tokio::{sync::Semaphore, time::sleep};
 use tracing::{Instrument, debug, debug_span, instrument};
 
 /// The base client with commmon functionality for both versions of the upload API.
 #[derive(Clone, Debug)]
 pub struct Client {
-    pub client: reqwest::Client,
-    pub base_url: Url,
-    pub auth_token: String,
+    client: reqwest::Client,
+    base_url: Url,
+    auth_token: String,
 }
 
 impl Client {
+    pub fn new(client: reqwest::Client, base_url: Url, auth_token: String) -> Self {
+        Self {
+            client,
+            base_url,
+            auth_token,
+        }
+    }
+
     /// Perform an authenticated request to the symbols server.
-    pub fn request(&self, method: reqwest::Method, path: &str) -> reqwest::RequestBuilder {
+    pub fn request(&self, method: Method, path: &str) -> reqwest::RequestBuilder {
         self.client
             // We validate the URL in the builder to make sure it can be used as a base URL.
             // The `path` is a hardcoded string from this library, so `join()` can't return an
@@ -23,6 +34,56 @@ impl Client {
             .request(method, self.base_url.join(path).unwrap())
             .header("auth-token", &self.auth_token)
     }
+
+    pub async fn get_auth_info(&self) -> crate::Result<AuthInfo> {
+        Retry::builder()
+            .delay_seconds(2)
+            .delay_factor(1.5)
+            .build()
+            .request(async move || Ok(self.request(Method::POST, "/upload/auth_info/")))
+            .await
+    }
+}
+
+#[derive(Clone, Debug, Deserialize)]
+#[allow(unused)]
+pub struct AuthInfo {
+    pub email: String,
+    pub try_symbols: bool,
+    #[serde(deserialize_with = "deserialize_system_time")]
+    pub token_expires_at: SystemTime,
+    pub upload_api_version: u32,
+    pub opentelemetry: Option<OpenTelemetryConfig>,
+}
+
+#[derive(Clone, Debug, Deserialize)]
+#[allow(unused)]
+pub struct OpenTelemetryConfig {
+    pub endpoint: String,
+    #[serde(default)]
+    pub headers: HashMap<String, String>,
+    #[serde(default)]
+    pub resource_attributes: HashMap<String, String>,
+    #[serde(deserialize_with = "deserialize_log_level")]
+    pub log_level: tracing::Level,
+}
+
+fn deserialize_system_time<'de, D>(deserializer: D) -> Result<SystemTime, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let timestamp = u64::deserialize(deserializer)?;
+    UNIX_EPOCH
+        .checked_add(Duration::from_secs(timestamp))
+        .ok_or_else(|| serde::de::Error::custom("Unix timestamp is out of range"))
+}
+
+fn deserialize_log_level<'de, D>(deserializer: D) -> Result<tracing::Level, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let level = String::deserialize(deserializer)?;
+    level.parse().map_err(serde::de::Error::custom)
 }
 
 #[derive(Debug)]
@@ -44,9 +105,9 @@ impl Retry {
     }
 
     #[instrument(level = "debug", skip(self, prepare))]
-    pub async fn request<F, R>(&self, prepare: F) -> Result<R>
+    pub async fn request<F, R>(&self, prepare: F) -> crate::Result<R>
     where
-        F: AsyncFn() -> Result<reqwest::RequestBuilder>,
+        F: AsyncFn() -> crate::Result<reqwest::RequestBuilder>,
         R: DeserializeOwned,
     {
         let mut remaining_retries = self.retries;

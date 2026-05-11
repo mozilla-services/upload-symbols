@@ -17,6 +17,7 @@ async fn upload_directory_locally() {
         .base_url(Url::parse("http://localhost:8000/").unwrap())
         .zip_size_threshold_v1(1 << 20) // 1 MiB
         .build()
+        .await
         .unwrap();
     let summary = client
         .upload_directory("../tests/data/linux")

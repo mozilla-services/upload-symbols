@@ -26,6 +26,7 @@ async fn upload_directory() {
         .base_url(tecken.url())
         .zip_size_threshold_v1(1 << 20) // 1 MiB
         .build()
+        .await
         .unwrap();
 
     // Upload the directory with half the files.
