@@ -7,10 +7,7 @@ use reqwest::Url;
 use std::{
     fmt::Debug,
     path::{Path, PathBuf},
-    sync::Arc,
-    time::Duration,
 };
-use tokio::sync::Semaphore;
 use tracing::instrument;
 
 /// Errors that may occur while uploading symbols.
@@ -32,12 +29,6 @@ pub enum Error {
 
 type Result<T> = std::result::Result<T, Error>;
 
-// Update the docstrings of the `ClientBuilder` methods when changing these defaults.
-const DEFAULT_MAX_CONNECTIONS_V1: u32 = 3;
-const DEFAULT_ZIP_SIZE_THRESHOLD_V1: u64 = 1 << 26; // 64 MiB
-const DEFAULT_RETRIES_V1: usize = 5;
-const DEFAULT_RETRY_DELAY_SECONDS_V1: u64 = 60;
-
 /// The Mozilla Symbols Server upload client.
 ///
 /// The main functionality is provided by the [`Client::upload_directory`] method.
@@ -46,13 +37,12 @@ const DEFAULT_RETRY_DELAY_SECONDS_V1: u64 = 60;
 /// (which uses [`Arc`] internally) and the limit on concurrent connections to the server.
 #[derive(Clone, Debug)]
 pub struct Client {
-    base: base::Client,
-    /// The current upload API doesn't handle load spikes gracefully, so we limit the number
-    /// of concurrent connections.
-    conn_limit_upload_v1: Arc<Semaphore>,
-    zip_size_threshold_v1: u64,
-    retries_v1: usize,
-    retry_delay_v1: Duration,
+    inner: ClientInner,
+}
+
+#[derive(Clone, Debug)]
+enum ClientInner {
+    V1(v1::Client),
 }
 
 impl Client {
@@ -62,10 +52,7 @@ impl Client {
             client: None,
             base_url: None,
             auth_token: auth_token.into(),
-            max_connections_v1: DEFAULT_MAX_CONNECTIONS_V1,
-            zip_size_threshold_v1: DEFAULT_ZIP_SIZE_THRESHOLD_V1,
-            retries_v1: DEFAULT_RETRIES_V1,
-            retry_delay_seconds_v1: DEFAULT_RETRY_DELAY_SECONDS_V1,
+            v1: Default::default(),
         }
     }
 
@@ -81,7 +68,9 @@ impl Client {
         if !path.is_dir() {
             return Err(Error::NotADirectory(path));
         }
-        v1::upload_directory(self, &path).await
+        match self.inner {
+            ClientInner::V1(ref inner) => inner.upload_directory(path).await,
+        }
     }
 }
 
@@ -105,32 +94,9 @@ pub struct ClientBuilder {
     )]
     auth_token: String,
 
-    /// The maximum number of concurrent uploads using the v1 upload API.
-    #[cfg_attr(feature = "clap", arg(
-        long,
-        default_value_t = DEFAULT_MAX_CONNECTIONS_V1,
-        value_parser = clap::value_parser!(u32).range(1..=16)
-    ))]
-    max_connections_v1: u32,
-
-    /// Set the ZIP archive size threshold in bytes.
-    ///
-    /// When building ZIP archives for v1 of the upload API, a new archive is started once the
-    /// size of the current archive exceeds this threshold. ZIP archives still can get much
-    /// bigger than this value since member files can be big.
-    #[cfg_attr(feature = "clap", arg(long, default_value_t = DEFAULT_ZIP_SIZE_THRESHOLD_V1))]
-    zip_size_threshold_v1: u64,
-
-    /// Set the number of retries for the version 1 upload API.
-    ///
-    /// On retriable status codes, uploading ZIP archives is retried this number of times, in
-    /// addition to the original request. A value of 0 disables retrying.
-    #[cfg_attr(feature = "clap", arg(long, default_value_t = DEFAULT_RETRIES_V1))]
-    retries_v1: usize,
-
-    /// Set the delay in seconds between retries for version 1 of the upload API.
-    #[cfg_attr(feature = "clap", arg(long, default_value_t = DEFAULT_RETRY_DELAY_SECONDS_V1))]
-    retry_delay_seconds_v1: u64,
+    /// Settings for the v1 upload API.
+    #[cfg_attr(feature = "clap", command(flatten))]
+    v1: v1::Config,
 }
 
 impl ClientBuilder {
@@ -147,14 +113,8 @@ impl ClientBuilder {
             base_url: Self::validate_base_url(self.base_url)?,
             auth_token: self.auth_token,
         };
-        let client = Client {
-            base,
-            conn_limit_upload_v1: Arc::new(Semaphore::new(self.max_connections_v1 as _)),
-            zip_size_threshold_v1: self.zip_size_threshold_v1,
-            retries_v1: self.retries_v1,
-            retry_delay_v1: Duration::from_secs(self.retry_delay_seconds_v1),
-        };
-        Ok(client)
+        let inner = ClientInner::V1(v1::Client::new(base, self.v1));
+        Ok(Client { inner })
     }
 
     // This function ensures that the base URL actually is an absolute URL with an http(s)
@@ -198,7 +158,7 @@ impl ClientBuilder {
     /// The default is 3. Panics if `max_connections` is 0.
     pub fn max_connections_v1(mut self, max_connections_v1: u32) -> Self {
         assert_ne!(max_connections_v1, 0, "must allow at least one connection");
-        self.max_connections_v1 = max_connections_v1;
+        self.v1.max_connections_v1 = max_connections_v1;
         self
     }
 
@@ -210,7 +170,7 @@ impl ClientBuilder {
     ///
     /// The default is 64 MiB.
     pub fn zip_size_threshold_v1(mut self, zip_size_threshold_v1: u64) -> Self {
-        self.zip_size_threshold_v1 = zip_size_threshold_v1;
+        self.v1.zip_size_threshold_v1 = zip_size_threshold_v1;
         self
     }
 
@@ -221,7 +181,7 @@ impl ClientBuilder {
     ///
     /// The default is 5.
     pub fn retries_v1(mut self, retries_v1: usize) -> Self {
-        self.retries_v1 = retries_v1;
+        self.v1.retries_v1 = retries_v1;
         self
     }
 
@@ -229,7 +189,7 @@ impl ClientBuilder {
     ///
     /// The default is 60 seconds.
     pub fn retry_delay_v1_seconds(mut self, retry_delay_v1_seconds: u64) -> Self {
-        self.retry_delay_seconds_v1 = retry_delay_v1_seconds;
+        self.v1.retry_delay_seconds_v1 = retry_delay_v1_seconds;
         self
     }
 }
