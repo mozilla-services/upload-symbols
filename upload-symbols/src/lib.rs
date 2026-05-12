@@ -23,8 +23,8 @@ pub enum Error {
     ZipError(#[from] zip::result::ZipError),
     #[error("error sending HTTP request: {0}")]
     ReqwestError(#[from] reqwest::Error),
-    #[error("bad request to symbols server: {0}")]
-    SymbolsServerBadRequest(String),
+    #[error("status {status} response from symbols server: {msg}")]
+    SymbolsServer4xx { status: u16, msg: String },
 }
 
 type Result<T> = std::result::Result<T, Error>;

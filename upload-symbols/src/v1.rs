@@ -1,18 +1,18 @@
 //! Client implementation for the original Mozilla Symbols Server upload endpoint.
 
 use crate::{
-    Error, Result, UploadSummary,
+    Result, UploadSummary,
+    base::Retry,
     sym_files::{InvalidKeyError, SymbolsFile},
 };
 use reqwest::{Method, multipart};
 use serde::Deserialize;
-use std::{collections::HashSet, io::Seek, path::PathBuf, sync::Arc, time::Duration};
+use std::{collections::HashSet, io::Seek, path::PathBuf, sync::Arc};
 use tokio::{
-    sync::{Semaphore, mpsc},
+    sync::mpsc,
     task::{JoinSet, spawn_blocking},
-    time::sleep,
 };
-use tracing::{Instrument, debug, debug_span, field, info_span, instrument};
+use tracing::{field, info_span, instrument};
 use zip::{CompressionMethod, ZipWriter};
 
 // Update the docstrings of the `ClientBuilder` methods when changing these defaults.
@@ -68,20 +68,21 @@ impl Default for Config {
 #[derive(Clone, Debug)]
 pub struct Client {
     base: Arc<crate::base::Client>,
-    conn_limit: Arc<Semaphore>,
     zip_size_threshold: u64,
-    retries: usize,
-    retry_delay: Duration,
+    retry: Arc<Retry>,
 }
 
 impl Client {
     pub fn new(base: crate::base::Client, config: Config) -> Self {
+        let retry = Retry::builder()
+            .max_connections(config.max_connections_v1)
+            .retries(config.retries_v1)
+            .delay_seconds(config.retry_delay_seconds_v1)
+            .build();
         Self {
             base: Arc::new(base),
-            conn_limit: Arc::new(Semaphore::new(config.max_connections_v1 as _)),
             zip_size_threshold: config.zip_size_threshold_v1,
-            retries: config.retries_v1,
-            retry_delay: Duration::from_secs(config.retry_delay_seconds_v1),
+            retry: Arc::new(retry),
         }
     }
 
@@ -241,57 +242,20 @@ impl ZipArchive {
 impl Client {
     #[instrument(skip(self))]
     async fn upload_zip_archive(self, path: PathBuf) -> Result<UploadResponse> {
-        let mut remaining_retries = self.retries;
         // We know the file name is of the form `symbols-{i}.zip`. So we can unwrap the result of
         // `file_name()`, as there must be a file name. We can also unwrap the result of to_str(),
         // since the file name only contain ASCII characters.
         let file_name = String::from(path.file_name().unwrap().to_str().unwrap());
-        loop {
-            let form = multipart::Form::new()
-                .file(file_name.clone(), &path)
-                .await?;
-            // We know the semaphore hasn't been closed, so we can unwrap.
-            let permit = self.conn_limit.acquire().await.unwrap();
-            let response = self
-                .base
-                .request(Method::POST, "upload/")
-                .multipart(form)
-                .send()
-                .instrument(debug_span!("v1 upload request"))
-                .await?;
-            let status = response.status().as_u16();
-            debug!("v1 upload request status {status}");
-            match status {
-                429 | 502 | 503 | 504 => {
-                    if remaining_retries == 0 {
-                        return Err(response.error_for_status().unwrap_err().into());
-                    }
-                    remaining_retries -= 1;
-                    drop(permit);
-                    sleep(self.retry_delay).await;
-                    continue;
-                }
-                400 => {
-                    // For 400s, the symbols server returns an error message.
-                    let server_error: ServerError = response.json().await?;
-                    return Err(Error::SymbolsServerBadRequest(server_error.error));
-                }
-                _ => {}
-            }
-            response.error_for_status_ref()?;
-            let upload_response: UploadResponse = response.json().await?;
-            debug!(
-                "v1 upload request successful after {} attempt(s)",
-                self.retries + 1 - remaining_retries
-            );
-            return Ok(upload_response);
-        }
+        self.retry
+            .request(async move || {
+                let form = multipart::Form::new()
+                    .file(file_name.clone(), &path)
+                    .await?;
+                let request = self.base.request(Method::POST, "upload/").multipart(form);
+                Ok(request)
+            })
+            .await
     }
-}
-
-#[derive(Deserialize)]
-struct ServerError {
-    error: String,
 }
 
 #[derive(Deserialize)]
