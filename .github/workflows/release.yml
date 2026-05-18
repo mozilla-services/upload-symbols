@@ -127,6 +127,11 @@ jobs:
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
             echo "$HOME/.cargo/bin" >> $GITHUB_PATH
           fi
+      - name: "Make SENTRY_DSN available to build jobs"
+        run: |
+          echo "SENTRY_DSN=$SENTRY_DSN" >> "$GITHUB_ENV"
+        env:
+          "SENTRY_DSN": "${{ secrets.SENTRY_DSN }}"
       - name: Install dist
         run: ${{ matrix.install_dist.run }}
       # Get the dist-manifest
