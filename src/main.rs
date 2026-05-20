@@ -1,10 +1,16 @@
+use crate::opentelemetry::OTelCoordinator;
 use anyhow::Result;
 use clap::{
     Parser,
     builder::{Styles, styling::AnsiColor},
 };
 use std::{env::VarError, path::PathBuf, process::ExitCode};
-use tracing_subscriber::{EnvFilter, fmt::format::FmtSpan};
+use tracing_subscriber::{
+    EnvFilter,
+    fmt::format::FmtSpan,
+    layer::{Layer as _, SubscriberExt},
+    util::SubscriberInitExt,
+};
 use upload_symbols::ClientBuilder;
 
 /// Upload symbols files to the Mozilla Symbols Server.
@@ -34,9 +40,9 @@ const CLAP_STYLES: Styles = Styles::styled()
 
 fn main() -> Result<ExitCode> {
     let _guard = setup_sentry();
-    setup_tracing();
+    let otel_coordinator = setup_tracing();
     let args = Args::parse();
-    upload_directory(args)
+    upload_directory(args, otel_coordinator)
 }
 
 fn setup_sentry() -> Result<Option<sentry::ClientInitGuard>> {
@@ -57,18 +63,30 @@ fn setup_sentry() -> Result<Option<sentry::ClientInitGuard>> {
     Ok(guard)
 }
 
-fn setup_tracing() {
-    tracing_subscriber::fmt()
+fn setup_tracing() -> impl OTelCoordinator {
+    let (otel_coordinator, otel_layer) = opentelemetry::Coordinator::new();
+    let fmt_layer = tracing_subscriber::fmt::layer()
         .with_span_events(FmtSpan::NEW | FmtSpan::CLOSE)
-        .with_env_filter(EnvFilter::from_env("UPLOAD_SYMBOLS_LOG"))
+        .with_filter(EnvFilter::from_env("UPLOAD_SYMBOLS_LOG"));
+    tracing_subscriber::registry()
+        .with(otel_layer)
+        .with(fmt_layer)
         .init();
+    otel_coordinator
 }
 
 #[tokio::main]
-async fn upload_directory(args: Args) -> Result<ExitCode> {
+async fn upload_directory(
+    args: Args,
+    mut otel_coordinator: impl OTelCoordinator,
+) -> Result<ExitCode> {
     let client = args.client_builder.build().await?;
+    if let Some(ref config) = client.auth_info().opentelemetry {
+        otel_coordinator.set_up_otlp(config)?;
+    }
     println!("Uploading symbols files in {}...", args.directory.display());
     let summary = client.upload_directory(args.directory).await?;
+    otel_coordinator.shutdown()?;
     if !summary.upload_errors.is_empty() {
         eprintln!("\nerror: the following keys failed to upload:");
         for key in &summary.failed_keys {
@@ -96,3 +114,5 @@ async fn upload_directory(args: Args) -> Result<ExitCode> {
         Ok(ExitCode::FAILURE)
     }
 }
+
+mod opentelemetry;

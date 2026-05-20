@@ -40,12 +40,15 @@ type Result<T> = std::result::Result<T, Error>;
 #[derive(Clone, Debug)]
 pub struct Client {
     inner: ClientInner,
+    auth_info: AuthInfo,
 }
 
 #[derive(Clone, Debug)]
 enum ClientInner {
     V1(v1::Client),
 }
+
+pub use base::{AuthInfo, OpenTelemetryConfig};
 
 impl Client {
     /// Return a [`ClientBuilder`] instance with a default configuration.
@@ -74,6 +77,10 @@ impl Client {
         match self.inner {
             ClientInner::V1(ref inner) => inner.upload_directory(path).await,
         }
+    }
+
+    pub fn auth_info(&self) -> &AuthInfo {
+        &self.auth_info
     }
 }
 
@@ -138,7 +145,7 @@ impl ClientBuilder {
             }
             _ => unreachable!("invalid API version returned by Symbols Server"),
         };
-        Ok(Client { inner })
+        Ok(Client { inner, auth_info })
     }
 
     // This function ensures that the base URL actually is an absolute URL with an http(s)
