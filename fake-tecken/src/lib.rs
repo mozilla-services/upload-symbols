@@ -89,8 +89,9 @@ async fn upload(
         }
     }
 
+    let id = uploaded_files.len() as u32;
     Ok(Json(UploadResponse {
-        upload: Upload { skipped_keys },
+        upload: Upload { id, skipped_keys },
     }))
 }
 
@@ -101,6 +102,7 @@ struct UploadResponse {
 
 #[derive(Serialize)]
 struct Upload {
+    id: u32,
     skipped_keys: Vec<String>,
 }
 
