@@ -12,7 +12,7 @@ use tokio::{
     sync::mpsc,
     task::{JoinSet, spawn_blocking},
 };
-use tracing::{field, info_span, instrument};
+use tracing::{Instrument, field, info_span, instrument};
 use zip::{CompressionMethod, ZipWriter};
 
 // Update the docstrings of the `ClientBuilder` methods when changing these defaults.
@@ -103,14 +103,20 @@ impl Client {
         let temp_dir = tempdir::TempDir::new("upload-symbols.")?;
         let temp_path = temp_dir.path().to_path_buf();
         let zip_size_threshold = self.zip_size_threshold;
-        let create_zip_handle =
-            spawn_blocking(move || create_zip_archives(tx, root, temp_path, zip_size_threshold));
+        let span = tracing::Span::current();
+        let create_zip_handle = spawn_blocking(move || {
+            span.in_scope(|| create_zip_archives(tx, root, temp_path, zip_size_threshold))
+        });
 
         // Upload ZIP archives as they get created.
         let mut set = JoinSet::new();
         while let Some((zip_archive_path, zip_keys)) = rx.recv().await {
             let client = self.clone();
-            set.spawn(async move { (client.upload_zip_archive(zip_archive_path).await, zip_keys) });
+            let span = tracing::Span::current();
+            set.spawn(
+                async move { (client.upload_zip_archive(zip_archive_path).await, zip_keys) }
+                    .instrument(span),
+            );
         }
 
         // Unwrap the outer JoinError. This will basically propagate panics.
