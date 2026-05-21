@@ -5,6 +5,7 @@ use opentelemetry_sdk::{
     Resource,
     trace::{SdkTracer, SdkTracerProvider},
 };
+use opentelemetry_semantic_conventions::resource::SERVICE_VERSION;
 use tracing::Subscriber;
 use tracing_opentelemetry::OpenTelemetryLayer;
 use tracing_subscriber::{
@@ -28,7 +29,7 @@ pub type Layer<S> = Filtered<reload::Layer<Option<InternalLayer<S>>, S>, Filter<
 /// wrap both the OpenTelemetry layer and the [`LevelFilter`] for that layer in a
 /// [`reload::Layer`] to make them dynamically configurable.
 ///
-/// The type parameter `S` represents that subscriber type.
+/// The type parameter `S` represents the subscriber type.
 pub struct Coordinator<S> {
     layer_handle: reload::Handle<Option<InternalLayer<S>>, S>,
     filter_handle: reload::Handle<LevelFilter, S>,
@@ -79,6 +80,37 @@ fn build_endpoint(base_url: &str, path: &str) -> String {
     format!("{}{path}", base_url.trim_end_matches('/'))
 }
 
+/// Return the OTel [`Resource`], a representation of the entity producing the telemetry.
+///
+/// The `Resource` struct uses `Arc` internally, so it can be cheaply cloned.
+fn resource(config: &OpenTelemetryConfig) -> Resource {
+    Resource::builder()
+        .with_service_name(env!("CARGO_PKG_NAME"))
+        .with_attribute(KeyValue::new(SERVICE_VERSION, env!("CARGO_PKG_VERSION")))
+        .with_attributes(
+            config
+                .resource_attributes
+                .iter()
+                .map(|(k, v)| KeyValue::new(k.clone(), v.clone())),
+        )
+        .build()
+}
+
+/// Return the [`SdkTracerProvider`] for OTel tracing support.
+fn tracer_provider(config: &OpenTelemetryConfig, resource: Resource) -> Result<SdkTracerProvider> {
+    let span_exporter = SpanExporter::builder()
+        .with_http()
+        .with_protocol(Protocol::HttpBinary)
+        .with_endpoint(build_endpoint(&config.endpoint, "/v1/traces"))
+        .with_headers(config.headers.clone())
+        .build()?;
+    let tracer_provider = SdkTracerProvider::builder()
+        .with_resource(resource)
+        .with_batch_exporter(span_exporter)
+        .build();
+    Ok(tracer_provider)
+}
+
 impl<S> OTelCoordinator for Coordinator<S>
 where
     S: Subscriber,
@@ -89,26 +121,9 @@ where
     /// This function sets up an [`OpenTelementryLayer`] and a [`LevelFilter`] based on the
     /// given configuration and replaces the placeholders with them.
     fn set_up_otlp(&mut self, config: &OpenTelemetryConfig) -> Result<()> {
-        let resource = Resource::builder()
-            .with_service_name("upload-symbols")
-            .with_attributes(
-                config
-                    .resource_attributes
-                    .iter()
-                    .map(|(k, v)| KeyValue::new(k.clone(), v.clone())),
-            )
-            .build();
-        let span_exporter = SpanExporter::builder()
-            .with_http()
-            .with_protocol(Protocol::HttpBinary)
-            .with_endpoint(build_endpoint(&config.endpoint, "/v1/traces"))
-            .with_headers(config.headers.clone())
-            .build()?;
-        let tracer_provider = SdkTracerProvider::builder()
-            .with_resource(resource)
-            .with_batch_exporter(span_exporter)
-            .build();
-        let tracer = tracer_provider.tracer("upload-symbols");
+        let resource = resource(config);
+        let tracer_provider = tracer_provider(config, resource.clone())?;
+        let tracer = tracer_provider.tracer(env!("CARGO_PKG_NAME"));
         self.tracer_provider = Some(tracer_provider);
         let layer = tracing_opentelemetry::layer().with_tracer(tracer);
         self.filter_handle

@@ -252,7 +252,8 @@ impl Client {
         // `file_name()`, as there must be a file name. We can also unwrap the result of to_str(),
         // since the file name only contain ASCII characters.
         let file_name = String::from(path.file_name().unwrap().to_str().unwrap());
-        let upload_response: UploadResponse = self.retry
+        let upload_response: UploadResponse = self
+            .retry
             .request(async move || {
                 let form = multipart::Form::new()
                     .file(file_name.clone(), &path)
