@@ -1,4 +1,3 @@
-use crate::opentelemetry::OTelCoordinator;
 use anyhow::Result;
 use clap::{
     Parser,
@@ -11,7 +10,7 @@ use tracing_subscriber::{
     layer::{Layer as _, SubscriberExt},
     util::SubscriberInitExt,
 };
-use upload_symbols::ClientBuilder;
+use upload_symbols::{ClientBuilder, OpenTelemetryConfig};
 
 /// Upload symbols files to the Mozilla Symbols Server.
 ///
@@ -40,9 +39,8 @@ const CLAP_STYLES: Styles = Styles::styled()
 
 fn main() -> Result<ExitCode> {
     let _guard = setup_sentry();
-    let otel_coordinator = setup_tracing();
     let args = Args::parse();
-    upload_directory(args, otel_coordinator)
+    upload_directory(args)
 }
 
 fn setup_sentry() -> Result<Option<sentry::ClientInitGuard>> {
@@ -63,30 +61,30 @@ fn setup_sentry() -> Result<Option<sentry::ClientInitGuard>> {
     Ok(guard)
 }
 
-fn setup_tracing() -> impl OTelCoordinator {
-    let (otel_coordinator, otel_layer) = opentelemetry::Coordinator::new();
+fn setup_tracing(config: Option<&OpenTelemetryConfig>) -> Result<Option<opentelemetry::Guard>> {
     let fmt_layer = tracing_subscriber::fmt::layer()
         .with_span_events(FmtSpan::NEW | FmtSpan::CLOSE)
         .with_filter(EnvFilter::from_env("UPLOAD_SYMBOLS_LOG"));
-    tracing_subscriber::registry()
-        .with(otel_layer)
-        .with(fmt_layer)
-        .init();
-    otel_coordinator
+    if let Some(config) = config {
+        let (otel_guard, otel_layer) = opentelemetry::set_up(config)?;
+        tracing_subscriber::registry()
+            .with(fmt_layer)
+            .with(otel_layer)
+            .init();
+        Ok(Some(otel_guard))
+    } else {
+        tracing_subscriber::registry().with(fmt_layer).init();
+        Ok(None)
+    }
 }
 
 #[tokio::main]
-async fn upload_directory(
-    args: Args,
-    mut otel_coordinator: impl OTelCoordinator,
-) -> Result<ExitCode> {
+async fn upload_directory(args: Args) -> Result<ExitCode> {
     let client = args.client_builder.build().await?;
-    if let Some(ref config) = client.auth_info().opentelemetry {
-        otel_coordinator.set_up_otlp(config)?;
-    }
+    let otel_guard = setup_tracing(client.auth_info().opentelemetry.as_ref())?;
     println!("Uploading symbols files in {}...", args.directory.display());
     let summary = client.upload_directory(args.directory).await?;
-    otel_coordinator.shutdown()?;
+    otel_guard.map(|guard| guard.shutdown()).transpose()?;
     if !summary.upload_errors.is_empty() {
         eprintln!("\nerror: the following keys failed to upload:");
         for key in &summary.failed_keys {
