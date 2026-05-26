@@ -1,92 +1,159 @@
 //! Client implementation for the original Mozilla Symbols Server upload endpoint.
 
 use crate::{
-    Client, Error, Result, UploadSummary,
+    Result, UploadSummary,
+    base::Retry,
     sym_files::{InvalidKeyError, SymbolsFile},
 };
 use reqwest::{Method, multipart};
 use serde::Deserialize;
-use std::{
-    collections::HashSet,
-    io::Seek,
-    path::{Path, PathBuf},
-};
+use std::{collections::HashSet, io::Seek, path::PathBuf, sync::Arc};
 use tokio::{
     sync::mpsc,
     task::{JoinSet, spawn_blocking},
-    time::sleep,
 };
-use tracing::{Instrument, debug, debug_span, field, info_span, instrument};
+use tracing::{field, info_span, instrument};
 use zip::{CompressionMethod, ZipWriter};
 
-/// Upload a directory of files to the Mozilla Symbols Server.
-///
-/// This function uses `crate::sym_files::discover()` to find symbols files under the given
-/// `root` directory and uploads them to the Mozilla Symbols Server using the given client to
-/// perform the HTTP requests. Only regular files are inlcuded.
-///
-/// Since the original version of the upload API only supports uploading ZIP archives, we first
-/// need to create ZIP archives in a temporary directory before sending the actual HTTP
-/// requests.
-#[instrument(level = "debug", skip(client))]
-pub async fn upload_directory(client: &Client, root: &Path) -> Result<UploadSummary> {
-    // Create ZIP archives in a background thread so we can start uploading the first
-    // archive as soon as it is ready.
-    let (tx, mut rx) = mpsc::channel(64);
-    let path = root.to_path_buf();
-    let temp_dir = tempdir::TempDir::new("upload-symbols.")?;
-    let temp_path = temp_dir.path().to_path_buf();
-    let zip_size_threshold = client.zip_size_threshold_v1;
-    let create_zip_handle =
-        spawn_blocking(move || create_zip_archives(tx, path, temp_path, zip_size_threshold));
+// Update the docstrings of the `ClientBuilder` methods when changing these defaults.
+const DEFAULT_MAX_CONNECTIONS_V1: u32 = 3;
+const DEFAULT_ZIP_SIZE_THRESHOLD_V1: u64 = 1 << 26; // 64 MiB
+const DEFAULT_RETRIES_V1: usize = 5;
+const DEFAULT_RETRY_DELAY_SECONDS_V1: u64 = 60;
 
-    // Upload ZIP archives as they get created.
-    let mut set = JoinSet::new();
-    while let Some((zip_archive_path, zip_keys)) = rx.recv().await {
-        let client = client.clone();
-        set.spawn(async move { (upload_zip_archive(client, zip_archive_path).await, zip_keys) });
+/// Configuration for the v1 upload client.
+#[derive(Debug)]
+#[cfg_attr(feature = "clap", derive(clap::Args))]
+pub struct Config {
+    /// The maximum number of concurrent uploads using the v1 upload API.
+    #[cfg_attr(feature = "clap", arg(
+        long,
+        default_value_t = DEFAULT_MAX_CONNECTIONS_V1,
+        value_parser = clap::value_parser!(u32).range(1..=16)
+    ))]
+    pub max_connections_v1: u32,
+
+    /// Set the ZIP archive size threshold in bytes.
+    ///
+    /// When building ZIP archives for v1 of the upload API, a new archive is started once the
+    /// size of the current archive exceeds this threshold. ZIP archives still can get much
+    /// bigger than this value since member files can be big.
+    #[cfg_attr(feature = "clap", arg(long, default_value_t = DEFAULT_ZIP_SIZE_THRESHOLD_V1))]
+    pub zip_size_threshold_v1: u64,
+
+    /// Set the number of retries for the version 1 upload API.
+    ///
+    /// On retriable status codes, uploading ZIP archives is retried this number of times, in
+    /// addition to the original request. A value of 0 disables retrying.
+    #[cfg_attr(feature = "clap", arg(long, default_value_t = DEFAULT_RETRIES_V1))]
+    pub retries_v1: usize,
+
+    /// Set the delay in seconds between retries for version 1 of the upload API.
+    #[cfg_attr(feature = "clap", arg(long, default_value_t = DEFAULT_RETRY_DELAY_SECONDS_V1))]
+    pub retry_delay_seconds_v1: u64,
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            max_connections_v1: DEFAULT_MAX_CONNECTIONS_V1,
+            zip_size_threshold_v1: DEFAULT_ZIP_SIZE_THRESHOLD_V1,
+            retries_v1: DEFAULT_RETRIES_V1,
+            retry_delay_seconds_v1: DEFAULT_RETRY_DELAY_SECONDS_V1,
+        }
     }
+}
 
-    // Unwrap the outer JoinError. This will basically propagate panics.
-    let discovery_errors = create_zip_handle.await.unwrap()?;
+/// The v1 upload client.
+#[derive(Clone, Debug)]
+pub struct Client {
+    base: Arc<crate::base::Client>,
+    zip_size_threshold: u64,
+    retry: Arc<Retry>,
+}
 
-    let mut uploaded_keys = vec![];
-    let mut skipped_keys = vec![];
-    let mut failed_keys = vec![];
-    let mut upload_errors = vec![];
-    while let Some(join_result) = set.join_next().await {
-        // Unwrap the outer result to propagate panics.
-        let (upload_result, zip_keys) = join_result.unwrap();
-        match upload_result {
-            Ok(UploadResponse { upload }) => {
-                let not_skipped = zip_keys
-                    .into_iter()
-                    .filter(|key| !upload.skipped_keys.contains(key));
-                uploaded_keys.extend(not_skipped);
-                skipped_keys.extend(upload.skipped_keys);
-            }
-            Err(e) => {
-                failed_keys.extend(zip_keys);
-                upload_errors.push(e);
-            }
+impl Client {
+    pub fn new(base: crate::base::Client, config: Config) -> Self {
+        let retry = Retry::builder()
+            .max_connections(config.max_connections_v1)
+            .retries(config.retries_v1)
+            .delay_seconds(config.retry_delay_seconds_v1)
+            .build();
+        Self {
+            base: Arc::new(base),
+            zip_size_threshold: config.zip_size_threshold_v1,
+            retry: Arc::new(retry),
         }
     }
 
-    // Explicitly close temp_dir so we can propagate any errors. We don't want to return any
-    // errors in this operation directly, since then the caller wouldn't get any information
-    // about the uploads that were performed, so we add any potential error to `upload_errors`.
-    if let Err(e) = temp_dir.close() {
-        upload_errors.push(e.into());
-    }
+    /// Upload a directory of files to the Mozilla Symbols Server.
+    ///
+    /// This function uses `crate::sym_files::discover()` to find symbols files under the given
+    /// `root` directory and uploads them to the Mozilla Symbols Server using the given client
+    /// to perform the HTTP requests. Only regular files are inlcuded.
+    ///
+    /// Since the original version of the upload API only supports uploading ZIP archives, we
+    /// first need to create ZIP archives in a temporary directory before sending the actual
+    /// HTTP requests.
+    #[instrument(level = "debug", skip(self))]
+    pub async fn upload_directory(&self, root: PathBuf) -> Result<UploadSummary> {
+        // Create ZIP archives in a background thread so we can start uploading the first
+        // archive as soon as it is ready.
+        let (tx, mut rx) = mpsc::channel(64);
+        let temp_dir = tempdir::TempDir::new("upload-symbols.")?;
+        let temp_path = temp_dir.path().to_path_buf();
+        let zip_size_threshold = self.zip_size_threshold;
+        let create_zip_handle =
+            spawn_blocking(move || create_zip_archives(tx, root, temp_path, zip_size_threshold));
 
-    let summary = UploadSummary {
-        uploaded_keys,
-        skipped_keys,
-        failed_keys,
-        discovery_errors,
-        upload_errors,
-    };
-    Ok(summary)
+        // Upload ZIP archives as they get created.
+        let mut set = JoinSet::new();
+        while let Some((zip_archive_path, zip_keys)) = rx.recv().await {
+            let client = self.clone();
+            set.spawn(async move { (client.upload_zip_archive(zip_archive_path).await, zip_keys) });
+        }
+
+        // Unwrap the outer JoinError. This will basically propagate panics.
+        let discovery_errors = create_zip_handle.await.unwrap()?;
+
+        let mut uploaded_keys = vec![];
+        let mut skipped_keys = vec![];
+        let mut failed_keys = vec![];
+        let mut upload_errors = vec![];
+        while let Some(join_result) = set.join_next().await {
+            // Unwrap the outer result to propagate panics.
+            let (upload_result, zip_keys) = join_result.unwrap();
+            match upload_result {
+                Ok(UploadResponse { upload }) => {
+                    let not_skipped = zip_keys
+                        .into_iter()
+                        .filter(|key| !upload.skipped_keys.contains(key));
+                    uploaded_keys.extend(not_skipped);
+                    skipped_keys.extend(upload.skipped_keys);
+                }
+                Err(e) => {
+                    failed_keys.extend(zip_keys);
+                    upload_errors.push(e);
+                }
+            }
+        }
+
+        // Explicitly close temp_dir so we can propagate any errors. We don't want to return any
+        // errors in this operation directly, since then the caller wouldn't get any information
+        // about the uploads that were performed, so we add any potential error to `upload_errors`.
+        if let Err(e) = temp_dir.close() {
+            upload_errors.push(e.into());
+        }
+
+        let summary = UploadSummary {
+            uploaded_keys,
+            skipped_keys,
+            failed_keys,
+            discovery_errors,
+            upload_errors,
+        };
+        Ok(summary)
+    }
 }
 
 /// Create ZIP archives for all symbols files in the given directory.
@@ -172,57 +239,23 @@ impl ZipArchive {
     }
 }
 
-#[instrument(skip(client))]
-async fn upload_zip_archive(client: Client, path: PathBuf) -> Result<UploadResponse> {
-    let mut remaining_retries = client.retries_v1;
-    // We know the file name is of the form `symbols-{i}.zip`. So we can unwrap the result of
-    // `file_name()`, as there must be a file name. We can also unwrap the result of to_str(),
-    // since the file name only contain ASCII characters.
-    let file_name = String::from(path.file_name().unwrap().to_str().unwrap());
-    loop {
-        let form = multipart::Form::new()
-            .file(file_name.clone(), &path)
-            .await?;
-        // We know the semaphore hasn't been closed, so we can unwrap.
-        let permit = client.conn_limit_upload_v1.acquire().await.unwrap();
-        let response = client
-            .request(Method::POST, "upload/")
-            .multipart(form)
-            .send()
-            .instrument(debug_span!("v1 upload request"))
-            .await?;
-        let status = response.status().as_u16();
-        debug!("v1 upload request status {status}");
-        match status {
-            429 | 502 | 503 | 504 => {
-                if remaining_retries == 0 {
-                    return Err(response.error_for_status().unwrap_err().into());
-                }
-                remaining_retries -= 1;
-                drop(permit);
-                sleep(client.retry_delay_v1).await;
-                continue;
-            }
-            400 => {
-                // For 400s, the symbols server returns an error message.
-                let server_error: ServerError = response.json().await?;
-                return Err(Error::SymbolsServerBadRequest(server_error.error));
-            }
-            _ => {}
-        }
-        response.error_for_status_ref()?;
-        let upload_response: UploadResponse = response.json().await?;
-        debug!(
-            "v1 upload request successful after {} attempt(s)",
-            client.retries_v1 + 1 - remaining_retries
-        );
-        return Ok(upload_response);
+impl Client {
+    #[instrument(skip(self))]
+    async fn upload_zip_archive(self, path: PathBuf) -> Result<UploadResponse> {
+        // We know the file name is of the form `symbols-{i}.zip`. So we can unwrap the result of
+        // `file_name()`, as there must be a file name. We can also unwrap the result of to_str(),
+        // since the file name only contain ASCII characters.
+        let file_name = String::from(path.file_name().unwrap().to_str().unwrap());
+        self.retry
+            .request(async move || {
+                let form = multipart::Form::new()
+                    .file(file_name.clone(), &path)
+                    .await?;
+                let request = self.base.request(Method::POST, "upload/").multipart(form);
+                Ok(request)
+            })
+            .await
     }
-}
-
-#[derive(Deserialize)]
-struct ServerError {
-    error: String,
 }
 
 #[derive(Deserialize)]

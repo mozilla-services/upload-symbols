@@ -5,7 +5,7 @@ use clap::{
 };
 use std::{env::VarError, path::PathBuf, process::ExitCode};
 use tracing_subscriber::{EnvFilter, fmt::format::FmtSpan};
-use upload_symbols::{Client, ClientBuilder};
+use upload_symbols::ClientBuilder;
 
 /// Upload symbols files to the Mozilla Symbols Server.
 ///
@@ -36,8 +36,7 @@ fn main() -> Result<ExitCode> {
     let _guard = setup_sentry();
     setup_tracing();
     let args = Args::parse();
-    let client = args.client_builder.build()?;
-    upload_directory(client, args.directory)
+    upload_directory(args)
 }
 
 fn setup_sentry() -> Result<Option<sentry::ClientInitGuard>> {
@@ -66,9 +65,10 @@ fn setup_tracing() {
 }
 
 #[tokio::main]
-async fn upload_directory(client: Client, directory: PathBuf) -> Result<ExitCode> {
-    println!("Uploading symbols files in {}...", directory.display());
-    let summary = client.upload_directory(directory).await?;
+async fn upload_directory(args: Args) -> Result<ExitCode> {
+    let client = args.client_builder.build().await?;
+    println!("Uploading symbols files in {}...", args.directory.display());
+    let summary = client.upload_directory(args.directory).await?;
     if !summary.upload_errors.is_empty() {
         eprintln!("\nerror: the following keys failed to upload:");
         for key in &summary.failed_keys {

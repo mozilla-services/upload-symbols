@@ -7,10 +7,7 @@ use reqwest::Url;
 use std::{
     fmt::Debug,
     path::{Path, PathBuf},
-    sync::Arc,
-    time::Duration,
 };
-use tokio::sync::Semaphore;
 use tracing::instrument;
 
 /// Errors that may occur while uploading symbols.
@@ -26,19 +23,15 @@ pub enum Error {
     ZipError(#[from] zip::result::ZipError),
     #[error("error sending HTTP request: {0}")]
     ReqwestError(#[from] reqwest::Error),
-    #[error("bad request to symbols server: {0}")]
-    SymbolsServerBadRequest(String),
+    #[error("status {status} response from symbols server: {msg}")]
+    SymbolsServer4xx { status: u16, msg: String },
+    #[error("upload client not implemented: {0:?}")]
+    NotImplemented(UploadApiVersion),
 }
 
 type Result<T> = std::result::Result<T, Error>;
 
-// Update the docstrings of the `ClientBuilder` methods when changing these defaults.
-const DEFAULT_MAX_CONNECTIONS_V1: u32 = 3;
-const DEFAULT_ZIP_SIZE_THRESHOLD_V1: u64 = 1 << 26; // 64 MiB
-const DEFAULT_RETRIES_V1: usize = 5;
-const DEFAULT_RETRY_DELAY_SECONDS_V1: u64 = 60;
-
-/// The Mozill Symbols Server upload client.
+/// The Mozilla Symbols Server upload client.
 ///
 /// The main functionality is provided by the [`Client::upload_directory`] method.
 ///
@@ -46,15 +39,12 @@ const DEFAULT_RETRY_DELAY_SECONDS_V1: u64 = 60;
 /// (which uses [`Arc`] internally) and the limit on concurrent connections to the server.
 #[derive(Clone, Debug)]
 pub struct Client {
-    client: reqwest::Client,
-    base_url: Url,
-    auth_token: String,
-    /// The current upload API doesn't handle load spikes gracefully, so we limit the number
-    /// of concurrent connections.
-    conn_limit_upload_v1: Arc<Semaphore>,
-    zip_size_threshold_v1: u64,
-    retries_v1: usize,
-    retry_delay_v1: Duration,
+    inner: ClientInner,
+}
+
+#[derive(Clone, Debug)]
+enum ClientInner {
+    V1(v1::Client),
 }
 
 impl Client {
@@ -64,10 +54,8 @@ impl Client {
             client: None,
             base_url: None,
             auth_token: auth_token.into(),
-            max_connections_v1: DEFAULT_MAX_CONNECTIONS_V1,
-            zip_size_threshold_v1: DEFAULT_ZIP_SIZE_THRESHOLD_V1,
-            retries_v1: DEFAULT_RETRIES_V1,
-            retry_delay_seconds_v1: DEFAULT_RETRY_DELAY_SECONDS_V1,
+            upload_api_version: UploadApiVersion::Auto,
+            v1: Default::default(),
         }
     }
 
@@ -83,18 +71,18 @@ impl Client {
         if !path.is_dir() {
             return Err(Error::NotADirectory(path));
         }
-        v1::upload_directory(self, &path).await
+        match self.inner {
+            ClientInner::V1(ref inner) => inner.upload_directory(path).await,
+        }
     }
+}
 
-    /// Perform an authenticated request to the symbols server.
-    fn request(&self, method: reqwest::Method, path: &str) -> reqwest::RequestBuilder {
-        self.client
-            // We validate the URL in the builder to make sure it can be used as a base URL.
-            // The `path` is a hardcoded string from this library, so `join()` can't return an
-            // error here and we can unwrap.
-            .request(method, self.base_url.join(path).unwrap())
-            .header("auth-token", &self.auth_token)
-    }
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "clap", derive(clap::ValueEnum))]
+pub enum UploadApiVersion {
+    Auto,
+    V1,
+    V2,
 }
 
 /// A configurable builder for a [`Client`].
@@ -117,32 +105,15 @@ pub struct ClientBuilder {
     )]
     auth_token: String,
 
-    /// The maximum number of concurrent uploads using the v1 upload API.
-    #[cfg_attr(feature = "clap", arg(
-        long,
-        default_value_t = DEFAULT_MAX_CONNECTIONS_V1,
-        value_parser = clap::value_parser!(u32).range(1..=16)
-    ))]
-    max_connections_v1: u32,
-
-    /// Set the ZIP archive size threshold in bytes.
+    /// The upload API version to use.
     ///
-    /// When building ZIP archives for v1 of the upload API, a new archive is started once the
-    /// size of the current archive exceeds this threshold. ZIP archives still can get much
-    /// bigger than this value since member files can be big.
-    #[cfg_attr(feature = "clap", arg(long, default_value_t = DEFAULT_ZIP_SIZE_THRESHOLD_V1))]
-    zip_size_threshold_v1: u64,
+    /// By default, the version is automatically detected by asking the server.
+    #[cfg_attr(feature = "clap", arg(long, value_enum, default_value_t = UploadApiVersion::Auto))]
+    upload_api_version: UploadApiVersion,
 
-    /// Set the number of retries for the version 1 upload API.
-    ///
-    /// On retriable status codes, uploading ZIP archives is retried this number of times, in
-    /// addition to the original request. A value of 0 disables retrying.
-    #[cfg_attr(feature = "clap", arg(long, default_value_t = DEFAULT_RETRIES_V1))]
-    retries_v1: usize,
-
-    /// Set the delay in seconds between retries for version 1 of the upload API.
-    #[cfg_attr(feature = "clap", arg(long, default_value_t = DEFAULT_RETRY_DELAY_SECONDS_V1))]
-    retry_delay_seconds_v1: u64,
+    /// Settings for the v1 upload API.
+    #[cfg_attr(feature = "clap", command(flatten))]
+    v1: v1::Config,
 }
 
 impl ClientBuilder {
@@ -150,20 +121,24 @@ impl ClientBuilder {
     ///
     /// This can fail if no `http_client` was provided and building the default
     /// [`reqwest::Client`] fails.
-    pub fn build(self) -> Result<Client> {
-        let client = Client {
-            client: match self.client {
-                Some(client) => client,
-                None => reqwest::Client::builder().user_agent(USER_AGENT).build()?,
-            },
-            base_url: Self::validate_base_url(self.base_url)?,
-            auth_token: self.auth_token,
-            conn_limit_upload_v1: Arc::new(Semaphore::new(self.max_connections_v1 as _)),
-            zip_size_threshold_v1: self.zip_size_threshold_v1,
-            retries_v1: self.retries_v1,
-            retry_delay_v1: Duration::from_secs(self.retry_delay_seconds_v1),
+    pub async fn build(self) -> Result<Client> {
+        let client = match self.client {
+            Some(client) => client,
+            None => reqwest::Client::builder().user_agent(USER_AGENT).build()?,
         };
-        Ok(client)
+        let base_url = Self::validate_base_url(self.base_url)?;
+        let base = base::Client::new(client, base_url, self.auth_token);
+        let auth_info = base.get_auth_info().await?;
+        let inner = match (self.upload_api_version, auth_info.upload_api_version) {
+            (UploadApiVersion::V1, _) | (UploadApiVersion::Auto, 1) => {
+                ClientInner::V1(v1::Client::new(base, self.v1))
+            }
+            (UploadApiVersion::V2, _) | (UploadApiVersion::Auto, 2) => {
+                return Err(Error::NotImplemented(UploadApiVersion::V2));
+            }
+            _ => unreachable!("invalid API version returned by Symbols Server"),
+        };
+        Ok(Client { inner })
     }
 
     // This function ensures that the base URL actually is an absolute URL with an http(s)
@@ -207,7 +182,7 @@ impl ClientBuilder {
     /// The default is 3. Panics if `max_connections` is 0.
     pub fn max_connections_v1(mut self, max_connections_v1: u32) -> Self {
         assert_ne!(max_connections_v1, 0, "must allow at least one connection");
-        self.max_connections_v1 = max_connections_v1;
+        self.v1.max_connections_v1 = max_connections_v1;
         self
     }
 
@@ -219,7 +194,7 @@ impl ClientBuilder {
     ///
     /// The default is 64 MiB.
     pub fn zip_size_threshold_v1(mut self, zip_size_threshold_v1: u64) -> Self {
-        self.zip_size_threshold_v1 = zip_size_threshold_v1;
+        self.v1.zip_size_threshold_v1 = zip_size_threshold_v1;
         self
     }
 
@@ -230,7 +205,7 @@ impl ClientBuilder {
     ///
     /// The default is 5.
     pub fn retries_v1(mut self, retries_v1: usize) -> Self {
-        self.retries_v1 = retries_v1;
+        self.v1.retries_v1 = retries_v1;
         self
     }
 
@@ -238,7 +213,7 @@ impl ClientBuilder {
     ///
     /// The default is 60 seconds.
     pub fn retry_delay_v1_seconds(mut self, retry_delay_v1_seconds: u64) -> Self {
-        self.retry_delay_seconds_v1 = retry_delay_v1_seconds;
+        self.v1.retry_delay_seconds_v1 = retry_delay_v1_seconds;
         self
     }
 }
@@ -266,6 +241,7 @@ impl UploadSummary {
 
 static USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"),);
 
+mod base;
 pub mod sym_files;
 mod v1;
 

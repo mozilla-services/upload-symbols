@@ -13,6 +13,7 @@ use std::{
     collections::HashSet,
     io::Cursor,
     sync::{Arc, Mutex, MutexGuard},
+    time::UNIX_EPOCH,
 };
 use tokio::{net::TcpListener, sync::oneshot};
 use url::Url;
@@ -30,6 +31,7 @@ impl FakeTecken {
         let uploaded_files = Arc::new(Mutex::new(HashSet::new()));
         let app = Router::new()
             .route("/upload/", post(upload))
+            .route("/upload/auth_info/", post(auth_info))
             .with_state(Arc::clone(&uploaded_files));
         let listener = TcpListener::bind(("127.0.0.1", 0)).await.unwrap();
         let port = listener.local_addr().unwrap().port();
@@ -100,4 +102,21 @@ struct UploadResponse {
 #[derive(Serialize)]
 struct Upload {
     skipped_keys: Vec<String>,
+}
+
+async fn auth_info() -> Result<Json<AuthInfo>, StatusCode> {
+    Ok(Json(AuthInfo {
+        email: "user@mozilla.com".to_string(),
+        try_symbols: false,
+        token_expires_at: UNIX_EPOCH.elapsed().unwrap().as_secs() + 86_400,
+        upload_api_version: 1,
+    }))
+}
+
+#[derive(Serialize)]
+pub struct AuthInfo {
+    email: String,
+    try_symbols: bool,
+    token_expires_at: u64,
+    upload_api_version: u32,
 }
