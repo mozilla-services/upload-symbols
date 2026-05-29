@@ -36,7 +36,7 @@ type Result<T> = std::result::Result<T, Error>;
 /// The main functionality is provided by the [`Client::upload_directory`] method.
 ///
 /// Clients are relatively cheap to clone. Clones will share the underlying [`reqwest::Client`]
-/// (which uses [`Arc`] internally) and the limit on concurrent connections to the server.
+/// (which uses `Arc` internally) and the limit on concurrent connections to the server.
 #[derive(Clone, Debug)]
 pub struct Client {
     inner: ClientInner,
