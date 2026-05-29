@@ -12,7 +12,7 @@ use tokio::{
     sync::mpsc,
     task::{JoinSet, spawn_blocking},
 };
-use tracing::{field, info_span, instrument};
+use tracing::{Instrument, Span, field, info_span, instrument};
 use zip::{CompressionMethod, ZipWriter};
 
 // Update the docstrings of the `ClientBuilder` methods when changing these defaults.
@@ -103,14 +103,20 @@ impl Client {
         let temp_dir = tempdir::TempDir::new("upload-symbols.")?;
         let temp_path = temp_dir.path().to_path_buf();
         let zip_size_threshold = self.zip_size_threshold;
-        let create_zip_handle =
-            spawn_blocking(move || create_zip_archives(tx, root, temp_path, zip_size_threshold));
+        let span = Span::current();
+        let create_zip_handle = spawn_blocking(move || {
+            span.in_scope(|| create_zip_archives(tx, root, temp_path, zip_size_threshold))
+        });
 
         // Upload ZIP archives as they get created.
         let mut set = JoinSet::new();
         while let Some((zip_archive_path, zip_keys)) = rx.recv().await {
             let client = self.clone();
-            set.spawn(async move { (client.upload_zip_archive(zip_archive_path).await, zip_keys) });
+            let span = Span::current();
+            set.spawn(
+                async move { (client.upload_zip_archive(zip_archive_path).await, zip_keys) }
+                    .instrument(span),
+            );
         }
 
         // Unwrap the outer JoinError. This will basically propagate panics.
@@ -240,13 +246,14 @@ impl ZipArchive {
 }
 
 impl Client {
-    #[instrument(skip(self))]
+    #[instrument(skip(self), fields(upload_id = field::Empty))]
     async fn upload_zip_archive(self, path: PathBuf) -> Result<UploadResponse> {
         // We know the file name is of the form `symbols-{i}.zip`. So we can unwrap the result of
         // `file_name()`, as there must be a file name. We can also unwrap the result of to_str(),
         // since the file name only contain ASCII characters.
         let file_name = String::from(path.file_name().unwrap().to_str().unwrap());
-        self.retry
+        let upload_response: UploadResponse = self
+            .retry
             .request(async move || {
                 let form = multipart::Form::new()
                     .file(file_name.clone(), &path)
@@ -254,7 +261,9 @@ impl Client {
                 let request = self.base.request(Method::POST, "upload/").multipart(form);
                 Ok(request)
             })
-            .await
+            .await?;
+        Span::current().record("upload_id", upload_response.upload.id);
+        Ok(upload_response)
     }
 }
 
@@ -265,5 +274,6 @@ struct UploadResponse {
 
 #[derive(Deserialize)]
 struct Upload {
+    id: u32,
     skipped_keys: HashSet<String>,
 }
