@@ -113,12 +113,12 @@ impl Retry {
         let mut remaining_retries = self.retries;
         let mut delay = self.delay;
         loop {
-            let request = prepare().await?;
             let permit = match self.conn_limit {
                 // We know the semaphore hasn't been closed, so we can unwrap.
                 Some(ref semaphore) => Some(semaphore.acquire().await.unwrap()),
                 None => None,
             };
+            let request = prepare().await?;
             let response = request
                 .send()
                 .instrument(debug_span!("Symbols Server request"))
