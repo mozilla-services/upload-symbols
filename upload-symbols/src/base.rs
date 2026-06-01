@@ -1,5 +1,5 @@
 use crate::Error;
-use reqwest::{Method, Url};
+use reqwest::{Method, Url, header::HeaderValue};
 use serde::{Deserialize, Deserializer, de::DeserializeOwned};
 use std::{
     collections::HashMap,
@@ -13,11 +13,11 @@ use tracing::{Instrument, debug, debug_span, instrument};
 pub struct Client {
     client: reqwest::Client,
     base_url: Url,
-    auth_token: String,
+    auth_token: HeaderValue,
 }
 
 impl Client {
-    pub fn new(client: reqwest::Client, base_url: Url, auth_token: String) -> Self {
+    pub fn new(client: reqwest::Client, base_url: Url, auth_token: HeaderValue) -> Self {
         Self {
             client,
             base_url,

@@ -3,7 +3,7 @@
 //! This library provides a [`Client`] to upload a directory of files to the [Mozilla Symbols
 //! Server](https://symbols.mozilla.org/).
 
-use reqwest::Url;
+use reqwest::{Url, header::HeaderValue};
 use std::{
     fmt::Debug,
     path::{Path, PathBuf},
@@ -27,6 +27,8 @@ pub enum Error {
     SymbolsServer4xx { status: u16, msg: String },
     #[error("upload client not implemented: {0:?}")]
     NotImplemented(UploadApiVersion),
+    #[error("auth token must contain only hex digits")]
+    InvalidAuthToken,
 }
 
 type Result<T> = std::result::Result<T, Error>;
@@ -140,7 +142,13 @@ impl ClientBuilder {
             None => reqwest::Client::builder().user_agent(USER_AGENT).build()?,
         };
         let base_url = Self::validate_base_url(self.base_url)?;
-        let base = base::Client::new(client, base_url, self.auth_token);
+        if self.auth_token.chars().any(|c| !c.is_ascii_hexdigit()) {
+            return Err(Error::InvalidAuthToken);
+        }
+        // We already know the auth token only contains hex digits, so we can unwrap.
+        let mut auth_token: HeaderValue = self.auth_token.try_into().unwrap();
+        auth_token.set_sensitive(true);
+        let base = base::Client::new(client, base_url, auth_token);
         let auth_info = base.get_auth_info().await?;
         let inner = match (self.upload_api_version, auth_info.upload_api_version) {
             (UploadApiVersion::V1, _) | (UploadApiVersion::Auto, 1) => {
@@ -252,7 +260,7 @@ impl UploadSummary {
     }
 }
 
-static USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"),);
+static USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
 
 mod base;
 pub mod sym_files;
