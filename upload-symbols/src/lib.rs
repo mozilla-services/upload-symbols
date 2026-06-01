@@ -107,7 +107,6 @@ const DEFAULT_CONNECT_TIMEOUT_SECONDS: u64 = 10;
 const DEFAULT_READ_TIMEOUT_SECONDS: u64 = 600;
 
 /// A configurable builder for a [`Client`].
-#[derive(Debug)]
 #[cfg_attr(feature = "clap", derive(clap::Args))]
 pub struct ClientBuilder {
     #[cfg_attr(feature = "clap", arg(skip))]
@@ -152,6 +151,21 @@ pub struct ClientBuilder {
     /// Settings for the v1 upload API.
     #[cfg_attr(feature = "clap", command(flatten))]
     v1: v1::Config,
+}
+
+// Add custom Debug implementation to redact the auth_token.
+impl Debug for ClientBuilder {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("ClientBuilder")
+            .field("client", &self.client)
+            .field("base_url", &self.base_url)
+            .field("auth_token", &"<redacted>")
+            .field("upload_api_version", &self.upload_api_version)
+            .field("connect_timeout_seconds", &self.connect_timeout_seconds)
+            .field("read_timeout_seconds", &self.read_timeout_seconds)
+            .field("v1", &self.v1)
+            .finish()
+    }
 }
 
 impl ClientBuilder {
