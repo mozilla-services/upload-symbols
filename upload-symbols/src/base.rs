@@ -40,7 +40,7 @@ impl Client {
             .delay_seconds(2)
             .delay_factor(1.5)
             .build()
-            .request(async move || Ok(self.request(Method::POST, "/upload/auth_info/")))
+            .request(async move || Ok(self.request(Method::POST, "upload/auth_info/")))
             .await
     }
 }
