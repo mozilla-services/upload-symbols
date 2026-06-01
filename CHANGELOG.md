@@ -1,4 +1,4 @@
-# Unreleased
+# Version 0.3.0 (2026-06-02)
 
 This release is the first feature-complete version with support for version 1 of the Mozilla Symbols Server upload API.
 
