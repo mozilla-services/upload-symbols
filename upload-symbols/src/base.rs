@@ -1,5 +1,5 @@
 use crate::Error;
-use reqwest::{Method, Url};
+use reqwest::{Method, Url, header::HeaderValue};
 use serde::{Deserialize, Deserializer, de::DeserializeOwned};
 use std::{
     collections::HashMap,
@@ -13,11 +13,11 @@ use tracing::{Instrument, debug, debug_span, instrument};
 pub struct Client {
     client: reqwest::Client,
     base_url: Url,
-    auth_token: String,
+    auth_token: HeaderValue,
 }
 
 impl Client {
-    pub fn new(client: reqwest::Client, base_url: Url, auth_token: String) -> Self {
+    pub fn new(client: reqwest::Client, base_url: Url, auth_token: HeaderValue) -> Self {
         Self {
             client,
             base_url,
@@ -40,7 +40,7 @@ impl Client {
             .delay_seconds(2)
             .delay_factor(1.5)
             .build()
-            .request(async move || Ok(self.request(Method::POST, "/upload/auth_info/")))
+            .request(async move || Ok(self.request(Method::POST, "upload/auth_info/")))
             .await
     }
 }
@@ -113,12 +113,12 @@ impl Retry {
         let mut remaining_retries = self.retries;
         let mut delay = self.delay;
         loop {
-            let request = prepare().await?;
             let permit = match self.conn_limit {
                 // We know the semaphore hasn't been closed, so we can unwrap.
                 Some(ref semaphore) => Some(semaphore.acquire().await.unwrap()),
                 None => None,
             };
+            let request = prepare().await?;
             let response = request
                 .send()
                 .instrument(debug_span!("Symbols Server request"))

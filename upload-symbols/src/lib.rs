@@ -3,10 +3,11 @@
 //! This library provides a [`Client`] to upload a directory of files to the [Mozilla Symbols
 //! Server](https://symbols.mozilla.org/).
 
-use reqwest::Url;
+use reqwest::{Url, header::HeaderValue, tls};
 use std::{
     fmt::Debug,
     path::{Path, PathBuf},
+    time::Duration,
 };
 use tracing::{info, instrument};
 
@@ -27,6 +28,8 @@ pub enum Error {
     SymbolsServer4xx { status: u16, msg: String },
     #[error("upload client not implemented: {0:?}")]
     NotImplemented(UploadApiVersion),
+    #[error("auth token must contain only hex digits")]
+    InvalidAuthToken,
 }
 
 type Result<T> = std::result::Result<T, Error>;
@@ -58,6 +61,8 @@ impl Client {
             base_url: None,
             auth_token: auth_token.into(),
             upload_api_version: UploadApiVersion::Auto,
+            connect_timeout_seconds: DEFAULT_CONNECT_TIMEOUT_SECONDS,
+            read_timeout_seconds: DEFAULT_READ_TIMEOUT_SECONDS,
             v1: Default::default(),
         }
     }
@@ -98,8 +103,10 @@ pub enum UploadApiVersion {
     V2,
 }
 
+const DEFAULT_CONNECT_TIMEOUT_SECONDS: u64 = 10;
+const DEFAULT_READ_TIMEOUT_SECONDS: u64 = 600;
+
 /// A configurable builder for a [`Client`].
-#[derive(Debug)]
 #[cfg_attr(feature = "clap", derive(clap::Args))]
 pub struct ClientBuilder {
     #[cfg_attr(feature = "clap", arg(skip))]
@@ -124,9 +131,41 @@ pub struct ClientBuilder {
     #[cfg_attr(feature = "clap", arg(long, value_enum, default_value_t = UploadApiVersion::Auto))]
     upload_api_version: UploadApiVersion,
 
+    /// Set the connect timeout for HTTP connections.
+    ///
+    /// This timeout only covers establishing a TCP connection to the server, and not
+    /// transferring any data. The default is 10 seconds.
+    #[cfg_attr(feature = "clap", arg(long, default_value_t = DEFAULT_CONNECT_TIMEOUT_SECONDS))]
+    connect_timeout_seconds: u64,
+
+    /// Set the socket read timeout for HTTP connections.
+    ///
+    /// This is the timeout for individual read operations on the socket. It does not establish
+    /// a total timeout for reading the entire response.
+    ///
+    /// The default value is 600 seconds to account for the long processing times upload API v1
+    /// requires to process uploaded ZIP archives.
+    #[cfg_attr(feature = "clap", arg(long, default_value_t = DEFAULT_READ_TIMEOUT_SECONDS))]
+    read_timeout_seconds: u64,
+
     /// Settings for the v1 upload API.
     #[cfg_attr(feature = "clap", command(flatten))]
     v1: v1::Config,
+}
+
+// Add custom Debug implementation to redact the auth_token.
+impl Debug for ClientBuilder {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("ClientBuilder")
+            .field("client", &self.client)
+            .field("base_url", &self.base_url)
+            .field("auth_token", &"<redacted>")
+            .field("upload_api_version", &self.upload_api_version)
+            .field("connect_timeout_seconds", &self.connect_timeout_seconds)
+            .field("read_timeout_seconds", &self.read_timeout_seconds)
+            .field("v1", &self.v1)
+            .finish()
+    }
 }
 
 impl ClientBuilder {
@@ -137,10 +176,21 @@ impl ClientBuilder {
     pub async fn build(self) -> Result<Client> {
         let client = match self.client {
             Some(client) => client,
-            None => reqwest::Client::builder().user_agent(USER_AGENT).build()?,
+            None => reqwest::Client::builder()
+                .user_agent(USER_AGENT)
+                .connect_timeout(Duration::from_secs(self.connect_timeout_seconds))
+                .read_timeout(Duration::from_secs(self.read_timeout_seconds))
+                .tls_version_min(tls::Version::TLS_1_2)
+                .build()?,
         };
         let base_url = Self::validate_base_url(self.base_url)?;
-        let base = base::Client::new(client, base_url, self.auth_token);
+        if self.auth_token.chars().any(|c| !c.is_ascii_hexdigit()) {
+            return Err(Error::InvalidAuthToken);
+        }
+        // We already know the auth token only contains hex digits, so we can unwrap.
+        let mut auth_token: HeaderValue = self.auth_token.try_into().unwrap();
+        auth_token.set_sensitive(true);
+        let base = base::Client::new(client, base_url, auth_token);
         let auth_info = base.get_auth_info().await?;
         let inner = match (self.upload_api_version, auth_info.upload_api_version) {
             (UploadApiVersion::V1, _) | (UploadApiVersion::Auto, 1) => {
@@ -179,6 +229,24 @@ impl ClientBuilder {
     /// The client should have a meaningful custom user agent string.
     pub fn http_client(mut self, client: reqwest::Client) -> Self {
         self.client = Some(client);
+        self
+    }
+
+    /// Set the connect timeout for HTTP connections.
+    ///
+    /// This timeout only covers establishing a TCP connection to the server, and not
+    /// transferring any data. The default is 10 seconds.
+    pub fn connect_timeout_seconds(mut self, connect_timeout_seconds: u64) -> Self {
+        self.connect_timeout_seconds = connect_timeout_seconds;
+        self
+    }
+
+    /// Set the socket read timeout for HTTP connections.
+    ///
+    /// This is the timeout for individual read operations on the socket. It does not establish
+    /// a total timeout for reading the entire response.
+    pub fn read_timeout_seconds(mut self, read_timeout_seconds: u64) -> Self {
+        self.read_timeout_seconds = read_timeout_seconds;
         self
     }
 
@@ -252,7 +320,7 @@ impl UploadSummary {
     }
 }
 
-static USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"),);
+static USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
 
 mod base;
 pub mod sym_files;

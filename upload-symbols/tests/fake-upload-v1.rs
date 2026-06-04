@@ -22,7 +22,7 @@ async fn upload_directory() {
 
     // Create a fake symbols server and a client.
     let tecken = fake_tecken::FakeTecken::new().await;
-    let client = Client::builder("fake_auth_token")
+    let client = Client::builder("123456789")
         .base_url(tecken.url())
         .zip_size_threshold_v1(1 << 20) // 1 MiB
         .build()
