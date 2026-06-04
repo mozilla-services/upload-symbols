@@ -8,7 +8,7 @@ use std::{
     fmt::Debug,
     path::{Path, PathBuf},
 };
-use tracing::instrument;
+use tracing::{info, instrument};
 
 /// Errors that may occur while uploading symbols.
 #[derive(Debug, thiserror::Error)]
@@ -36,7 +36,7 @@ type Result<T> = std::result::Result<T, Error>;
 /// The main functionality is provided by the [`Client::upload_directory`] method.
 ///
 /// Clients are relatively cheap to clone. Clones will share the underlying [`reqwest::Client`]
-/// (which uses [`Arc`] internally) and the limit on concurrent connections to the server.
+/// (which uses `Arc` internally) and the limit on concurrent connections to the server.
 #[derive(Clone, Debug)]
 pub struct Client {
     inner: ClientInner,
@@ -74,9 +74,15 @@ impl Client {
         if !path.is_dir() {
             return Err(Error::NotADirectory(path));
         }
-        match self.inner {
-            ClientInner::V1(ref inner) => inner.upload_directory(path).await,
-        }
+        let summary = match self.inner {
+            ClientInner::V1(ref inner) => inner.upload_directory(path).await?,
+        };
+        info!(monotonic_counter.files_uploaded = summary.uploaded_keys.len());
+        info!(monotonic_counter.files_skipped = summary.skipped_keys.len());
+        info!(monotonic_counter.files_failed = summary.failed_keys.len());
+        info!(monotonic_counter.discovery_errors = summary.discovery_errors.len());
+        info!(monotonic_counter.upload_errors = summary.upload_errors.len());
+        Ok(summary)
     }
 
     pub fn auth_info(&self) -> &AuthInfo {

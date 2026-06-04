@@ -27,10 +27,11 @@ repository.workspace = true
 [dependencies]
 anyhow = { workspace = true }
 clap = { workspace = true }
-opentelemetry = { version = "0.32.0", default-features = false, features = ["trace"] }
-opentelemetry-otlp = { version = "0.32.0", default-features = false, features = ["trace", "http-proto", "reqwest-blocking-client"] }
+libc = "0.2.186"
+opentelemetry = { version = "0.32.0", default-features = false, features = ["metrics", "trace"] }
+opentelemetry-otlp = { version = "0.32.0", default-features = false, features = ["trace", "http-proto", "reqwest-blocking-client", "metrics"] }
 opentelemetry-semantic-conventions = "0.32.0"
-opentelemetry_sdk = { version = "0.32.0", default-features = false, features = ["trace"] }
+opentelemetry_sdk = { version = "0.32.0", default-features = false, features = ["metrics", "trace"] }
 reqwest = { workspace = true }
 sentry = { version = "0.48.0", default-features = false, features = ["backtrace", "contexts", "panic", "reqwest", "rustls"] }
 tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }

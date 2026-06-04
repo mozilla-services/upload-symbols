@@ -16,7 +16,7 @@ use upload_symbols::{ClientBuilder, OpenTelemetryConfig};
 ///
 /// All symbols files in the source directory are discovered and uploaded to the Mozilla
 /// Symbols Server. You need an authentication token with upload permissions for the server you
-/// are uploading to and sore it in the `SYMBOLS_AUTH_TOKEN` environment variable.
+/// are uploading to and store it in the `SYMBOLS_AUTH_TOKEN` environment variable.
 #[derive(Debug, Parser)]
 #[command(styles = CLAP_STYLES)]
 struct Args {

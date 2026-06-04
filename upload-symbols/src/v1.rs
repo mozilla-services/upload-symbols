@@ -12,7 +12,7 @@ use tokio::{
     sync::mpsc,
     task::{JoinSet, spawn_blocking},
 };
-use tracing::{Instrument, Span, field, info_span, instrument};
+use tracing::{Instrument, Span, field, info, info_span, instrument};
 use zip::{CompressionMethod, ZipWriter};
 
 // Update the docstrings of the `ClientBuilder` methods when changing these defaults.
@@ -131,6 +131,7 @@ impl Client {
             let (upload_result, zip_keys) = join_result.unwrap();
             match upload_result {
                 Ok(UploadResponse { upload }) => {
+                    info!(monotonic_counter.zip_archives_uploaded = 1);
                     let not_skipped = zip_keys
                         .into_iter()
                         .filter(|key| !upload.skipped_keys.contains(key));
@@ -138,6 +139,7 @@ impl Client {
                     skipped_keys.extend(upload.skipped_keys);
                 }
                 Err(e) => {
+                    info!(monotonic_counter.zip_archive_upload_failed = 1);
                     failed_keys.extend(zip_keys);
                     upload_errors.push(e);
                 }
@@ -237,7 +239,10 @@ impl ZipArchive {
 
     fn finish(self, tx: &mpsc::Sender<(PathBuf, Vec<String>)>) -> zip::result::ZipResult<()> {
         let mut file = self.writer.finish()?;
-        self.span.record("size", file.stream_position()?);
+        let size = file.stream_position()?;
+        self.span.record("size", size);
+        info!(monotonic_counter.zip_archives_created = 1);
+        info!(monotonic_counter.zip_archives_created_bytes = size);
         self.span.exit();
         // We know the receiver hasn't hung up yet, so we can unwrap.
         tx.blocking_send((self.path, self.keys)).unwrap();
