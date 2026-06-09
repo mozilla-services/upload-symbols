@@ -6,7 +6,7 @@
 use std::{collections::HashSet, fs::create_dir_all, os::unix::fs::symlink};
 use upload_symbols::{Client, sym_files};
 
-static TEST_DATA_PATH: &str = "../tests/data/linux";
+static TEST_DATA_PATH: &str = "../../tests/data/linux";
 
 #[tokio::test]
 async fn upload_directory() {

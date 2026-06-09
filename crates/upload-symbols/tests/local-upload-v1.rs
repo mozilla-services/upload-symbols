@@ -20,7 +20,7 @@ async fn upload_directory_locally() {
         .await
         .unwrap();
     let summary = client
-        .upload_directory("../tests/data/linux")
+        .upload_directory("../../tests/data/linux")
         .await
         .unwrap();
     let successful_keys: HashSet<String> = summary
