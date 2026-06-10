@@ -6,7 +6,7 @@ use std::{
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
 use tokio::{sync::Semaphore, time::sleep};
-use tracing::{Instrument, debug, debug_span, instrument};
+use tracing::{Instrument, debug, info_span, instrument};
 
 /// The base client with commmon functionality for both versions of the upload API.
 #[derive(Clone, Debug)]
@@ -121,7 +121,7 @@ impl Retry {
             let request = prepare().await?;
             let response = request
                 .send()
-                .instrument(debug_span!("Symbols Server request"))
+                .instrument(info_span!("Symbols Server request"))
                 .await?;
             let status = response.status().as_u16();
             debug!("Symbols Server request status {status}");
