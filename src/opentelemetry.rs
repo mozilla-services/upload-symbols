@@ -5,7 +5,7 @@ use opentelemetry_otlp::{
 };
 use opentelemetry_sdk::{Resource, metrics::SdkMeterProvider, trace::SdkTracerProvider};
 use opentelemetry_semantic_conventions::resource::SERVICE_VERSION;
-use std::ffi::CStr;
+use std::{ffi::CStr, time::Duration};
 use tracing::{Subscriber, level_filters::LevelFilter};
 use tracing_opentelemetry::MetricsLayer;
 use tracing_subscriber::{filter::Targets, layer::Layer, registry::LookupSpan};
@@ -51,8 +51,11 @@ pub struct Guard {
 impl Guard {
     /// Shut down all OTel providers to flush all remaining data to the collector.
     pub fn shutdown(&self) -> Result<()> {
-        self.tracer_provider.shutdown()?;
-        self.meter_provider.shutdown()?;
+        // The default shutdown timeout is five seconds.
+        self.tracer_provider
+            .shutdown_with_timeout(Duration::from_secs(10))?;
+        self.meter_provider
+            .shutdown_with_timeout(Duration::from_secs(10))?;
         Ok(())
     }
 }
