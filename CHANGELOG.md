@@ -1,3 +1,7 @@
+# Version 0.3.1 (2026-06-10)
+
+This release contains minor telemetry fixes and some dependency upgrades.
+
 # Version 0.3.0 (2026-06-02)
 
 This release is the first feature-complete version with support for version 1 of the Mozilla Symbols Server upload API.
