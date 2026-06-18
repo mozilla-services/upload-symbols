@@ -73,6 +73,8 @@ pub enum InvalidKeyError {
     InvalidCharacters(String),
     #[error("error while traversing diretory tree")]
     WalkDirError(#[from] walkdir::Error),
+    #[error("empty file: {0}")]
+    EmptyFile(PathBuf),
 }
 
 /// Discover all symbols files in a directory.
@@ -122,6 +124,13 @@ impl Iterator for Discovery {
                     // This is also true for symlinks; `entry.path()` still returns the path of
                     // the link, not the path of the target.
                     let rel_path = entry.path().strip_prefix(&self.root).unwrap();
+                    let metadata = match entry.metadata() {
+                        Ok(metadata) => metadata,
+                        Err(e) => return Some(Err(InvalidKeyError::from(e))),
+                    };
+                    if metadata.len() == 0 {
+                        return Some(Err(InvalidKeyError::EmptyFile(rel_path.into())));
+                    }
                     if entry.depth() != 3 {
                         // Everything that isn't exactly at depth 3 is not of the form
                         // `<debug_file>/<debug_id>/<symbols_file>`.
