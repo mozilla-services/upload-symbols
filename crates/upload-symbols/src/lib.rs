@@ -30,6 +30,12 @@ pub enum Error {
     NotImplemented(UploadApiVersion),
     #[error("auth token must contain only hex digits")]
     InvalidAuthToken,
+    #[error("missing range header in GCS response")]
+    MissingRangeHeader,
+    #[error("invalid range header in GCS response: {0:?}")]
+    InvalidRangeHeader(HeaderValue),
+    #[error("invalid Symbols Server response: {msg}")]
+    InvalidSymbolsServerResponse { msg: String },
 }
 
 type Result<T> = std::result::Result<T, Error>;
@@ -49,6 +55,7 @@ pub struct Client {
 #[derive(Clone, Debug)]
 enum ClientInner {
     V1(v1::Client),
+    V2(v2::Client),
 }
 
 pub use base::{AuthInfo, OpenTelemetryConfig};
@@ -64,6 +71,7 @@ impl Client {
             connect_timeout_seconds: DEFAULT_CONNECT_TIMEOUT_SECONDS,
             read_timeout_seconds: DEFAULT_READ_TIMEOUT_SECONDS,
             v1: Default::default(),
+            v2: Default::default(),
         }
     }
 
@@ -81,6 +89,7 @@ impl Client {
         }
         let summary = match self.inner {
             ClientInner::V1(ref inner) => inner.upload_directory(path).await?,
+            ClientInner::V2(ref inner) => inner.upload_directory(path).await?,
         };
         info!(monotonic_counter.files_uploaded = summary.uploaded_keys.len());
         info!(monotonic_counter.files_skipped = summary.skipped_keys.len());
@@ -151,6 +160,10 @@ pub struct ClientBuilder {
     /// Settings for the v1 upload API.
     #[cfg_attr(feature = "clap", command(flatten))]
     v1: v1::Config,
+
+    /// Settings for the v2 upload API.
+    #[cfg_attr(feature = "clap", command(flatten))]
+    v2: v2::Config,
 }
 
 // Add custom Debug implementation to redact the auth_token.
@@ -164,6 +177,7 @@ impl Debug for ClientBuilder {
             .field("connect_timeout_seconds", &self.connect_timeout_seconds)
             .field("read_timeout_seconds", &self.read_timeout_seconds)
             .field("v1", &self.v1)
+            .field("v2", &self.v2)
             .finish()
     }
 }
@@ -197,7 +211,7 @@ impl ClientBuilder {
                 ClientInner::V1(v1::Client::new(base, self.v1))
             }
             (UploadApiVersion::V2, _) | (UploadApiVersion::Auto, 2) => {
-                return Err(Error::NotImplemented(UploadApiVersion::V2));
+                ClientInner::V2(v2::Client::new(base, self.v2))
             }
             _ => unreachable!("invalid API version returned by Symbols Server"),
         };
@@ -297,9 +311,80 @@ impl ClientBuilder {
         self.v1.retry_delay_seconds_v1 = retry_delay_v1_seconds;
         self
     }
+
+    /// Set the number of retries for Symbols Server requests.
+    ///
+    /// On retriable status codes, Symbols Server requests are retried this number of times, in
+    /// addition to the original request. A value of 0 disables retrying.
+    ///
+    /// The default is 2.
+    pub fn retries(mut self, retries: usize) -> Self {
+        self.v2.retries = retries;
+        self
+    }
+
+    /// Set the delay in seconds between Symbols Server request retries.
+    ///
+    /// The default is 30 seconds.
+    pub fn retry_delay_seconds(mut self, retry_delay_seconds: u64) -> Self {
+        self.v2.retry_delay_seconds = retry_delay_seconds;
+        self
+    }
+
+    /// Set the number of symbols files per request to the Symbols Server.
+    ///
+    /// The default is 128.
+    pub fn batch_size(mut self, batch_size: usize) -> Self {
+        assert_ne!(batch_size, 0, "the batch size needs to be at least one");
+        self.v2.batch_size = batch_size;
+        self
+    }
+
+    /// Set the maximum number of concurrent file uploads to GCS.
+    ///
+    /// The default is 16. Panics if `max_file_uploads` is 0.
+    pub fn max_file_uploads(mut self, max_file_uploads: u32) -> Self {
+        assert_ne!(max_file_uploads, 0, "must allow at least one file upload");
+        self.v2.max_file_uploads = max_file_uploads;
+        self
+    }
+
+    /// Set the number of retries for individual file uploads to GCS.
+    ///
+    /// The number of retriable status codes that are accepted before bailing out for each file
+    /// upload. A value of 0 disables retrying.
+    ///
+    /// The default is 10.
+    pub fn file_upload_retries(mut self, file_upload_retries: usize) -> Self {
+        self.v2.file_upload_retries = file_upload_retries;
+        self
+    }
+
+    /// Set the retry delay in seconds between GCS upload request retries.
+    ///
+    /// The default is 1 second.
+    pub fn file_upload_delay_seconds(mut self, file_upload_delay_seconds: u64) -> Self {
+        self.v2.file_upload_delay_seconds = file_upload_delay_seconds;
+        self
+    }
+
+    /// Set the chunk size for file uploads to GCS.
+    ///
+    /// The value will be rounded down to the next multiple of 256 KiB and must be positive.
+    ///
+    /// The default is 16 MiB.
+    pub fn chunk_size(mut self, chunk_size: u64) -> Self {
+        const MIN_CHUNK_SIZE: u64 = 1 << 18;
+        assert!(
+            chunk_size >= MIN_CHUNK_SIZE,
+            "chunk_size must be at least 256 KiB"
+        );
+        self.v2.chunk_size = chunk_size & !(MIN_CHUNK_SIZE - 1);
+        self
+    }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct UploadSummary {
     /// Keys of files that were successfully uploaded.
     pub uploaded_keys: Vec<String>,
@@ -318,6 +403,24 @@ impl UploadSummary {
     pub fn success(&self) -> bool {
         self.discovery_errors.is_empty() && self.upload_errors.is_empty()
     }
+
+    fn record_upload(&mut self, key: String, result: Result<()>) {
+        match result {
+            Ok(()) => self.uploaded_keys.push(key),
+            Err(e) => {
+                self.upload_errors.push(e);
+                self.failed_keys.push(key);
+            }
+        }
+    }
+
+    fn merge(&mut self, other: UploadSummary) {
+        self.uploaded_keys.extend(other.uploaded_keys);
+        self.skipped_keys.extend(other.skipped_keys);
+        self.failed_keys.extend(other.failed_keys);
+        self.discovery_errors.extend(other.discovery_errors);
+        self.upload_errors.extend(other.upload_errors);
+    }
 }
 
 static USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
@@ -325,6 +428,7 @@ static USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_V
 mod base;
 pub mod sym_files;
 mod v1;
+mod v2;
 
 #[cfg(test)]
 mod tests {

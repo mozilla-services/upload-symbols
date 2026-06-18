@@ -58,6 +58,10 @@ impl SymbolsFile {
     pub fn open(&self) -> io::Result<File> {
         File::open(&self.path)
     }
+
+    pub async fn async_open(&self) -> io::Result<tokio::fs::File> {
+        tokio::fs::File::open(&self.path).await
+    }
 }
 
 /// Errors for invalid keys found during symbols file discovery.
