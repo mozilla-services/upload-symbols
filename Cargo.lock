@@ -2781,6 +2781,7 @@ version = "0.3.1"
 dependencies = [
  "clap",
  "fake-tecken",
+ "flate2",
  "md-5",
  "reqwest",
  "serde",

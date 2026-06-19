@@ -4,7 +4,7 @@ use crate::{
     sym_files::{InvalidKeyError, SymbolsFile},
 };
 use md5::Digest;
-use reqwest::{Body, Method, Url};
+use reqwest::{Body, Method, Url, header::HeaderMap};
 use serde::{Deserialize, Deserializer, Serialize};
 use std::{
     collections::HashMap,
@@ -144,6 +144,9 @@ impl Client {
     /// all infromation.
     #[instrument(level = "debug", skip(self))]
     pub async fn upload_directory(&self, root: PathBuf) -> Result<UploadSummary> {
+        let temp_dir = tempdir::TempDir::new("upload-symbols.")?;
+        let temp_path = temp_dir.path().to_path_buf();
+
         let (batch_tx, batch_rx) = mpsc::channel(16);
         let batch_size = self.batch_size;
         let span = Span::current();
@@ -168,8 +171,9 @@ impl Client {
             }
             let key = job.sym_file.key().to_string();
             let client = self.clone();
+            let temp_path = temp_path.clone();
             uploads.spawn(async move {
-                let result = client.upload_file_to_gcs(job).await;
+                let result = client.upload_file_to_gcs(job, temp_path).await;
                 (key, result)
             });
         }
@@ -181,6 +185,9 @@ impl Client {
         // Unwrap the outer JoinError. This will basically propagate panics.
         summary.discovery_errors = collect_file_specs_handle.await.unwrap()?;
         summary.merge(collect_upload_jobs_handle.await.unwrap()?);
+        if let Err(e) = temp_dir.close() {
+            summary.upload_errors.push(e.into());
+        }
         Ok(summary)
     }
 
@@ -206,7 +213,10 @@ impl Client {
                 .await?;
             for file_spec in upload_response.files {
                 match file_spec.action {
-                    ActionSpec::Upload { url: session_url } => {
+                    ActionSpec::Upload {
+                        url,
+                        content_encoding,
+                    } => {
                         let Some(sym_file) = batch.sym_files.remove(&file_spec.key) else {
                             // The Symbols Server returned a spec for a key we don't know
                             // about. This can only happen due to a bug.
@@ -220,7 +230,8 @@ impl Client {
                         };
                         tx.send(UploadJob {
                             sym_file,
-                            session_url,
+                            session_url: url,
+                            content_encoding,
                         })
                         .await
                         .unwrap();
@@ -245,7 +256,19 @@ impl Client {
     ///
     /// Documentation of the protocol:
     /// https://docs.cloud.google.com/storage/docs/performing-resumable-uploads#upload-data
-    async fn upload_file_to_gcs(&self, job: UploadJob) -> Result<()> {
+    async fn upload_file_to_gcs(&self, mut job: UploadJob, temp_path: PathBuf) -> Result<()> {
+        let mut content_encoding_header = HeaderMap::new();
+        if let Some(ContentEncoding::Gzip) = job.content_encoding {
+            job = task::spawn_blocking(move || -> Result<UploadJob> {
+                job.sym_file.gzip_compress(temp_path)?;
+                Ok(job)
+            })
+            .await
+            .unwrap()?;
+            content_encoding_header.insert("content-encoding", "gzip".parse().unwrap());
+        }
+        let content_encoding_header = content_encoding_header;
+
         let mut remaining_retries = self.file_upload_retries;
         let mut delay = self.file_upload_delay;
         let file = job.sym_file.async_open().await?;
@@ -265,6 +288,7 @@ impl Client {
                     "content-range",
                     format!("bytes {transferred}-{chunk_end}/{file_size}"),
                 )
+                .headers(content_encoding_header.clone())
                 .body(Body::wrap_stream(ReaderStream::new(
                     chunk_file.take(chunk_size),
                 )))
@@ -401,6 +425,7 @@ struct FileBatch {
 struct UploadJob {
     sym_file: SymbolsFile,
     session_url: Url,
+    content_encoding: Option<ContentEncoding>,
 }
 
 /// Data for a single symbols file in a upload v2 request payload.
@@ -417,6 +442,15 @@ struct UploadRequest {
     files: Vec<FileSpecRequest>,
 }
 
+/// The content encoding for the upload, returned by the server.
+///
+/// Only "gzip" and no content encoding at all are supported.
+#[derive(Clone, Copy, Debug, Deserialize)]
+#[serde(rename_all = "lowercase")]
+enum ContentEncoding {
+    Gzip,
+}
+
 /// An action specification for an individual file in the upload v2 response.
 #[derive(Debug, Deserialize)]
 #[serde(tag = "type", rename_all = "snake_case")]
@@ -424,6 +458,7 @@ enum ActionSpec {
     Upload {
         #[serde(deserialize_with = "deserialize_url")]
         url: Url,
+        content_encoding: Option<ContentEncoding>,
     },
     Skip,
     Error {
@@ -439,7 +474,7 @@ struct FileSpecResponse {
 }
 
 /// The upload protocol specifier. Only "gcs-resumable" is supported.
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Copy, Debug, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 enum UploadProtocol {
     GcsResumable,

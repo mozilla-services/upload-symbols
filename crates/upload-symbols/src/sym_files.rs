@@ -2,7 +2,7 @@
 
 use std::{
     ffi::OsStr,
-    fs::File,
+    fs::{File, create_dir_all},
     io,
     path::{MAIN_SEPARATOR, Path, PathBuf},
 };
@@ -59,8 +59,26 @@ impl SymbolsFile {
         File::open(&self.path)
     }
 
+    /// Open the symbols file asynchronously and return the `File` instance.
     pub async fn async_open(&self) -> io::Result<tokio::fs::File> {
         tokio::fs::File::open(&self.path).await
+    }
+
+    /// Store a gzip-compressed copy of this symbols file in `temp_path`.
+    ///
+    /// This method updates the path of this instance to the compressed copy.
+    pub fn gzip_compress(&mut self, temp_path: PathBuf) -> io::Result<()> {
+        let compressed_path = temp_path.join(format!("{}.gz", self.key));
+        if let Some(parent) = compressed_path.parent() {
+            create_dir_all(parent)?;
+        }
+        let mut input = self.open()?;
+        let output = File::create_new(&compressed_path)?;
+        let mut encoder = flate2::write::GzEncoder::new(output, flate2::Compression::default());
+        io::copy(&mut input, &mut encoder)?;
+        encoder.finish()?;
+        self.path = compressed_path;
+        Ok(())
     }
 }
 
