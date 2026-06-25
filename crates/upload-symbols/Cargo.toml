@@ -24,4 +24,3 @@ tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
 
 [features]
 clap = ["dep:clap"]
-local-upload-test = []
