@@ -99,6 +99,13 @@ impl Client {
         Ok(summary)
     }
 
+    pub fn upload_api_version(&self) -> UploadApiVersion {
+        match self.inner {
+            ClientInner::V1(_) => UploadApiVersion::V1,
+            ClientInner::V2(_) => UploadApiVersion::V2,
+        }
+    }
+
     pub fn auth_info(&self) -> &AuthInfo {
         &self.auth_info
     }
@@ -269,6 +276,15 @@ impl ClientBuilder {
     /// This defaults to <https://symbols.mozilla.org/>.
     pub fn base_url(mut self, base_url: Url) -> Self {
         self.base_url = Some(base_url);
+        self
+    }
+
+    /// Set the upload API version to use.
+    ///
+    /// The default is [`UploadApiVersion::Auto`], which asks the symbols server which version
+    /// to use.
+    pub fn upload_api_version(mut self, upload_api_version: UploadApiVersion) -> Self {
+        self.upload_api_version = upload_api_version;
         self
     }
 
