@@ -6,33 +6,42 @@ use axum::{
     Json, Router,
     extract::{Multipart, State},
     http::StatusCode,
-    routing::post,
+    routing::{post, put},
 };
 use serde::Serialize;
 use std::{
-    collections::HashSet,
     io::Cursor,
     sync::{Arc, Mutex, MutexGuard},
     time::UNIX_EPOCH,
 };
+pub use storage::SymbolsStorage;
 use tokio::{net::TcpListener, sync::oneshot};
 use url::Url;
 
-type UploadedFiles = Arc<Mutex<HashSet<String>>>;
+mod storage;
+mod v2;
+
+type AppState = Arc<Mutex<SymbolsStorage>>;
 
 pub struct FakeTecken {
-    uploaded_files: UploadedFiles,
+    storage: AppState,
     port: u16,
     shutdown_tx: Option<oneshot::Sender<()>>,
 }
 
 impl FakeTecken {
-    pub async fn new() -> Self {
-        let uploaded_files = Arc::new(Mutex::new(HashSet::new()));
+    pub async fn new(upload_api_version: u32) -> Self {
+        let storage = Arc::new(Mutex::new(SymbolsStorage::new()));
         let app = Router::new()
             .route("/upload/", post(upload))
+            .route("/upload/v2/", post(v2::upload))
+            .route(
+                "/gcs/resumable-upload/{resumable_upload_id}",
+                put(v2::resumable_upload),
+            )
+            .with_state(Arc::clone(&storage))
             .route("/upload/auth_info/", post(auth_info))
-            .with_state(Arc::clone(&uploaded_files));
+            .with_state(upload_api_version);
         let listener = TcpListener::bind(("127.0.0.1", 0)).await.unwrap();
         let port = listener.local_addr().unwrap().port();
         let (shutdown_tx, shutdown_rx) = oneshot::channel();
@@ -44,7 +53,7 @@ impl FakeTecken {
                 .into_future(),
         );
         Self {
-            uploaded_files,
+            storage,
             port,
             shutdown_tx: Some(shutdown_tx),
         }
@@ -54,8 +63,8 @@ impl FakeTecken {
         Url::parse(&format!("http://localhost:{}/", self.port)).unwrap()
     }
 
-    pub fn uploaded_files(&self) -> MutexGuard<'_, HashSet<String>> {
-        self.uploaded_files.lock().unwrap()
+    pub fn symbols_storage(&self) -> MutexGuard<'_, SymbolsStorage> {
+        self.storage.lock().unwrap()
     }
 }
 
@@ -68,7 +77,7 @@ impl Drop for FakeTecken {
 }
 
 async fn upload(
-    State(uploaded_files): State<UploadedFiles>,
+    State(storage): State<AppState>,
     mut multipart: Multipart,
 ) -> Result<Json<UploadResponse>, StatusCode> {
     let field = multipart
@@ -79,17 +88,17 @@ async fn upload(
     let bytes = field.bytes().await.map_err(|_| StatusCode::BAD_REQUEST)?;
 
     let archive = zip::ZipArchive::new(Cursor::new(bytes)).map_err(|_| StatusCode::BAD_REQUEST)?;
-    let mut uploaded_files = uploaded_files.lock().unwrap();
+    let mut storage = storage.lock().unwrap();
+    let id = storage.new_upload();
     let mut skipped_keys = Vec::new();
     for file_name in archive.file_names() {
-        if uploaded_files.contains(file_name) {
+        if storage.uploaded_files().contains(file_name) {
             skipped_keys.push(file_name.to_owned());
         } else {
-            uploaded_files.insert(file_name.to_owned());
+            storage.upload_file(file_name.to_owned());
         }
     }
 
-    let id = uploaded_files.len() as u32;
     Ok(Json(UploadResponse {
         upload: Upload { id, skipped_keys },
     }))
@@ -106,12 +115,12 @@ struct Upload {
     skipped_keys: Vec<String>,
 }
 
-async fn auth_info() -> Result<Json<AuthInfo>, StatusCode> {
+async fn auth_info(State(upload_api_version): State<u32>) -> Result<Json<AuthInfo>, StatusCode> {
     Ok(Json(AuthInfo {
         email: "user@mozilla.com".to_string(),
         try_symbols: false,
         token_expires_at: UNIX_EPOCH.elapsed().unwrap().as_secs() + 86_400,
-        upload_api_version: 1,
+        upload_api_version,
     }))
 }
 
