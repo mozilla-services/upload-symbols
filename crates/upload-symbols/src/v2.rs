@@ -35,7 +35,7 @@ const DEFAULT_CHUNK_SIZE: u64 = 16 * 1024 * 1024;
 
 /// Configuration for the v2 upload client.
 #[derive(Debug)]
-#[cfg_attr(feature = "clap", derive(clap::Args))]
+#[cfg_attr(feature = "clap", derive(clap::Args), group(id = "config-v2"))]
 pub struct Config {
     /// The number of retries for Symbols Server requests.
     ///
