@@ -119,6 +119,16 @@ pub enum UploadApiVersion {
     V2,
 }
 
+impl std::fmt::Display for UploadApiVersion {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            UploadApiVersion::Auto => f.write_str("auto"),
+            UploadApiVersion::V1 => f.write_str("1"),
+            UploadApiVersion::V2 => f.write_str("2"),
+        }
+    }
+}
+
 const DEFAULT_CONNECT_TIMEOUT_SECONDS: u64 = 10;
 const DEFAULT_READ_TIMEOUT_SECONDS: u64 = 600;
 

@@ -83,6 +83,10 @@ async fn upload_directory(args: Args) -> Result<ExitCode> {
     let client = args.client_builder.build().await?;
     let otel_guard = setup_tracing(client.auth_info().opentelemetry.as_ref())?;
     println!("Uploading symbols files in {}...", args.directory.display());
+    println!(
+        "Using version {} of the upload API.",
+        client.upload_api_version()
+    );
     let summary = client.upload_directory(args.directory).await?;
     if let Some(Err(error)) = otel_guard.map(|guard| guard.shutdown()) {
         eprintln!("error: shutting down OTLP submission failed: {error}");
