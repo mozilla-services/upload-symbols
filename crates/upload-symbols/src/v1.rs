@@ -23,7 +23,7 @@ const DEFAULT_RETRY_DELAY_SECONDS_V1: u64 = 60;
 
 /// Configuration for the v1 upload client.
 #[derive(Debug)]
-#[cfg_attr(feature = "clap", derive(clap::Args))]
+#[cfg_attr(feature = "clap", derive(clap::Args), group(id = "config-v1"))]
 pub struct Config {
     /// The maximum number of concurrent uploads using the v1 upload API.
     #[cfg_attr(feature = "clap", arg(

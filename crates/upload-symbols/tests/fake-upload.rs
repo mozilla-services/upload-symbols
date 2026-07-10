@@ -1,15 +1,43 @@
-//! Integration tests for the upload API v1 client.
+//! Integration tests for both versions of the upload API client.
 //!
 //! This test uses a fake Tecken implementation, so it doesn't require a running Tecken
 //! development stack.
 
-use std::{collections::HashSet, fs::create_dir_all, os::unix::fs::symlink};
-use upload_symbols::{Client, sym_files};
+use fake_tecken::FakeTecken;
+use std::{assert_matches, collections::HashSet, fs::create_dir_all, os::unix::fs::symlink};
+use upload_symbols::{Client, UploadApiVersion, sym_files};
+
+#[tokio::test]
+async fn test_upload_client_v1() {
+    // Create a fake symbols server and a client.
+    let tecken = fake_tecken::FakeTecken::new(1).await;
+    let client = Client::builder("123456789")
+        .base_url(tecken.url())
+        .zip_size_threshold_v1(1 << 20) // 1 MiB
+        .build()
+        .await
+        .unwrap();
+    assert_matches!(client.upload_api_version(), UploadApiVersion::V1);
+    upload_directory(tecken, client).await;
+}
+
+#[tokio::test]
+async fn test_upload_client_v2() {
+    // Create a fake symbols server and a client.
+    let tecken = fake_tecken::FakeTecken::new(2).await;
+    let client = Client::builder("123456789")
+        .base_url(tecken.url())
+        .batch_size(32)
+        .build()
+        .await
+        .unwrap();
+    assert_matches!(client.upload_api_version(), UploadApiVersion::V2);
+    upload_directory(tecken, client).await;
+}
 
 static TEST_DATA_PATH: &str = "../../tests/data/linux";
 
-#[tokio::test]
-async fn upload_directory() {
+async fn upload_directory(tecken: FakeTecken, client: Client) {
     // Create a temporary directory with symlinks to half the files in the test data dir.
     let temp_dir = tempdir::TempDir::new("upload-symbols-test-data.").unwrap();
     let temp_path = temp_dir.path();
@@ -20,19 +48,10 @@ async fn upload_directory() {
         symlink(symbols_file.path().canonicalize().unwrap(), target).unwrap();
     }
 
-    // Create a fake symbols server and a client.
-    let tecken = fake_tecken::FakeTecken::new().await;
-    let client = Client::builder("123456789")
-        .base_url(tecken.url())
-        .zip_size_threshold_v1(1 << 20) // 1 MiB
-        .build()
-        .await
-        .unwrap();
-
     // Upload the directory with half the files.
     let summary1 = client.upload_directory(&temp_path).await.unwrap();
     let uploaded_keys1: HashSet<String> = summary1.uploaded_keys.into_iter().collect();
-    assert_eq!(&uploaded_keys1, &*tecken.uploaded_files());
+    assert_eq!(&uploaded_keys1, tecken.symbols_storage().uploaded_files());
     assert!(summary1.skipped_keys.is_empty());
     assert!(summary1.failed_keys.is_empty());
     assert!(summary1.discovery_errors.is_empty());
@@ -46,7 +65,7 @@ async fn upload_directory() {
     assert!(uploaded_keys1.is_disjoint(&uploaded_keys2));
     assert_eq!(
         &(&uploaded_keys1 | &uploaded_keys2),
-        &*tecken.uploaded_files()
+        tecken.symbols_storage().uploaded_files()
     );
     assert!(summary2.failed_keys.is_empty());
     assert!(summary2.discovery_errors.is_empty());

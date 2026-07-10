@@ -2,7 +2,7 @@
 
 use std::{
     ffi::OsStr,
-    fs::File,
+    fs::{File, create_dir_all},
     io,
     path::{MAIN_SEPARATOR, Path, PathBuf},
 };
@@ -58,6 +58,28 @@ impl SymbolsFile {
     pub fn open(&self) -> io::Result<File> {
         File::open(&self.path)
     }
+
+    /// Open the symbols file asynchronously and return the `File` instance.
+    pub async fn async_open(&self) -> io::Result<tokio::fs::File> {
+        tokio::fs::File::open(&self.path).await
+    }
+
+    /// Store a gzip-compressed copy of this symbols file in `temp_path`.
+    ///
+    /// This method updates the path of this instance to the compressed copy.
+    pub fn gzip_compress(&mut self, temp_path: PathBuf) -> io::Result<()> {
+        let compressed_path = temp_path.join(format!("{}.gz", self.key));
+        if let Some(parent) = compressed_path.parent() {
+            create_dir_all(parent)?;
+        }
+        let mut input = self.open()?;
+        let output = File::create_new(&compressed_path)?;
+        let mut encoder = flate2::write::GzEncoder::new(output, flate2::Compression::default());
+        io::copy(&mut input, &mut encoder)?;
+        encoder.finish()?;
+        self.path = compressed_path;
+        Ok(())
+    }
 }
 
 /// Errors for invalid keys found during symbols file discovery.
@@ -73,6 +95,8 @@ pub enum InvalidKeyError {
     InvalidCharacters(String),
     #[error("error while traversing diretory tree")]
     WalkDirError(#[from] walkdir::Error),
+    #[error("empty file: {0}")]
+    EmptyFile(PathBuf),
 }
 
 /// Discover all symbols files in a directory.
@@ -122,6 +146,13 @@ impl Iterator for Discovery {
                     // This is also true for symlinks; `entry.path()` still returns the path of
                     // the link, not the path of the target.
                     let rel_path = entry.path().strip_prefix(&self.root).unwrap();
+                    let metadata = match entry.metadata() {
+                        Ok(metadata) => metadata,
+                        Err(e) => return Some(Err(InvalidKeyError::from(e))),
+                    };
+                    if metadata.len() == 0 {
+                        return Some(Err(InvalidKeyError::EmptyFile(rel_path.into())));
+                    }
                     if entry.depth() != 3 {
                         // Everything that isn't exactly at depth 3 is not of the form
                         // `<debug_file>/<debug_id>/<symbols_file>`.

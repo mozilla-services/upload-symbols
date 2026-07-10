@@ -35,6 +35,10 @@ impl Client {
             .header("auth-token", &self.auth_token)
     }
 
+    pub fn http_client(&self) -> &reqwest::Client {
+        &self.client
+    }
+
     pub async fn get_auth_info(&self) -> crate::Result<AuthInfo> {
         Retry::builder()
             .delay_seconds(2)
@@ -68,7 +72,7 @@ pub struct OpenTelemetryConfig {
     pub log_level: tracing::Level,
 }
 
-fn deserialize_system_time<'de, D>(deserializer: D) -> Result<SystemTime, D::Error>
+pub(crate) fn deserialize_system_time<'de, D>(deserializer: D) -> Result<SystemTime, D::Error>
 where
     D: Deserializer<'de>,
 {
