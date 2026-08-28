@@ -4,7 +4,7 @@ use crate::{
     sym_files::{InvalidKeyError, SymbolsFile},
 };
 use md5::Digest;
-use reqwest::{Body, Method, Url, header::HeaderMap};
+use reqwest::{Body, Method, Url};
 use serde::{Deserialize, Deserializer, Serialize};
 use std::{
     collections::HashMap,
@@ -257,7 +257,6 @@ impl Client {
     /// Documentation of the protocol:
     /// https://docs.cloud.google.com/storage/docs/performing-resumable-uploads#upload-data
     async fn upload_file_to_gcs(&self, mut job: UploadJob, temp_path: PathBuf) -> Result<()> {
-        let mut content_encoding_header = HeaderMap::new();
         if let Some(ContentEncoding::Gzip) = job.content_encoding {
             job = task::spawn_blocking(move || -> Result<UploadJob> {
                 job.sym_file.gzip_compress(temp_path)?;
@@ -265,9 +264,7 @@ impl Client {
             })
             .await
             .unwrap()?;
-            content_encoding_header.insert("content-encoding", "gzip".parse().unwrap());
         }
-        let content_encoding_header = content_encoding_header;
 
         let mut remaining_retries = self.file_upload_retries;
         let mut delay = self.file_upload_delay;
@@ -288,7 +285,6 @@ impl Client {
                     "content-range",
                     format!("bytes {transferred}-{chunk_end}/{file_size}"),
                 )
-                .headers(content_encoding_header.clone())
                 .body(Body::wrap_stream(ReaderStream::new(
                     chunk_file.take(chunk_size),
                 )))
@@ -330,9 +326,9 @@ impl Client {
                     if response.status().is_client_error() || response.status().is_server_error() {
                         return Err(gcs_error(response).await);
                     }
-                    // It's even more unexpected if the previous line did not bail out. If we
-                    // get here, we've got no idea how to recover, so let's just panic to get a
-                    // stack trace in Sentry.
+                    // We received neither an error status code now one of the known success
+                    // status codes. If we get here, we've got no idea how to recover, so let's
+                    // just panic to get a stack trace in Sentry.
                     panic!("unexpected response from GCS: {status}");
                 }
             }
