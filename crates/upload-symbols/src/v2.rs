@@ -319,7 +319,7 @@ impl Client {
                 }
                 429 | 500 | 502 | 503 | 504 => {
                     if remaining_retries == 0 {
-                        return Err(response.error_for_status().unwrap_err().into());
+                        return Err(gcs_error(response).await);
                     }
                     sleep(delay).await;
                     remaining_retries -= 1;
@@ -327,7 +327,9 @@ impl Client {
                 }
                 _ => {
                     // Something unexpected must have happened if we get here.
-                    response.error_for_status()?;
+                    if response.status().is_client_error() || response.status().is_server_error() {
+                        return Err(gcs_error(response).await);
+                    }
                     // It's even more unexpected if the previous line did not bail out. If we
                     // get here, we've got no idea how to recover, so let's just panic to get a
                     // stack trace in Sentry.
@@ -337,6 +339,19 @@ impl Client {
         }
         Ok(())
     }
+}
+
+/// Extract the message from the body of a GCS error response.
+async fn gcs_error(response: reqwest::Response) -> crate::Error {
+    let status = response.status().as_u16();
+    let msg = match response.text().await {
+        Ok(body) => match body.trim() {
+            "" => "<empty response>".to_string(),
+            msg => msg.to_string(),
+        },
+        Err(error) => format!("failed to read response body: {error}"),
+    };
+    crate::Error::GcsError { status, msg }
 }
 
 /// Discover files and compute their MD5 hashes.
