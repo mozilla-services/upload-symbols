@@ -4,7 +4,7 @@ use crate::{
     sym_files::{InvalidKeyError, SymbolsFile},
 };
 use md5::Digest;
-use reqwest::{Body, Method, Url, header::HeaderMap};
+use reqwest::{Body, Method, Url};
 use serde::{Deserialize, Deserializer, Serialize};
 use std::{
     collections::HashMap,
@@ -257,7 +257,6 @@ impl Client {
     /// Documentation of the protocol:
     /// https://docs.cloud.google.com/storage/docs/performing-resumable-uploads#upload-data
     async fn upload_file_to_gcs(&self, mut job: UploadJob, temp_path: PathBuf) -> Result<()> {
-        let mut content_encoding_header = HeaderMap::new();
         if let Some(ContentEncoding::Gzip) = job.content_encoding {
             job = task::spawn_blocking(move || -> Result<UploadJob> {
                 job.sym_file.gzip_compress(temp_path)?;
@@ -265,9 +264,7 @@ impl Client {
             })
             .await
             .unwrap()?;
-            content_encoding_header.insert("content-encoding", "gzip".parse().unwrap());
         }
-        let content_encoding_header = content_encoding_header;
 
         let mut remaining_retries = self.file_upload_retries;
         let mut delay = self.file_upload_delay;
@@ -288,7 +285,6 @@ impl Client {
                     "content-range",
                     format!("bytes {transferred}-{chunk_end}/{file_size}"),
                 )
-                .headers(content_encoding_header.clone())
                 .body(Body::wrap_stream(ReaderStream::new(
                     chunk_file.take(chunk_size),
                 )))
@@ -319,7 +315,7 @@ impl Client {
                 }
                 429 | 500 | 502 | 503 | 504 => {
                     if remaining_retries == 0 {
-                        return Err(response.error_for_status().unwrap_err().into());
+                        return Err(gcs_error(response).await);
                     }
                     sleep(delay).await;
                     remaining_retries -= 1;
@@ -327,16 +323,31 @@ impl Client {
                 }
                 _ => {
                     // Something unexpected must have happened if we get here.
-                    response.error_for_status()?;
-                    // It's even more unexpected if the previous line did not bail out. If we
-                    // get here, we've got no idea how to recover, so let's just panic to get a
-                    // stack trace in Sentry.
+                    if response.status().is_client_error() || response.status().is_server_error() {
+                        return Err(gcs_error(response).await);
+                    }
+                    // We received neither an error status code now one of the known success
+                    // status codes. If we get here, we've got no idea how to recover, so let's
+                    // just panic to get a stack trace in Sentry.
                     panic!("unexpected response from GCS: {status}");
                 }
             }
         }
         Ok(())
     }
+}
+
+/// Extract the message from the body of a GCS error response.
+async fn gcs_error(response: reqwest::Response) -> crate::Error {
+    let status = response.status().as_u16();
+    let msg = match response.text().await {
+        Ok(body) => match body.trim() {
+            "" => "<empty response>".to_string(),
+            msg => msg.to_string(),
+        },
+        Err(error) => format!("failed to read response body: {error}"),
+    };
+    crate::Error::GcsError { status, msg }
 }
 
 /// Discover files and compute their MD5 hashes.

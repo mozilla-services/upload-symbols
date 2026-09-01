@@ -34,6 +34,8 @@ pub enum Error {
     MissingRangeHeader,
     #[error("invalid range header in GCS response: {0:?}")]
     InvalidRangeHeader(HeaderValue),
+    #[error("status {status} response from GCS: {msg}")]
+    GcsError { status: u16, msg: String },
     #[error("invalid Symbols Server response: {msg}")]
     InvalidSymbolsServerResponse { msg: String },
 }
