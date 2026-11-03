@@ -92,10 +92,11 @@ async fn upload(
     let id = storage.new_upload();
     let mut skipped_keys = Vec::new();
     for file_name in archive.file_names() {
-        if storage.uploaded_files().contains(file_name) {
-            skipped_keys.push(file_name.to_owned());
+        let file_name = file_name.unwrap();
+        if storage.uploaded_files().contains(&*file_name) {
+            skipped_keys.push(file_name.into_owned());
         } else {
-            storage.upload_file(file_name.to_owned());
+            storage.upload_file(file_name.into_owned());
         }
     }
 
