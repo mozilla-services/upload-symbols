@@ -15,7 +15,7 @@ serde = { version = "1.0.228", features = ["derive"] }
 tokio = { version = "1.52.3" }
 tracing = "0.1.44"
 url = "2.5.8"
-zip = "8.6.0"
+zip = "9.1.0"
 
 
 [package]
